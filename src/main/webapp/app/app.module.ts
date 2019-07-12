@@ -16,10 +16,10 @@ import { FrsCoreModule } from 'app/core';
 import { FrsAppRoutingModule } from './app-routing.module';
 import { FrsHomeModule } from './home/home.module';
 import { FrsAccountModule } from './account/account.module';
-import { FrsEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
+import { FrsModule } from './frs/frs.module';
 
 @NgModule({
   imports: [
@@ -30,14 +30,14 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
       alertAsToast: false,
       alertTimeout: 5000,
       i18nEnabled: true,
-      defaultI18nLang: 'ko'
+      defaultI18nLang: 'en'
     }),
     FrsSharedModule.forRoot(),
     FrsCoreModule,
     FrsHomeModule,
+    FrsModule,
     FrsAccountModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
-    FrsEntityModule,
     FrsAppRoutingModule
   ],
   declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
