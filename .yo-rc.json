@@ -1,0 +1,40 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.exntu.frs",
+      "nativeLanguage": "ko"
+    },
+    "jhipsterVersion": "6.1.2",
+    "applicationType": "monolith",
+    "baseName": "FRS",
+    "packageName": "com.exntu.frs",
+    "packageFolder": "com/exntu/frs",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MmY5MDRiNjU4NzMzODkyNjkzZmVhODE3MWYxNmVmZmE3YjYyYTM0ZTU1ZDI1NzVjYTI4Y2IzMGU0NjE2YmU2ZmVmMWFjZjNhYmZmOGU0MDBmOTU4OWUwZDkzNmRmNzhhNDE4NDZiMThkOTE0MmFlYWNjNDBhOTU1MGYxY2EzMGE=",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "testFrameworks": ["protractor"],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "ko",
+    "languages": ["ko", "en"]
+  }
+}
