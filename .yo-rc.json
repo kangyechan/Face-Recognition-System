@@ -1,0 +1,40 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.exntu.faceadmin",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "6.1.2",
+    "applicationType": "monolith",
+    "baseName": "FaceAdmin",
+    "packageName": "com.exntu.faceadmin",
+    "packageFolder": "com/exntu/faceadmin",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MjAwMjcwYmZmMjBhMGMzZjE4NzgwMzdkMzU2Y2QyMjU4NWNlYWU3MDZmODU2OWMzZmQ1N2NmNWU5YTJlOWJmY2M4YWFjYTMyNWRiNjdkYzRmM2I3MDA2YTVjNTQ5NGQ0NDIyYTk2NTJlMjNlNzUzYTdkNThkMzg2ZjQ0ZWU0MGQ=",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "ko"]
+  }
+}
