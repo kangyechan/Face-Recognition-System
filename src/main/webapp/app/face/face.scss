@@ -1,0 +1,47 @@
+.face-container {
+  margin: -15px -20px;
+
+  .contents-box {
+    padding: 10px 30px;
+  }
+
+  .top-box {
+    display: flex;
+    flex-wrap: wrap;
+    border-top: solid 1px #efefef;
+    border-bottom: solid 1px #efefef;
+
+    #left-box {
+      width: 15%;
+      float: left;
+    }
+
+    #center-box {
+      width: 70%;
+      float: left;
+      border-left: solid 1px #efefef;
+      border-right: solid 1px #efefef;
+    }
+
+    #right-box {
+      width: 15%;
+      float: left;
+    }
+  }
+
+  .bottom-box {
+    margin-top: 15px;
+
+    #bottom-left {
+      width: 15%;
+      float: left;
+      border-right: solid 1px #efefef;
+    }
+
+    #bottom-right {
+      width: 80%;
+      float: left;
+      border-right: solid 1px #efefef;
+    }
+  }
+}

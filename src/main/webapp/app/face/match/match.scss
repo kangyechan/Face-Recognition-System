@@ -1,0 +1,12 @@
+.match-list {
+  height: 10vh;
+
+  .match-name {
+    border-bottom: solid 2px black;
+
+    h1 {
+      font-size: 1em;
+      font-weight: 500;
+    }
+  }
+}

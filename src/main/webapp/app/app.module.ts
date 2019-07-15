@@ -15,8 +15,9 @@ import { FaceAdminSharedModule } from 'app/shared';
 import { FaceAdminCoreModule } from 'app/core';
 import { FaceAdminAppRoutingModule } from './app-routing.module';
 import { FaceAdminHomeModule } from './home/home.module';
+import { FaceAdminFaceModule } from './face/face.module';
 import { FaceAdminAccountModule } from './account/account.module';
-import { FaceAdminEntityModule } from './entities/entity.module';
+// import { FaceAdminEntityModule } from './entities/entity.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ActiveMenuDirective, ErrorComponent } from './layouts';
@@ -35,9 +36,10 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     FaceAdminSharedModule.forRoot(),
     FaceAdminCoreModule,
     FaceAdminHomeModule,
+    FaceAdminFaceModule,
     FaceAdminAccountModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
-    FaceAdminEntityModule,
+    // FaceAdminEntityModule,
     FaceAdminAppRoutingModule
   ],
   declarations: [JhiMainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],

@@ -1,0 +1,34 @@
+.name-section {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+
+  .name-text {
+    width: 50%;
+    float: left;
+
+    h1 {
+      font-size: 1em;
+      font-weight: 500;
+    }
+  }
+
+  .camera-button {
+    width: 50%;
+    float: left;
+
+    button {
+      float: right;
+      font-size: 13px;
+      background: #e2f3f9;
+      border-radius: 50%;
+      border: none;
+    }
+  }
+}
+
+.camera-section {
+  width: 100%;
+  height: 60vh;
+  background: #e2f3f9;
+}
