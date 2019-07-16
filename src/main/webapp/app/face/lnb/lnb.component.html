@@ -1,0 +1,20 @@
+<div [@slideInOut]="buttonState ? 'in' : 'out'" class="lnb-container">
+
+    <div class="lnb-contents">
+
+        <a (click)="prework()">
+            전처리
+        </a>
+
+        <a (click)="learning()">
+            학습
+        </a>
+
+        <button class="lnb-button" (click)="lnbToggle()">
+            {{ buttonArrow }}
+        </button>
+
+    </div>
+
+</div>
+

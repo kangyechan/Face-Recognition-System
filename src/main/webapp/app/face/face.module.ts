@@ -9,10 +9,22 @@ import { LiveComponent } from './live/live.component';
 import { MatchComponent } from './match/match.component';
 import { PictureComponent } from './picture/picture.component';
 import { DetectComponent } from './detect/detect.component';
+import { LnbComponent, ModalLeaningComponent, ModalPreworkComponent } from './lnb/lnb.component';
 
 @NgModule({
   imports: [FaceAdminSharedModule, RouterModule.forChild([FACE_ROUTE])],
-  declarations: [FaceComponent, ListComponent, LiveComponent, MatchComponent, PictureComponent, DetectComponent],
+  declarations: [
+    FaceComponent,
+    ListComponent,
+    LiveComponent,
+    MatchComponent,
+    PictureComponent,
+    DetectComponent,
+    LnbComponent,
+    ModalLeaningComponent,
+    ModalPreworkComponent
+  ],
+  entryComponents: [ModalLeaningComponent, ModalPreworkComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FaceAdminFaceModule {}
