@@ -2,9 +2,9 @@
   position: absolute;
   top: 50%;
   z-index: 99;
-  width: 12vh;
-  height: 10vh;
-  margin-top: -5vh;
+  width: 120px;
+  height: 90px;
+  margin-top: -45px;
   box-shadow: 0 0 5px 1px #efefef;
   background-color: #e9f7fb;
 
@@ -19,7 +19,7 @@
       text-align: center;
       font-size: 1em;
       font-weight: 400;
-      line-height: 5vh;
+      line-height: 45px;
     }
 
     a:hover {
@@ -40,6 +40,7 @@
       border-radius: 50%;
       border: none;
       box-shadow: 0 0 5px 1px #efefef;
+      transition: all ease 1s;
 
       &:hover {
         box-shadow: 0 0 5px 5px #efefef;

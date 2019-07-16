@@ -9,7 +9,8 @@ import { LiveComponent } from './live/live.component';
 import { MatchComponent } from './match/match.component';
 import { PictureComponent } from './picture/picture.component';
 import { DetectComponent } from './detect/detect.component';
-import { LnbComponent, ModalLeaningComponent, ModalPreworkComponent } from './lnb/lnb.component';
+import { LnbComponent } from './lnb/lnb.component';
+import { LearningModalComponent, PreworkModalComponent } from './modal/modal.component';
 
 @NgModule({
   imports: [FaceAdminSharedModule, RouterModule.forChild([FACE_ROUTE])],
@@ -21,10 +22,10 @@ import { LnbComponent, ModalLeaningComponent, ModalPreworkComponent } from './ln
     PictureComponent,
     DetectComponent,
     LnbComponent,
-    ModalLeaningComponent,
-    ModalPreworkComponent
+    LearningModalComponent,
+    PreworkModalComponent
   ],
-  entryComponents: [ModalLeaningComponent, ModalPreworkComponent],
+  entryComponents: [LearningModalComponent, PreworkModalComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FaceAdminFaceModule {}
