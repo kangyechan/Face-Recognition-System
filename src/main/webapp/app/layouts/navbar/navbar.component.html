@@ -151,6 +151,33 @@
                             <span jhiTranslate="global.menu.account.register">Register</span>
                         </a>
                     </li>
+
+                    <li *ngSwitchCase="false">
+                        <a class="dropdown-item" (click)="customLogin()" id="customlogin">
+                            <span>Custom login</span>
+                        </a>
+                    </li>
+                    <li *ngSwitchCase="false">
+                        <a class="dropdown-item" routerLink="customRegister" routerLinkActive="active" (click)="collapseNavbar()">
+                            <span>Custom Register</span>
+                        </a>
+                    </li>
+
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
+                            <span>Custom Settings</span>
+                        </a>
+                    </li>
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
+                            <span>Custom Password</span>
+                        </a>
+                    </li>
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
+                            <span>Custom Logout</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

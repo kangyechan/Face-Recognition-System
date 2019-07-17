@@ -13,6 +13,9 @@ import {
   SettingsComponent,
   accountState
 } from './';
+import { CustomRegisterComponent } from './custom-register/custom-register.component';
+import { CustomPasswordResetInitComponent } from './custom-password-reset/init/custom-password-reset-init.component';
+import { CustomPasswordResetFinishComponent } from './custom-password-reset/finish/custom-password-reset-finish.component';
 
 @NgModule({
   imports: [FaceAdminSharedModule, RouterModule.forChild(accountState)],
@@ -23,7 +26,10 @@ import {
     PasswordStrengthBarComponent,
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
-    SettingsComponent
+    SettingsComponent,
+    CustomRegisterComponent,
+    CustomPasswordResetInitComponent,
+    CustomPasswordResetFinishComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

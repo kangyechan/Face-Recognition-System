@@ -157,6 +157,22 @@ public class AccountResource {
        );
     }
 
+    // password reset custom mail
+    /**
+     * {@code POST   /account/custom-reset-password/init} : Send an email to reset the password of the user.
+     *
+     * @param mail the mail of the user.
+     * @throws EmailNotFoundException {@code 400 (Bad Request)} if the email address is not registered.
+     */
+    @PostMapping(path = "/account/custom-reset-password/init")
+    public void customRequestPasswordReset(@RequestBody String mail) {
+        mailService.sendCustomPasswordResetMail(
+            userService.requestPasswordReset(mail)
+                .orElseThrow(EmailNotFoundException::new)
+        );
+    }
+
+
     /**
      * {@code POST   /account/reset-password/finish} : Finish to reset the password of the user.
      *
@@ -176,6 +192,26 @@ public class AccountResource {
             throw new AccountResourceException("No user was found for this reset key");
         }
     }
+    /**
+     * {@code POST   /account/custom-reset-password/finish} : Finish to reset the password of the user.
+     *
+     * @param keyAndPassword the generated key and the new password.
+     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws RuntimeException {@code 500 (Internal Server Error)} if the password could not be reset.
+     */
+    @PostMapping(path = "/account/custom-reset-password/finish")
+    public void customFinishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
+        if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
+            throw new InvalidPasswordException();
+        }
+        Optional<User> user =
+            userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
+
+        if (!user.isPresent()) {
+            throw new AccountResourceException("No user was found for this reset key");
+        }
+    }
+
 
     private static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) &&
