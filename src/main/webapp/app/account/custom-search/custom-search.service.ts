@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { SERVER_API_URL } from 'app/app.constants';
 import { Observable } from 'rxjs';
+import { SERVER_API_URL } from 'app/app.constants';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CustomRegisterService {
+export class CustomSearchService {
   constructor(private http: HttpClient) {}
 
-  save(account: any): Observable<any> {
-    return this.http.post(SERVER_API_URL + 'api/customRegister', account);
+  save(mail: string): Observable<any> {
+    return this.http.post(SERVER_API_URL + 'api/customSearch', mail);
   }
 }

@@ -2,10 +2,10 @@ import { AfterViewInit, Component, ElementRef, OnInit, Renderer } from '@angular
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators } from '@angular/forms';
 import { JhiLanguageService } from 'ng-jhipster';
-import { Register } from 'app/account';
 import { CustomLoginModalService } from 'app/core/login/custom-login-modal.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared';
+import { CustomRegisterService } from 'app/account/custom-register/custom-register.service';
 
 @Component({
   selector: 'jhi-custom-register',
@@ -22,7 +22,7 @@ export class CustomRegisterComponent implements OnInit, AfterViewInit {
 
   registerForm = this.fb.group({
     login: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(15), Validators.pattern('^[_.@A-Za-z0-9-]*$')]],
-    email: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]],
+    email: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30), Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
     confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]]
   });
@@ -30,7 +30,7 @@ export class CustomRegisterComponent implements OnInit, AfterViewInit {
   constructor(
     private languageService: JhiLanguageService,
     private customLoginModalService: CustomLoginModalService,
-    private registerService: Register,
+    private customRegisterService: CustomRegisterService,
     private elementRef: ElementRef,
     private renderer: Renderer,
     private fb: FormBuilder
@@ -58,7 +58,8 @@ export class CustomRegisterComponent implements OnInit, AfterViewInit {
       this.errorUserExists = null;
       this.errorEmailExists = null;
       this.languageService.getCurrent().then(langKey => {
-        this.registerService.save(registerAccount).subscribe(
+        registerAccount = { ...registerAccount, langKey };
+        this.customRegisterService.save(registerAccount).subscribe(
           () => {
             this.success = true;
           },
