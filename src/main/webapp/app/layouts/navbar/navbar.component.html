@@ -164,17 +164,17 @@
                     </li>
 
                     <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="customSettings" routerLinkActive="active" (click)="collapseNavbar()">
                             <span>Custom Settings</span>
                         </a>
                     </li>
                     <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="customPassword" routerLinkActive="active" (click)="collapseNavbar()">
                             <span>Custom Password</span>
                         </a>
                     </li>
                     <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" (click)="logout()" id="customLogout">
                             <span>Custom Logout</span>
                         </a>
                     </li>
