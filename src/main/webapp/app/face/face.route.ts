@@ -7,7 +7,7 @@ export const FACE_ROUTE: Route = {
   path: 'face',
   component: FaceComponent,
   data: {
-    authorities: ['ROLE_ADMIN'],
+    authorities: ['ROLE_USER'],
     pageTitle: 'face.title'
   },
   canActivate: [UserRouteAccessService]

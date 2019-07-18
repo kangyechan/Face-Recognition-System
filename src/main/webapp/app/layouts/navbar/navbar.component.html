@@ -31,7 +31,7 @@
 <!--                    &lt;!&ndash; jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here &ndash;&gt;-->
 <!--                </ul>-->
 <!--            </li>-->
-            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *jhiHasAnyAuthority="'ROLE_USER'" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link" routerLink="face" (click)="collapseNavbar()">
                     <span>
 <!--                        <fa-icon icon="home"></fa-icon>-->
