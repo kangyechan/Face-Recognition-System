@@ -25,7 +25,7 @@ export class CustomPasswordResetFinishComponent implements OnInit, AfterViewInit
 
   constructor(
     private customPasswordResetFinishService: CustomPasswordResetFinishService,
-    private customLoginModalServce: CustomLoginModalService,
+    private customLoginModalService: CustomLoginModalService,
     private route: ActivatedRoute,
     private elementRef: ElementRef,
     private renderer: Renderer,
@@ -66,6 +66,6 @@ export class CustomPasswordResetFinishComponent implements OnInit, AfterViewInit
   }
 
   login() {
-    this.modalRef = this.customLoginModalServce.open();
+    this.modalRef = this.customLoginModalService.open();
   }
 }

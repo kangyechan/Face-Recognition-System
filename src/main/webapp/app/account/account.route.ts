@@ -5,7 +5,7 @@ import { customRegisterRoute } from './custom-register/custom-register.route';
 import { customPasswordResetInitRoute } from './custom-password-reset/init/custom-password-reset-init.route';
 import { customPasswordResetFinishRoute } from './custom-password-reset/finish/custom-password-reset-finish.route';
 import { customActivateRoute } from './custom-activate/custom-activate.route';
-import { customSearchRoute } from './custom-search/custom-seach.route';
+import { customSearchRoute } from './custom-search/mail/custom-search-mail.route';
 
 const ACCOUNT_ROUTES = [
   activateRoute,

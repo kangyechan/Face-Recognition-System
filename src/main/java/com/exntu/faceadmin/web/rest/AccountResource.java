@@ -177,6 +177,21 @@ public class AccountResource {
         userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
     }
 
+    // username search custom mail
+    /**
+     * {@code POST   /account/customSearch/mail} : Send an email to reset the password of the user.
+     *
+     * @param mail the mail of the user.
+     * @throws EmailNotFoundException {@code 400 (Bad Request)} if the email address is not registered.
+     */
+    @PostMapping(path = "/account/customSearch/mail")
+    public void customRequestUsernameSearch(@RequestBody String mail) {
+        mailService.sendCustomSearchMail(
+            userService.requestUsernameSearch(mail)
+                .orElseThrow(EmailNotFoundException::new)
+        );
+    }
+
     /**
      * {@code POST   /account/reset-password/init} : Send an email to reset the password of the user.
      *

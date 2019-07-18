@@ -87,6 +87,6 @@ export class CustomLoginComponent implements AfterViewInit {
 
   requestSearchUserName() {
     this.activeModal.dismiss('to state requestSearch');
-    console.log('아이디 찾기 버튼 클d릭');
+    this.router.navigate(['/customSearch', 'request']);
   }
 }

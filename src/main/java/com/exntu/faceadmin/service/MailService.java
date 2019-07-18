@@ -103,6 +103,12 @@ public class MailService {
     }
 
     @Async
+    public void sendCustomSearchMail(User user) {
+        log.debug("Sending username search email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/usernameCustomSearchEmail", "email.reset.title");
+    }
+
+    @Async
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");

@@ -17,7 +17,7 @@ import { CustomRegisterComponent } from './custom-register/custom-register.compo
 import { CustomPasswordResetInitComponent } from './custom-password-reset/init/custom-password-reset-init.component';
 import { CustomPasswordResetFinishComponent } from './custom-password-reset/finish/custom-password-reset-finish.component';
 import { CustomActivateComponent } from './custom-activate/custom-activate.component';
-import { CustomSearchComponent } from './custom-search/custom-search.component';
+import { CustomSearchMailComponent } from './custom-search/mail/custom-search-mail.component';
 
 @NgModule({
   imports: [FaceAdminSharedModule, RouterModule.forChild(accountState)],
@@ -33,7 +33,7 @@ import { CustomSearchComponent } from './custom-search/custom-search.component';
     CustomPasswordResetInitComponent,
     CustomPasswordResetFinishComponent,
     CustomActivateComponent,
-    CustomSearchComponent
+    CustomSearchMailComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -1,23 +1,23 @@
-import { AfterViewInit, Component, ElementRef, Renderer } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer } from '@angular/core';
+import { CustomSearchMailService } from 'app/account/custom-search/mail/custom-search-mail.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { CustomPasswordResetInitService } from './custom-password-reset-init.service';
 import { EMAIL_NOT_FOUND_TYPE } from 'app/shared';
 
 @Component({
-  selector: 'jhi-custom-password-reset-init',
-  templateUrl: './custom-password-reset-init.component.html',
-  styleUrls: ['./custom-password-reset-init.scss']
+  selector: 'jhi-custom-search',
+  templateUrl: './custom-search-mail.component.html',
+  styleUrls: ['./custom-search-mail.scss']
 })
-export class CustomPasswordResetInitComponent implements AfterViewInit {
+export class CustomSearchMailComponent implements AfterViewInit {
   error: string;
   errorEmailNotExists: string;
   success: string;
-  resetRequestForm = this.fb.group({
+  searchRequestForm = this.fb.group({
     email: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30), Validators.email]]
   });
 
   constructor(
-    private customPasswordResetInitService: CustomPasswordResetInitService,
+    private customSearchService: CustomSearchMailService,
     private elementRef: ElementRef,
     private renderer: Renderer,
     private fb: FormBuilder
@@ -31,7 +31,7 @@ export class CustomPasswordResetInitComponent implements AfterViewInit {
     this.error = null;
     this.errorEmailNotExists = null;
 
-    this.customPasswordResetInitService.save(this.resetRequestForm.get(['email']).value).subscribe(
+    this.customSearchService.save(this.searchRequestForm.get(['email']).value).subscribe(
       () => {
         this.success = 'OK';
       },

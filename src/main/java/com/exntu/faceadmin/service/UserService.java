@@ -76,6 +76,15 @@ public class UserService {
             });
     }
 
+    public Optional<User> requestUsernameSearch(String mail) {
+        return userRepository.findOneByEmailIgnoreCase(mail)
+            .filter(User::getActivated)
+            .map(user -> {
+                this.clearUserCaches(user);
+                return user;
+            });
+    }
+
     public Optional<User> requestPasswordReset(String mail) {
         return userRepository.findOneByEmailIgnoreCase(mail)
             .filter(User::getActivated)
