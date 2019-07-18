@@ -6,11 +6,14 @@ import { customPasswordResetInitRoute } from './custom-password-reset/init/custo
 import { customPasswordResetFinishRoute } from './custom-password-reset/finish/custom-password-reset-finish.route';
 import { customActivateRoute } from './custom-activate/custom-activate.route';
 import { customSearchRoute } from './custom-search/mail/custom-search-mail.route';
+import { customSettingRoute } from './custom-settings/custom-settings.route';
+import { customPasswordRoute } from './custom-password/custom-password.route';
 
 const ACCOUNT_ROUTES = [
   activateRoute,
   customActivateRoute,
   passwordRoute,
+  customPasswordRoute,
   customSearchRoute,
   passwordResetFinishRoute,
   customPasswordResetFinishRoute,
@@ -18,7 +21,8 @@ const ACCOUNT_ROUTES = [
   customPasswordResetInitRoute,
   registerRoute,
   customRegisterRoute,
-  settingsRoute
+  settingsRoute,
+  customSettingRoute
 ];
 
 export const accountState: Routes = [

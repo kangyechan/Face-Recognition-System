@@ -41,6 +41,14 @@ export class SettingsComponent implements OnInit {
   }
 
   save() {
+    console.log(this.settingsForm.get('firstName').value);
+    console.log(this.settingsForm.get('lastName').value);
+    console.log(this.settingsForm.get('email').value);
+    console.log(this.settingsForm.get('activated').value);
+    console.log(this.settingsForm.get('authorities').value);
+    console.log(this.settingsForm.get('langKey').value);
+    console.log(this.settingsForm.get('login').value);
+    console.log(this.settingsForm.get('imageUrl').value);
     const settingsAccount = this.accountFromForm();
     this.accountService.save(settingsAccount).subscribe(
       () => {

@@ -18,6 +18,8 @@ import { CustomPasswordResetInitComponent } from './custom-password-reset/init/c
 import { CustomPasswordResetFinishComponent } from './custom-password-reset/finish/custom-password-reset-finish.component';
 import { CustomActivateComponent } from './custom-activate/custom-activate.component';
 import { CustomSearchMailComponent } from './custom-search/mail/custom-search-mail.component';
+import { CustomSettingsComponent } from './custom-settings/custom-settings.component';
+import { CustomPasswordComponent } from './custom-password/custom-password.component';
 
 @NgModule({
   imports: [FaceAdminSharedModule, RouterModule.forChild(accountState)],
@@ -33,7 +35,9 @@ import { CustomSearchMailComponent } from './custom-search/mail/custom-search-ma
     CustomPasswordResetInitComponent,
     CustomPasswordResetFinishComponent,
     CustomActivateComponent,
-    CustomSearchMailComponent
+    CustomSearchMailComponent,
+    CustomSettingsComponent,
+    CustomPasswordComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
