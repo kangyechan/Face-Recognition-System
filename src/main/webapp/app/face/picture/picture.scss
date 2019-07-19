@@ -1,3 +1,13 @@
 .picture-section {
-  height: 15vh;
+  width: 80%;
+  float: left;
+  padding: 10px 30px;
+
+  .picture {
+    float: left;
+
+    .picture-card {
+      margin-right: 20px;
+    }
+  }
 }

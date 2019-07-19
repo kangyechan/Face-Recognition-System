@@ -1,11 +1,17 @@
 <div class="detect-list">
 
     <div class="detect-name">
+        <label>Live Detected Face</label>
+    </div>
 
-        <h1>Live Detected Face</h1>
-
-
-
+    <div class="detect-menu">
+        <label id="all"><input type="checkbox" [(ngModel)]="allCheckbox" (change)="checkAll()"/>All</label>
+        <label><input type="checkbox" [(ngModel)]="memCheckbox" (change)="checkMem()"/>Member</label>
+        <label><input type="checkbox" [(ngModel)]="whiteCheckbox" (change)="checkWhite()"/>WhiteList</label>
+        <label><input type="checkbox" [(ngModel)]="blackCheckbox" (change)="checkBlack()"/>BlackList</label>
+        <label><input type="checkbox" [(ngModel)]="unknownCheckbox" (change)="checkUnknown()"/>Unknown</label>
     </div>
 
 </div>
+
+<jhi-picture></jhi-picture>

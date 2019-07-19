@@ -1,7 +1,13 @@
 <div class="picture-section">
 
+    <div class="picture" id="memPicture" *ngFor="let card of peopleList">
+        <div class="picture-card" *ngIf="allType">
+            {{ card.name }}
+        </div>
 
+        <div class="picture-card" *ngIf="!allType && card.show">
+            {{ card.name }}
+        </div>
+    </div>
 
 </div>
-
-
