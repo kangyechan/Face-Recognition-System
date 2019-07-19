@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LiveService } from 'app/face/live/live.service';
 
 @Component({
   selector: 'jhi-live',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class LiveComponent implements OnInit {
   bAction: string;
 
-  constructor() {}
+  constructor(private liveService: LiveService) {}
 
   ngOnInit() {
     this.bAction = 'OFF';
@@ -17,8 +18,10 @@ export class LiveComponent implements OnInit {
   toggleCamera() {
     if (this.bAction === 'OFF') {
       this.bAction = 'ON';
+      this.liveService.save(true);
     } else {
       this.bAction = 'OFF';
+      this.liveService.save(false);
     }
   }
 }
