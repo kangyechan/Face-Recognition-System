@@ -328,6 +328,7 @@
             <artifactId>metrics-core</artifactId>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
+
     </dependencies>
 
     <build>

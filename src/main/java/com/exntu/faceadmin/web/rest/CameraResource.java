@@ -17,15 +17,25 @@ public class CameraResource {
 
     private final Logger log = LoggerFactory.getLogger(CameraResource.class);
 
+    private final CameraService cameraService;
+
+    public CameraResource(CameraService cameraService) {
+        this.cameraService = cameraService;
+    }
 
     /**
-     * {@code POST  /camera/camera-state-onoff} : Control Camera
-     *
-     *
+     * {@code POST  /camera/camera-state} : Control Camera
+     * @param state the state of camera power.
      */
-    @PostMapping(path = "/camera/camera-state-onoff")
-    public void cameraStateOnOff() {
-        log.debug("zzzzzzzzzzzzzz------");
-        System.out.println("TESTESDAFDASF");
+    @PostMapping(path = "/camera/camera-state")
+    public void cameraStateOnOff(@RequestBody String state) {
+        log.debug("------------------- camera -------------------");
+        log.debug(state);
+        log.debug("------------------- camera -------------------");
+        if(state.equals("on")) {
+            cameraService.onCamera(state);
+        } else {
+            log.debug("camera off button");
+        }
     }
 }

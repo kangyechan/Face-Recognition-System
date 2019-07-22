@@ -9,8 +9,8 @@ import { SERVER_API_URL } from 'app/app.constants';
 export class LiveService {
   constructor(private http: HttpClient) {}
 
-  save(state: boolean): Observable<any> {
+  save(state: String): Observable<any> {
     console.log('on off 버튼 클릭중 : ' + state);
-    return this.http.post(SERVER_API_URL + 'api/camera/camera-state-onoff', state);
+    return this.http.post(SERVER_API_URL + 'api/camera/camera-state', state);
   }
 }
