@@ -10,7 +10,7 @@ export class LiveService {
   constructor(private http: HttpClient) {}
 
   save(state: String): Observable<any> {
-    console.log('on off 버튼 클릭중 : ' + state);
-    return this.http.post(SERVER_API_URL + 'api/camera/camera-state', state);
+    console.log('on off state : ' + state);
+    return this.http.post(SERVER_API_URL + 'api/camera/camera-state', state, { responseType: 'blob' });
   }
 }

@@ -3,6 +3,7 @@ package com.exntu.faceadmin;
 import com.exntu.faceadmin.config.ApplicationProperties;
 import com.exntu.faceadmin.config.DefaultProfileUtil;
 
+import com.exntu.faceadmin.service.CameraService;
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.apache.commons.lang3.StringUtils;
@@ -61,6 +62,8 @@ public class FaceAdminApp implements InitializingBean {
         SpringApplication app = new SpringApplication(FaceAdminApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
+        CameraService cameraService = new CameraService(env);
+        cameraService.cameraOnOff("ON");
         logApplicationStartup(env);
     }
 
