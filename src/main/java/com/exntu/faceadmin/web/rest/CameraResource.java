@@ -32,10 +32,7 @@ public class CameraResource {
         log.debug("------------------- camera -------------------");
         log.debug(state);
         log.debug("------------------- camera -------------------");
-        if(state.equals("on")) {
-            cameraService.onCamera(state);
-        } else {
-            log.debug("camera off button");
-        }
+        cameraService.cameraOnOff(state);
+
     }
 }

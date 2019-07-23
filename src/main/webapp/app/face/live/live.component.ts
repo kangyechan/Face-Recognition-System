@@ -9,6 +9,7 @@ import { LiveService } from 'app/face/live/live.service';
 export class LiveComponent implements OnInit {
   bAction: string;
   cameraState;
+  imageToShow: any;
 
   constructor(private liveService: LiveService) {}
 
@@ -19,15 +20,34 @@ export class LiveComponent implements OnInit {
 
   toggleCamera() {
     if (this.bAction === 'OFF') {
-      this.liveService.save('off').subscribe(data => {
-        this.bAction = 'ON';
-        this.cameraState = true;
+      this.bAction = 'ON';
+      this.cameraState = true;
+      this.liveService.save('OFF').subscribe(data => {
+        console.log(data);
+
+        live: data;
       });
     } else {
-      this.liveService.save('on').subscribe(data => {
-        this.bAction = 'OFF';
-        this.cameraState = false;
+      this.bAction = 'OFF';
+      this.cameraState = false;
+      this.liveService.save('ON').subscribe(data => {
+        console.log(data);
+        live: data;
       });
+    }
+  }
+
+  createImageFromBlob(image: Blob) {
+    let reader = new FileReader();
+    reader.addEventListener(
+      'load',
+      () => {
+        this.imageToShow = reader.result;
+      },
+      false
+    );
+    if (image) {
+      reader.readAsDataURL(image);
     }
   }
 }
