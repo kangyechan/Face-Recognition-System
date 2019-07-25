@@ -6,6 +6,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.xml.ws.Action;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,6 +41,7 @@ public class CameraService {
 
     private final Logger log = LoggerFactory.getLogger(CameraService.class);
 
+    @Async
     public void cameraOnOff(String state) {
 
         try {

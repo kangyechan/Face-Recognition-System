@@ -11,6 +11,7 @@ export class LiveService {
 
   save(state: String): Observable<any> {
     console.log('on off state : ' + state);
-    return this.http.post(SERVER_API_URL + 'api/camera/camera-state', state, { responseType: 'blob' });
+    console.log(SERVER_API_URL);
+    return this.http.post(SERVER_API_URL + 'api/camera/camera-state', state);
   }
 }

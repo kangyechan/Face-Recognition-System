@@ -293,7 +293,7 @@ describe('Component Tests', () => {
       it('should call refresh on init', () => {
         // GIVEN
         spyOn(service, 'checkHealth').and.returnValue(of(new HttpResponse()));
-        spyOn(service, 'transformHealthData').and.returnValue({ data: 'test' });
+        spyOn(service, 'transformHealthData').and.returnValue({ data: 'images.test' });
 
         // WHEN
         comp.ngOnInit();
@@ -301,7 +301,7 @@ describe('Component Tests', () => {
         // THEN
         expect(service.checkHealth).toHaveBeenCalled();
         expect(service.transformHealthData).toHaveBeenCalled();
-        expect(comp.healthData).toEqual({ data: 'test' });
+        expect(comp.healthData).toEqual({ data: 'images.test' });
       });
       it('should handle a 503 on refreshing health data', () => {
         // GIVEN
