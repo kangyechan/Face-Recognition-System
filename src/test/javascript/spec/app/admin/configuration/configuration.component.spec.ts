@@ -39,8 +39,8 @@ describe('Component Tests', () => {
       });
       it('Should call load all on init', () => {
         // GIVEN
-        const body = [{ config: 'test', properties: 'test' }, { config: 'test2' }];
-        const envConfig = { envConfig: 'test' };
+        const body = [{ config: 'images.test', properties: 'images.test' }, { config: 'test2' }];
+        const envConfig = { envConfig: 'images.test' };
         spyOn(service, 'get').and.returnValue(of(body));
         spyOn(service, 'getEnv').and.returnValue(of(envConfig));
 
@@ -58,7 +58,7 @@ describe('Component Tests', () => {
       it('should return the keys of an Object', () => {
         // GIVEN
         const data = {
-          key1: 'test',
+          key1: 'images.test',
           key2: 'test2'
         };
 

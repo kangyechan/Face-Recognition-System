@@ -11,9 +11,11 @@ import { PictureComponent } from './picture/picture.component';
 import { DetectComponent } from './detect/detect.component';
 import { LnbComponent } from './lnb/lnb.component';
 import { LearningModalComponent, PreworkModalComponent } from './modal/modal.component';
+import { WebcamModule } from 'ngx-webcam';
+// import { WebCamModule } from 'ack-angular-webcam';
 
 @NgModule({
-  imports: [FaceAdminSharedModule, RouterModule.forChild([FACE_ROUTE])],
+  imports: [FaceAdminSharedModule, RouterModule.forChild([FACE_ROUTE]), WebcamModule],
   declarations: [
     FaceComponent,
     ListComponent,

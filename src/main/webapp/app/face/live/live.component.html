@@ -12,6 +12,9 @@
 
 <div class="camera-section">
 
-    <img src="../../../../python/images/test.jpeg"/>
+     <img #live [src]="getLive()"/>
+    <!--<canvas #canvas width="600" height="400"></canvas>-->
+    <!-- <ack-webcam [useParentWidthHeight]="true" [reflect]="true" [options]="{audio: true }"></ack-webcam> -->
+   <!-- <webcam *ngIf="showWebcam" (initError)="handleInitError($event)" [allowCameraSwitch]="false" [imageQuality]="1" mirrorImage="always" [height]="550" [width]="1000" ></webcam>-->
 
 </div>

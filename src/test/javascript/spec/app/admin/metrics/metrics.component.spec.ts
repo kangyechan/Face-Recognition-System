@@ -32,14 +32,14 @@ describe('Component Tests', () => {
         // GIVEN
         const response = {
           timers: {
-            service: 'test',
-            unrelatedKey: 'test'
+            service: 'images.test',
+            unrelatedKey: 'images.test'
           },
           gauges: {
             'jcache.statistics': {
               value: 2
             },
-            unrelatedKey: 'test'
+            unrelatedKey: 'images.test'
           }
         };
         spyOn(service, 'getMetrics').and.returnValue(of(response));
