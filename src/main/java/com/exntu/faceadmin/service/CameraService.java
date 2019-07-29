@@ -41,7 +41,6 @@ public class CameraService {
 
     private final Logger log = LoggerFactory.getLogger(CameraService.class);
 
-    @Async
     public void cameraOnOff(String state) {
 
         try {
@@ -90,5 +89,10 @@ public class CameraService {
             e.printStackTrace();
             log.error("Exception Raised loading python" + e.toString());
         }
+    }
+
+    @Async
+    public String listenImage() {
+        return "asfafds";
     }
 }

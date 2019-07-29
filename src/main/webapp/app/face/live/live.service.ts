@@ -10,8 +10,10 @@ export class LiveService {
   constructor(private http: HttpClient) {}
 
   save(state: String): Observable<any> {
-    console.log('on off state : ' + state);
-    console.log(SERVER_API_URL);
     return this.http.post(SERVER_API_URL + 'api/camera/camera-state', state);
+  }
+
+  listen(): Observable<any> {
+    return this.http.get(SERVER_API_URL + 'api/camera/live');
   }
 }
