@@ -41,6 +41,19 @@ public class CameraResource {
         log.debug(state);
         log.debug("------------------- camera -------------------");
         cameraService.cameraOnOff(state);
+    }
 
+    /**
+     * {@code GET  /camera/live} : Control Camera
+     * @param temperature the activation key.
+     */
+    @GetMapping(path = "/camera/live")
+    @Async
+    public String uploadImage(@RequestParam(value = "temperature") String temperature){
+        log.debug("------------------- live -------------------");
+        log.debug(temperature);
+        log.debug("------------------- live -------------------");
+        temperature = temperature;
+        return temperature;
     }
 }
