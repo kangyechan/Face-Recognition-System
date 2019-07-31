@@ -63,7 +63,7 @@ public class FaceAdminApp implements InitializingBean {
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         CameraService cameraService = new CameraService(env);
-        cameraService.cameraOnOff("ON");
+        cameraService.cameraOnOff();
         logApplicationStartup(env);
     }
 

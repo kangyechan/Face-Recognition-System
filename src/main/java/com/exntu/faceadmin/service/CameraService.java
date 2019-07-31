@@ -1,5 +1,6 @@
 package com.exntu.faceadmin.service;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -8,13 +9,12 @@ import org.springframework.stereotype.Service;
 
 import javax.xml.ws.Action;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.List;
 
 // # Python Path
@@ -31,8 +31,11 @@ public class CameraService {
 
     private static Process mProcess;
     private static Process process;
+    private static Process dProcess;
+    private static Process doorProcess;
 
-    Image capture = null;
+//    public Queue<byte[]> imgQ = new LinkedList<>();
+
     public CameraService(Environment env) {
         if(this.environment == null) {
             this.environment = env;
@@ -41,7 +44,7 @@ public class CameraService {
 
     private final Logger log = LoggerFactory.getLogger(CameraService.class);
 
-    public void cameraOnOff(String state) {
+    public void cameraOnOff() {
 
         try {
             List<String> cmd = new ArrayList<String>();
@@ -61,38 +64,83 @@ public class CameraService {
             // Add Directory Info
             bld.directory(new File(Paths.get(currentPath.toString(), "src", "main", "python").toString()));
 
-            if(state.equals("ON")) {
-                log.debug("camera on button click!");
-                if(process == null) process = bld.start();
-                else log.debug("Already exist Process!");
+//            if(state.equals("ON")) {
+            log.debug("camera on button click!");
+            if(process == null) process = bld.start();
+            else log.debug("Already exist Process!");
 
-                mProcess = process;
+            mProcess = process;
 
-                BufferedReader in = new BufferedReader(new InputStreamReader(mProcess.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(mProcess.getInputStream()));
 
-                String line;
+            String line;
 
-                try{
-                    while((line = in.readLine()) != null) {
-                        log.error("out: "+ line);
-                    }
-                } catch(IOException e) {
-                    log.error("Exception in reading python file"+ e.toString());
+            try{
+                while((line = in.readLine()) != null) {
+                    log.error("out: "+ line);
                 }
-            } else {
-                log.debug("camera off button click!");
-                process.destroy();
-                process = null;
+            } catch(IOException e) {
+                log.error("Exception in reading python file"+ e.toString());
             }
-
+//            } else {
+//                log.debug("camera off button click!");
+//                process.destroy();
+//                process = null;
+//            }
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Exception Raised loading python" + e.toString());
         }
     }
 
-    @Async
-    public String listenImage() {
-        return "asfafds";
+//    @Async
+//    public void liveCamera(String state) throws IOException, InterruptedException {
+//        while(state.equals("ON")) {
+//            InputStream in = new FileInputStream("src/main/python/live.jpg");
+//            this.imgQ.offer(IOUtils.toByteArray(in));
+//            Thread.sleep(1000);
+//            log.debug("teqwrqw");
+//        }
+//    }
+
+    public void doorOpen() {
+        try {
+            List<String> doorCmd = new ArrayList<>();
+            doorCmd.add(environment.getProperty("python.path"));
+
+            // Path
+            Path currentPath = Paths.get(System.getProperty("user.dir"));
+            Path filePath = Paths.get(currentPath.toString(), "src", "main", "python", environment.getProperty("python.fileName.door"));
+            doorCmd.add(filePath.toString());
+
+            ProcessBuilder doorBld = new ProcessBuilder(doorCmd);
+
+            doorBld.directory(new File(Paths.get(currentPath.toString(), "src", "main", "python").toString()));
+
+            log.debug("Door OPEN Click");
+            if(dProcess == null) dProcess = doorBld.start();
+            else log.debug("Already open door...");
+
+            doorProcess = dProcess;
+
+            BufferedReader doorIn = new BufferedReader(new InputStreamReader(doorProcess.getInputStream()));
+
+            String line;
+
+            try{
+                while ((line = doorIn.readLine()) != null) {
+                    log.error("out: "+ line);
+                }
+            } catch (IOException e) {
+                log.error("Exception in reading door open python file" + e.toString());
+            }
+
+            dProcess.destroy();
+            dProcess = null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Exception Raised loading python" + e.toString());
+        }
     }
 }
