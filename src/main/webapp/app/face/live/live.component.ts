@@ -7,8 +7,6 @@ import { LiveService } from 'app/face/live/live.service';
   styleUrls: ['./live.scss']
 })
 export class LiveComponent implements OnInit {
-  @ViewChild('live', { static: true }) live: ElementRef;
-
   bAction: string;
   cameraState;
   serverText: string;
@@ -18,7 +16,7 @@ export class LiveComponent implements OnInit {
   ngOnInit() {
     this.bAction = 'OFF';
     this.cameraState = false;
-    this.serverText = 'servertext';
+    this.serverText = 'serverTEst';
   }
 
   toggleCamera() {
@@ -26,23 +24,28 @@ export class LiveComponent implements OnInit {
       this.bAction = 'ON';
       this.cameraState = true;
       this.liveService.save('OFF').subscribe(data => {
-        console.log(data);
+        console.log('OFF 버튼 클릭, 구독 중지');
+        // this.subscribeImage.unsubscribe();
       });
     } else {
       this.bAction = 'OFF';
       this.cameraState = false;
       this.liveService.save('ON').subscribe(data => {
-        console.log(data);
-      });
-      this.liveService.listen().subscribe(() => {
-        console.log('image get reque가 일어나고 있음');
+        console.log('ON 버튼 클릭, 구독 시작');
       });
     }
-    // this.serverText = this.getServerText();
   }
 
-  // getServerText(): string {
-  //
-  //   return require('http://localhost:8080/api/camera/live');
-  //
+  toggleDoor() {
+    this.liveService.listen().subscribe(response => {
+      console.log('image get request가 일어나고 있음');
+      this.serverText = response;
+      console.log(this.serverText);
+    });
+  }
+
+  get captureURL() {
+    // return 'http://localhost:5000/capture/stream';
+    return 'http://localhost:8080/api/camera/live';
+  }
 }

@@ -1,5 +1,6 @@
 package com.exntu.faceadmin.web.rest;
 
+import com.exntu.faceadmin.domain.Encode;
 import com.exntu.faceadmin.service.CameraService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -9,12 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
-import javax.activation.FileTypeMap;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
+import java.util.Map;
 
 /**
  * REST controller for managing the web camera.
@@ -44,16 +40,19 @@ public class CameraResource {
     }
 
     /**
-     * {@code GET  /camera/live} : Control Camera
-     * @param temperature the activation key.
+     * {@code POST  /camera/live} : Control Camera
+     * @param encode the activation param.
      */
+    @PostMapping(path = "/camera/live")
+    public String uploadImage(@RequestBody Encode encode) {
+
+        return encode.get;
+    }
+
     @GetMapping(path = "/camera/live")
-    @Async
-    public String uploadImage(@RequestParam(value = "temperature") String temperature){
-        log.debug("------------------- live -------------------");
-        log.debug(temperature);
-        log.debug("------------------- live -------------------");
-        temperature = temperature;
-        return temperature;
+    public void getImages(@RequestParam(value = "temperature", required = false) byte[] temperature) throws Exception {
+
+
+        // return temperature;
     }
 }
