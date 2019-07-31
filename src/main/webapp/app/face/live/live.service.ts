@@ -14,6 +14,10 @@ export class LiveService {
   }
 
   listen(): Observable<any> {
-    return this.http.get(SERVER_API_URL + 'api/camera/live');
+    return this.http.get(SERVER_API_URL + 'api/camera/live?temperature=23.5', { responseType: 'text' });
+  }
+
+  getCaptureURL() {
+    return SERVER_API_URL + 'api/camera/live';
   }
 }
