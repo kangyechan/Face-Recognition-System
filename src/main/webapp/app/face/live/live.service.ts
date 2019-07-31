@@ -14,10 +14,14 @@ export class LiveService {
   }
 
   listen(): Observable<any> {
-    return this.http.get(SERVER_API_URL + 'api/camera/live?temperature=23.5', { responseType: 'text' });
+    return this.http.get(SERVER_API_URL + 'api/camera/live', { responseType: 'text' });
+  }
+
+  doorOpen(state: String): Observable<any> {
+    return this.http.post(SERVER_API_URL + 'api/camera/door-open', state);
   }
 
   getCaptureURL() {
-    return SERVER_API_URL + 'api/camera/live';
+    return 'http://localhost:9090';
   }
 }

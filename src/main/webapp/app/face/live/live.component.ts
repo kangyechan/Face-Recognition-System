@@ -7,45 +7,38 @@ import { LiveService } from 'app/face/live/live.service';
   styleUrls: ['./live.scss']
 })
 export class LiveComponent implements OnInit {
-  bAction: string;
+  cameraText: string;
+  doorText: string;
   cameraState;
-  serverText: string;
 
   constructor(private liveService: LiveService) {}
 
   ngOnInit() {
-    this.bAction = 'OFF';
-    this.cameraState = false;
-    this.serverText = 'serverTEst';
+    this.cameraText = 'OFF';
+    this.doorText = 'OPEN';
+    this.cameraState = true;
+    // this.liveService.listen().subscribe(response => {
+    //   console.log('testing');
+    // });
   }
 
   toggleCamera() {
-    if (this.bAction === 'OFF') {
-      this.bAction = 'ON';
-      this.cameraState = true;
-      this.liveService.save('OFF').subscribe(data => {
-        console.log('OFF 버튼 클릭, 구독 중지');
-        // this.subscribeImage.unsubscribe();
-      });
-    } else {
-      this.bAction = 'OFF';
+    if (this.cameraState) {
+      this.cameraText = 'ON';
       this.cameraState = false;
-      this.liveService.save('ON').subscribe(data => {
-        console.log('ON 버튼 클릭, 구독 시작');
-      });
+    } else {
+      this.cameraText = 'OFF';
+      this.cameraState = true;
     }
   }
 
   toggleDoor() {
-    this.liveService.listen().subscribe(response => {
-      console.log('image get request가 일어나고 있음');
-      this.serverText = response;
-      console.log(this.serverText);
+    this.liveService.doorOpen('ON').subscribe(data => {
+      console.log('Door open');
     });
   }
 
   get captureURL() {
-    // return 'http://localhost:5000/capture/stream';
-    return 'http://localhost:8080/api/camera/live';
+    return this.liveService.getCaptureURL();
   }
 }

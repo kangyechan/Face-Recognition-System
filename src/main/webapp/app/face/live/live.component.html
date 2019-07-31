@@ -4,15 +4,20 @@
         <label>Live On</label>
     </div>
 
-    <div class="camera-button">
-        <button (click)="toggleCamera()">{{ bAction }}</button>
+    <div class="button-section">
+        <div class="camera-button">
+                <button (click)="toggleCamera()">{{ cameraText }}</button>
+        </div>
+        <div class="door-button">
+            <button (click)="toggleDoor()">{{ doorText }}</button>
+        </div>
     </div>
-
 </div>
 
 <div class="camera-section">
 
+
     <img class="NO-CACHE" border="1"
-             [src]="captureURL" width="300">
+             [src]="" *ngIf="cameraState">
 
 </div>

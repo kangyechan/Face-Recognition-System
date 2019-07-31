@@ -154,3 +154,4 @@ python:
   path: /Library/Frameworks/Python.framework/Versions/3.4/bin/python3.4
   fileName:
     camera: camera.py
+    door: door.py
