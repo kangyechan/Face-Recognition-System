@@ -9,10 +9,6 @@ import { SERVER_API_URL } from 'app/app.constants';
 export class LiveService {
   constructor(private http: HttpClient) {}
 
-  save(state: String): Observable<any> {
-    return this.http.post(SERVER_API_URL + 'api/camera/camera-state', state);
-  }
-
   listen(): Observable<any> {
     return this.http.get(SERVER_API_URL + 'api/camera/live', { responseType: 'text' });
   }
@@ -22,6 +18,6 @@ export class LiveService {
   }
 
   getCaptureURL() {
-    return 'http://localhost:9090';
+    return SERVER_API_URL + 'api/camera/live';
   }
 }

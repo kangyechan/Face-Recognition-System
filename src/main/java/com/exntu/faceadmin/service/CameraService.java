@@ -13,8 +13,6 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.List;
 
 // # Python Path
@@ -29,21 +27,16 @@ import java.util.List;
 public class CameraService {
     private Environment environment;
 
-    private static Process mProcess;
     private static Process process;
     private static Process dProcess;
-    private static Process doorProcess;
-
-//    public Queue<byte[]> imgQ = new LinkedList<>();
 
     public CameraService(Environment env) {
-        if(this.environment == null) {
-            this.environment = env;
-        }
+        this.environment = env;
     }
 
     private final Logger log = LoggerFactory.getLogger(CameraService.class);
 
+    @Async
     public void cameraOnOff() {
 
         try {
@@ -64,44 +57,15 @@ public class CameraService {
             // Add Directory Info
             bld.directory(new File(Paths.get(currentPath.toString(), "src", "main", "python").toString()));
 
-//            if(state.equals("ON")) {
             log.debug("camera on button click!");
             if(process == null) process = bld.start();
             else log.debug("Already exist Process!");
 
-            mProcess = process;
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(mProcess.getInputStream()));
-
-            String line;
-
-            try{
-                while((line = in.readLine()) != null) {
-                    log.error("out: "+ line);
-                }
-            } catch(IOException e) {
-                log.error("Exception in reading python file"+ e.toString());
-            }
-//            } else {
-//                log.debug("camera off button click!");
-//                process.destroy();
-//                process = null;
-//            }
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Exception Raised loading python" + e.toString());
         }
     }
-
-//    @Async
-//    public void liveCamera(String state) throws IOException, InterruptedException {
-//        while(state.equals("ON")) {
-//            InputStream in = new FileInputStream("src/main/python/live.jpg");
-//            this.imgQ.offer(IOUtils.toByteArray(in));
-//            Thread.sleep(1000);
-//            log.debug("teqwrqw");
-//        }
-//    }
 
     public void doorOpen() {
         try {
@@ -120,20 +84,6 @@ public class CameraService {
             log.debug("Door OPEN Click");
             if(dProcess == null) dProcess = doorBld.start();
             else log.debug("Already open door...");
-
-            doorProcess = dProcess;
-
-            BufferedReader doorIn = new BufferedReader(new InputStreamReader(doorProcess.getInputStream()));
-
-            String line;
-
-            try{
-                while ((line = doorIn.readLine()) != null) {
-                    log.error("out: "+ line);
-                }
-            } catch (IOException e) {
-                log.error("Exception in reading door open python file" + e.toString());
-            }
 
             dProcess.destroy();
             dProcess = null;
