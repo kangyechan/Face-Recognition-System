@@ -50,9 +50,14 @@
   height: 60vh;
   text-align: center;
 
-  img {
+  div {
     background: #efefef;
     width: 100%;
     height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 }

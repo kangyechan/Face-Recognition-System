@@ -19,8 +19,10 @@
 
 <div class="camera-section">
 
+    <div *ngIf="cameraState">
 
-    <img class="NO-CACHE" border="1"
-             [src]="" *ngIf="cameraState">
+        <img class="NO-CACHE" border="1" [src]="captureURL">
+
+    </div>
 
 </div>

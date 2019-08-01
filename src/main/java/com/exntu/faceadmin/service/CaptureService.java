@@ -35,17 +35,16 @@ public class CaptureService {
     @Async
     public void liveCamera() throws IOException, InterruptedException {
 
+        FileInputStream in = new FileInputStream("src/main/python/live.jpg");
+
         while(this.state.equals("ON")) {
             Thread.sleep(10);
-            InputStream in = new FileInputStream("src/main/python/live.jpg");
             this.imgQ.offer(IOUtils.toByteArray(in));
 
             if(this.onOff.equals("STOP")) {
                 this.imgQ.poll();
             }
-            log.debug("siae: ");
             log.debug(Integer.toString(this.imgQ.size()));
-
         }
         log.debug("끝났음");
     }

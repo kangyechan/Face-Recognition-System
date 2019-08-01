@@ -42,6 +42,7 @@ export class LiveComponent implements OnInit {
   }
 
   get captureURL() {
+    console.log('reset');
     return this.liveService.getCaptureURL();
   }
 }

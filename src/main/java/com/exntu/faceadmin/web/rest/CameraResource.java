@@ -12,9 +12,11 @@ import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 /**
@@ -56,24 +58,38 @@ public class CameraResource extends HttpServlet {
 //        produces = MediaType.IMAGE_JPEG_VALUE
     )
     public void getImage(HttpServletResponse response) throws IOException, InterruptedException {
-
         log.debug("accessed live methods");
 
-//        return IOUtils.toByteArray(in);
+        response.setContentType("image/jpeg; charset=UTF-8");
+        OutputStream out = response.getOutputStream();
 
+        // 바로 image를 사용하는 로직
         while(this.state.equals("ON")){
-            ServletOutputStream out;
-            response.setContentType("image/jpeg");
-            out = response.getOutputStream();
-            BufferedOutputStream bout = new BufferedOutputStream(out);
+            Thread.sleep(10);
 
-            FileInputStream in = new FileInputStream("src/main/python/live.jpg");
-            bout.write(IOUtils.toByteArray(in));
+            byte[] image = IOUtils.toByteArray(new FileInputStream("src/main/python/live.jpg"));
 
-            bout.flush();
+            out.write(image);
 
+            out.flush();
         }
+//         CaptureService의 queue를 이용한 로직
+//        response.setContentType("image/jpeg; charset=UTF-8");
+//        OutputStream out = response.getOutputStream();
+//        captureService.liveCamera();
+//        Thread.sleep(50);
+//        captureService.setOnOff("START");
+//
+//        while(this.state.equals("ON")){
+//            Thread.sleep(10);
+//
+//            log.debug(captureService.getPeek().toString());
+//            out.write(captureService.getFrame());
+//            Thread.sleep(500);
+//        }
     }
+//            FileInputStream in = new FileInputStream("src/main/python/live.jpg");
+
 
     /**
      * {@code POST  /camera/door-open} : Door Control
