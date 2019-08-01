@@ -11,13 +11,18 @@
         <div class="door-button">
             <button (click)="toggleDoor()">{{ doorText }}</button>
         </div>
+        <div class="door-button">
+            <button (click)="getCapture()">test</button>
+        </div>
     </div>
 </div>
 
 <div class="camera-section">
 
+    <div *ngIf="cameraState">
 
-    <img class="NO-CACHE" border="1"
-             [src]="" *ngIf="cameraState">
+        <img class="NO-CACHE" border="1" [src]="captureURL">
+
+    </div>
 
 </div>

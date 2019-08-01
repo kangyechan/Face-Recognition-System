@@ -4,6 +4,7 @@ import com.exntu.faceadmin.config.ApplicationProperties;
 import com.exntu.faceadmin.config.DefaultProfileUtil;
 
 import com.exntu.faceadmin.service.CameraService;
+import com.exntu.faceadmin.service.CaptureService;
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,7 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -58,13 +60,13 @@ public class FaceAdminApp implements InitializingBean {
      *
      * @param args the command line arguments.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         SpringApplication app = new SpringApplication(FaceAdminApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         CameraService cameraService = new CameraService(env);
-        cameraService.cameraOnOff();
         logApplicationStartup(env);
+        cameraService.cameraOnOff();
     }
 
     private static void logApplicationStartup(Environment env) {

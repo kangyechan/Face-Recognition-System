@@ -17,9 +17,6 @@ export class LiveComponent implements OnInit {
     this.cameraText = 'OFF';
     this.doorText = 'OPEN';
     this.cameraState = true;
-    // this.liveService.listen().subscribe(response => {
-    //   console.log('testing');
-    // });
   }
 
   toggleCamera() {
@@ -38,7 +35,14 @@ export class LiveComponent implements OnInit {
     });
   }
 
+  getCapture() {
+    this.liveService.listen().subscribe(data => {
+      console.log(data);
+    });
+  }
+
   get captureURL() {
+    console.log('reset');
     return this.liveService.getCaptureURL();
   }
 }
