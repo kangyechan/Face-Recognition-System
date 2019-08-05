@@ -1,0 +1,46 @@
+<div class='member-list'>
+
+    <div class='member-name'>
+
+        <label>Members</label>
+
+        <button (click)='componentInsideModal.open()'> + </button>
+
+    </div>
+
+    <div class="members">
+
+    <tree-root [nodes]="nodes" [options]="options"></tree-root>
+
+    </div>
+
+</div>
+
+<modal #componentInsideModal>
+    <ng-template class="member-modal-header" #modalHeader>
+        <h2>Add member</h2>
+    </ng-template>
+    <ng-template #modalBody>
+        <div class="member-menu-section">
+            <div class="member-menu">
+                <div class="member-button" [ngStyle]="{'background-color': folder_state ? '#e2f3f9':'white'}" (click)="toggle_state('folder')">Folder</div>
+            </div>
+            <div class="member-menu">
+                <div class="member-button" [ngStyle]="{'background-color': member_state ? '#e2f3f9':'white'}" (click)="toggle_state('member')">Member</div>
+            </div>
+        </div>
+        <div class="form-section" *ngIf="folder_state">
+            <label>Folder name</label>
+            <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ fwarning }}" [(ngModel)]="folderName">
+        </div>
+        <div class="form-section" *ngIf="member_state">
+            <label>Member name</label>
+            <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ mwarning }}" [(ngModel)]="memberName">
+        </div>
+    </ng-template>
+    <ng-template #modalFooter>
+        <!-- <button type="button" class="btn btn-outline-dark" (click)="componentInsideModal.close()">Save</button> -->
+        <button *ngIf="folder_state" type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>
+        <button *ngIf="member_state" type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>
+    </ng-template>
+</modal>

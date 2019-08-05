@@ -24,7 +24,7 @@ import java.io.*;
  */
 @RestController
 @RequestMapping("/api")
-public class CameraResource extends HttpServlet {
+public class CameraResource {
 
     private final Logger log = LoggerFactory.getLogger(CameraResource.class);
 
