@@ -92,6 +92,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/camera/livecamera").permitAll()
             .antMatchers("/api/camera/live").permitAll()
             .antMatchers("/api/camera/door-open").permitAll()
+            .antMatchers("/api/member/make-member").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()

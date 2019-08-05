@@ -1,0 +1,57 @@
+@import '~angular-tree-component/dist/angular-tree-component.css';
+
+.member-list {
+  button:hover {
+    box-shadow: 0 0 5px 1px #efefef;
+  }
+
+  .member-name {
+    border-bottom: solid 2px black;
+    padding: 0 5px;
+
+    label {
+      font-size: 1em;
+      font-weight: 500;
+    }
+
+    button {
+      float: right;
+      font-size: 15px;
+      background: #e2f3f9;
+      border-radius: 30%;
+      border: none;
+    }
+  }
+
+  .members {
+    height: 60vh;
+    overflow: scroll;
+  }
+}
+
+.member-menu-section {
+  width: 100%;
+  height: 24px;
+
+  .form-section {
+    padding-top: 30px;
+  }
+
+  .member-menu {
+    float: left;
+    width: 50%;
+    text-align: center;
+
+    .member-button {
+      width: 100%;
+      height: 100%;
+      background-color: white;
+    }
+
+    .member-button:hover {
+      cursor: pointer;
+      background: #e2f3f9;
+      box-shadow: 0 0 5px 1px #efefef;
+    }
+  }
+}
