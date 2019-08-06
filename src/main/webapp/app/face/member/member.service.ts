@@ -9,7 +9,15 @@ import { Observable } from 'rxjs';
 export class MemberService {
   constructor(private http: HttpClient) {}
 
-  makeFolder(): Observable<any> {
-    return this.http.get(SERVER_API_URL + 'api/member/make-member', { responseType: 'text' });
+  initMembersFolder(): Observable<any> {
+    return this.http.get(SERVER_API_URL + 'api/member/init-members', { responseType: 'json' });
+  }
+
+  makeMembersFolder(folderName: string): Observable<any> {
+    return this.http.get(SERVER_API_URL + 'api/member/make-members-folder', { responseType: 'text', params: { folderName } });
+  }
+
+  readMemberFolderLists(folderId: string, folderName: string): Observable<any> {
+    return this.http.get(SERVER_API_URL + 'api/member/read-member-folder-list', { responseType: 'json', params: { folderId, folderName } });
   }
 }

@@ -16,10 +16,28 @@
 
     button {
       float: right;
-      font-size: 15px;
-      background: #e2f3f9;
-      border-radius: 30%;
       border: none;
+    }
+
+    fa-icon {
+      font-size: 15px;
+    }
+
+    #add_button {
+      fa-icon {
+        color: blue;
+      }
+    }
+
+    #del_button {
+      fa-icon {
+        color: red;
+      }
+      margin-right: 3px;
+    }
+
+    #cancel_button {
+      color: #000000;
     }
   }
 
@@ -51,7 +69,7 @@
     .member-button:hover {
       cursor: pointer;
       background: #e2f3f9;
-      box-shadow: 0 0 5px 1px #efefef;
+      box-shadow: 0 0 3px 1px #efefef;
     }
   }
 }
