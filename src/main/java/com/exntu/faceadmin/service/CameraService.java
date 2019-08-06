@@ -82,11 +82,16 @@ public class CameraService {
             doorBld.directory(new File(Paths.get(currentPath.toString(), "src", "main", "python").toString()));
 
             log.debug("Door OPEN Click");
-            if(dProcess == null) dProcess = doorBld.start();
+            if(dProcess == null) {
+                dProcess = doorBld.start();
+
+                Thread.sleep(3000);
+
+                dProcess.destroy();
+                dProcess = null;
+            }
             else log.debug("Already open door...");
 
-            dProcess.destroy();
-            dProcess = null;
 
         } catch (Exception e) {
             e.printStackTrace();

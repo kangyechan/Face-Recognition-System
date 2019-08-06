@@ -1,19 +1,15 @@
 <div class='member-list'>
-
     <div class='member-name'>
-
         <label>Members</label>
-
-        <button (click)='componentInsideModal.open()'> + </button>
-
+        <button *ngIf="!del_checkbox" id="add_button" (click)='componentInsideModal.open()'><fa-icon icon="folder-plus"></fa-icon></button>
+        <button *ngIf="!del_checkbox" id="del_button" (click)="del_checkbox_toggle(true)"><fa-icon icon="folder-minus"></fa-icon></button>
+        <button *ngIf="del_checkbox" id="cancel_button" (click)="del_checkbox_toggle(false)"><fa-icon icon="window-close"></fa-icon></button>
+        <button *ngIf="del_checkbox" id="del_button" (click)="del_confirm()"><fa-icon icon="trash-alt"></fa-icon></button>
     </div>
 
     <div class="members">
-
-    <tree-root [nodes]="nodes" [options]="options"></tree-root>
-
+        <tree-root #tree [nodes]="member_folder" [options]="options" (select)="onSelect($event)"></tree-root>
     </div>
-
 </div>
 
 <modal #componentInsideModal>
@@ -31,11 +27,11 @@
         </div>
         <div class="form-section" *ngIf="folder_state">
             <label>Folder name</label>
-            <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ fwarning }}" [(ngModel)]="folderName">
+            <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ fWarning }}" [(ngModel)]="folderName">
         </div>
         <div class="form-section" *ngIf="member_state">
             <label>Member name</label>
-            <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ mwarning }}" [(ngModel)]="memberName">
+            <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ mWarning }}" [(ngModel)]="memberName">
         </div>
     </ng-template>
     <ng-template #modalFooter>

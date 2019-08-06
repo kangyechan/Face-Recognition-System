@@ -327,6 +327,12 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.199</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
 
     </dependencies>

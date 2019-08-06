@@ -1,8 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MemberService } from 'app/face/member/member.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TreeNode } from 'angular-tree-component/dist/defs/api';
+import { ITreeNode, ITreeOptions, TreeNode } from 'angular-tree-component/dist/defs/api';
 import { request } from 'http';
+import { TreeComponent } from 'angular-tree-component';
 
 @Component({
   selector: 'jhi-list',
@@ -10,6 +11,12 @@ import { request } from 'http';
   styleUrls: ['./member.scss']
 })
 export class MemberComponent implements OnInit {
+  member_folder = [{}];
+  del_checkbox = false;
+  selectedTreeList: any;
+
+  @ViewChild(TreeComponent, { static: false }) private tree: TreeComponent;
+
   nodes = [
     {
       id: '01',
@@ -24,7 +31,7 @@ export class MemberComponent implements OnInit {
         {
           id: '02-2',
           name: 'child2.2',
-          children: [{ id: 2 - 2 - 1, name: 'subsub' }]
+          children: [{ id: '02-2-1', name: 'subsub' }]
         }
       ]
     },
@@ -37,16 +44,24 @@ export class MemberComponent implements OnInit {
       id: '04',
       name: 'blacklist',
       children: [{ id: '04-1', name: 'blacklist4.1' }, { id: '04-2', name: 'blakclist4.2' }]
-    },
-    {
-      id: '05',
-      name: 'unknown',
-      hasChildren: true
     }
+    // {
+    //   id: '05',
+    //   name: 'unknown',
+    //   hasChildren: true
+    // }
   ];
-  options = {
+  options: ITreeOptions = {
+    useCheckbox: this.del_checkbox,
     getChildren: (node: TreeNode) => {
-      return request('/api/children/' + node.id);
+      this.memberService.readMemberFolderLists(node.data.id, node.data.name).subscribe(data => {
+        this.member_folder.forEach(folder => {
+          if (folder.id === node.data.id) {
+            folder.children = data;
+            this.tree.treeModel.update();
+          }
+        });
+      });
     }
   };
 
@@ -54,8 +69,8 @@ export class MemberComponent implements OnInit {
   member_state;
   folderName: string;
   memberName: string;
-  fwarning: string;
-  mwarning: string;
+  fWarning: string;
+  mWarning: string;
 
   @ViewChild('componentInsideModal', { static: false })
   componentInsideModals: ElementRef<any>;
@@ -65,13 +80,35 @@ export class MemberComponent implements OnInit {
   ngOnInit() {
     this.folder_state = true;
     this.member_state = false;
+    this.memberService.initMembersFolder().subscribe(data => {
+      this.member_folder = data;
+      console.log(this.member_folder);
+    });
   }
 
   memberAdd() {
     // console.log(this.memberPath);
-    this.memberService.makeFolder().subscribe(data => {
-      console.log(data);
-    });
+    // this.memberService.makeFolder().subscribe(data => {
+    //   console.log(data);
+    // });
+  }
+
+  del_checkbox_toggle(use: boolean) {
+    this.del_checkbox = use;
+    this.options.useCheckbox = use;
+  }
+
+  del_confirm() {
+    console.log('selectedTreeList 의 구성요소를 삭제');
+  }
+
+  onSelect(event) {
+    this.selectedTreeList = Object.entries(event.treeModel.selectedLeafNodeIds)
+      .filter(([key, value]) => {
+        return value === true;
+      })
+      .map(node => node[0]);
+    console.log(this.selectedTreeList);
   }
 
   toggle_state(menu: string) {
@@ -89,15 +126,23 @@ export class MemberComponent implements OnInit {
   onSubmit() {
     if (this.folder_state) {
       if (this.folderName === undefined) {
-        this.fwarning = 'input folder name';
+        this.fWarning = 'input folder name';
       } else {
-        console.log(this.folderName);
-        this.folderName = undefined;
-        this.componentInsideModals.close();
+        this.memberService.makeMembersFolder(this.folderName).subscribe(newFolderName => {
+          if (newFolderName !== 'fail') {
+            console.log(newFolderName + ' mkdir success.');
+            this.member_folder.push({ name: newFolderName });
+            this.tree.treeModel.update();
+          } else {
+            console.log('mkdir failed.');
+          }
+          this.folderName = undefined;
+          this.componentInsideModals.close();
+        });
       }
     } else {
       if (this.memberName === undefined) {
-        this.mwarning = 'input member name';
+        this.mWarning = 'input member name';
       } else {
         this.memberName = undefined;
         this.componentInsideModals.close();
