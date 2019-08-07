@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Service for memver
@@ -25,6 +26,7 @@ public class MemberService {
     }
 
     public Object readRootFolder() {
+        int folderId = 0;
         ArrayList<Members> initMembers = new ArrayList<>();
         File rootFolder = new File(membersFolderPath);
         if(!rootFolder.exists()) {
@@ -32,25 +34,26 @@ public class MemberService {
         } else {
             File[] arrRootFolder = rootFolder.listFiles();
             if(arrRootFolder != null) {
-                for(int i = 0; i < arrRootFolder.length; ++i) {
-                    Members membersList = new Members(String.valueOf(i), arrRootFolder[i].getName());
-                    if(arrRootFolder[i].getName().startsWith(".")) {
-                        log.debug(arrRootFolder[i].getName() + "is NOT Directory.");
+                for(File rootFolderName: arrRootFolder) {
+                    Members membersList = new Members(String.valueOf(folderId), rootFolderName.getName(), rootFolderName.getName() + "/");
+                    if(!rootFolderName.isDirectory()) {
+                        log.debug(rootFolderName.getName() + "is NOT Directory.");
                         continue;
                     } else {
-                        File memList = new File(membersFolderPath + arrRootFolder[i].getName() + "/");
+                        File memList = new File(membersFolderPath + rootFolderName.getName() + "/");
                         File[] memListFolder = memList.listFiles();
                         if(memListFolder != null) {
                             if(memListFolder.length < 1) {
                                 membersList.setHasChildren(false);
-                                log.debug(arrRootFolder[i].getName() + " This folder has not children.");
+                                log.debug(rootFolderName.getName() + " This folder has not children.");
                             } else {
                                 membersList.setHasChildren(true);
-                                log.debug(arrRootFolder[i].getName() + " This folder has children.");
+                                log.debug(rootFolderName.getName() + " This folder has children.");
                             }
                         } else {
                             log.error("MembersListFolder NULL Point Exception.");
                         }
+                        folderId++;
                     }
                     initMembers.add(membersList);
                 }
@@ -61,7 +64,6 @@ public class MemberService {
         return initMembers;
     }
 
-    @Async
     public boolean makeNewFolder(String folderName) {
         File newFolder = new File(membersFolderPath + folderName + "/");
         if(!newFolder.exists()) {
@@ -78,8 +80,9 @@ public class MemberService {
         return true;
     }
 
-    public Object readMemberList(String folderId, String folderName) {
-        String readMembersFolderPath = membersFolderPath + folderName + "/";
+    public Object readMemberList(String folderId, String folderName, String folderPath) {
+        int memFolderId = 0;
+        String readMembersFolderPath = membersFolderPath + folderPath;
         ArrayList<Members> readMembers = new ArrayList<>();
         File memberFolder = new File(readMembersFolderPath);
         if(!memberFolder.exists()) {
@@ -87,25 +90,39 @@ public class MemberService {
         } else {
             File[] arrMemFolder = memberFolder.listFiles();
             if(arrMemFolder != null) {
-                for(int i = 0; i < arrMemFolder.length; ++i) {
-                    Members memList =  new Members(folderId + "-" + String.valueOf(i), arrMemFolder[i].getName());
-                    if(arrMemFolder[i].getName().startsWith(".")) {
-                        log.debug(arrMemFolder[i].getName() + "is NOT Directory.");
-                        continue;
+                for(File memFolderName: arrMemFolder) {
+                    Members memList =  new Members(
+                        folderId + "-" + String.valueOf(memFolderId), memFolderName.getName(),
+                        folderPath + memFolderName.getName() + "/" );
+                    if(!memFolderName.isDirectory()) {
+                        log.debug(memFolderName.getName() + "is NOT Directory.");
+                        if(memFolderName.getName().toLowerCase().endsWith(".png") ||
+                            memFolderName.getName().toLowerCase().endsWith(".jpg") ||
+                            memFolderName.getName().toLowerCase().endsWith(".jpeg") ||
+                            memFolderName.getName().toLowerCase().endsWith(".gif") ||
+                            memFolderName.getName().toLowerCase().endsWith(".bmp") ||
+                            memFolderName.getName().toLowerCase().endsWith(".tif") ||
+                            memFolderName.getName().toLowerCase().endsWith(".tiff")) {
+                            memList.setPath(folderPath + memFolderName.getName().toLowerCase());
+                            memFolderId++;
+                        } else {
+                            continue;
+                        }
                     } else {
-                        File memListFolder = new File(readMembersFolderPath + arrMemFolder[i].getName() + "/");
+                        File memListFolder = new File(readMembersFolderPath + memFolderName.getName() + "/");
                         File[] memListFolderChildren = memListFolder.listFiles();
                         if(memListFolderChildren != null) {
                             if(memListFolderChildren.length < 1) {
                                 memList.setHasChildren(false);
-                                log.debug(arrMemFolder[i].getName() + " This folder has not children.");
+                                log.debug(memFolderName.getName() + " This folder has not children.");
                             } else {
                                 memList.setHasChildren(true);
-                                log.debug(arrMemFolder[i].getName() + " This folder has children.");
+                                log.debug(memFolderName.getName() + " This folder has children.");
                             }
                         } else {
                             log.error("memListFolderChildren is NULL Point Exception.");
                         }
+                        memFolderId++;
                     }
                     readMembers.add(memList);
                 }
@@ -114,5 +131,45 @@ public class MemberService {
             }
         }
         return readMembers;
+    }
+
+    public boolean deleteFolder(ArrayList<String> selectedList) {
+        for(String delFolderPath: selectedList) {
+            if(recursiveDeleteFolder(membersFolderPath + delFolderPath)) {
+                log.debug(delFolderPath + " is delete success.");
+            }
+            else return false;
+        }
+        return true;
+    }
+
+    private boolean recursiveDeleteFolder(String path) {
+        File folder = new File(path);
+        try {
+            if(folder.exists()) {
+                File[] folder_list = folder.listFiles();
+                if(folder_list != null) {
+                    for(int i = 0; i < folder_list.length; i++) {
+                        if(folder_list[i].isFile()) {
+                            folder_list[i].delete();
+                            log.debug(folder_list[i].getName() + " file is delete.");
+                        } else {
+                            recursiveDeleteFolder(folder_list[i].getPath());
+                            log.debug(folder_list[i].getName() + " folder is delete.");
+                        }
+                        folder_list[i].delete();
+                    }
+                    folder.delete();
+                } else {
+                    log.error("recursive function NULL Point Exception.");
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("recursive Delete Error");
+            return false;
+        }
+        return true;
     }
 }

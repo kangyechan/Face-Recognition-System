@@ -11,60 +11,6 @@ import { TreeComponent } from 'angular-tree-component';
   styleUrls: ['./member.scss']
 })
 export class MemberComponent implements OnInit {
-  member_folder = [{}];
-  del_checkbox = false;
-  selectedTreeList: any;
-
-  @ViewChild(TreeComponent, { static: false }) private tree: TreeComponent;
-
-  nodes = [
-    {
-      id: '01',
-      name: 'exntu',
-      children: [{ id: '01-1', name: 'child1' }, { id: '01-2', name: 'child2' }]
-    },
-    {
-      id: '02',
-      name: 'magenta',
-      children: [
-        { id: '02-1', name: 'child2.1' },
-        {
-          id: '02-2',
-          name: 'child2.2',
-          children: [{ id: '02-2-1', name: 'subsub' }]
-        }
-      ]
-    },
-    {
-      id: '03',
-      name: 'whitelist',
-      children: [{ id: '03-1', name: 'child3.1' }, { id: '03-2', name: 'child3.2' }]
-    },
-    {
-      id: '04',
-      name: 'blacklist',
-      children: [{ id: '04-1', name: 'blacklist4.1' }, { id: '04-2', name: 'blakclist4.2' }]
-    }
-    // {
-    //   id: '05',
-    //   name: 'unknown',
-    //   hasChildren: true
-    // }
-  ];
-  options: ITreeOptions = {
-    useCheckbox: this.del_checkbox,
-    getChildren: (node: TreeNode) => {
-      this.memberService.readMemberFolderLists(node.data.id, node.data.name).subscribe(data => {
-        this.member_folder.forEach(folder => {
-          if (folder.id === node.data.id) {
-            folder.children = data;
-            this.tree.treeModel.update();
-          }
-        });
-      });
-    }
-  };
-
   folder_state;
   member_state;
   folderName: string;
@@ -72,17 +18,46 @@ export class MemberComponent implements OnInit {
   fWarning: string;
   mWarning: string;
 
-  @ViewChild('componentInsideModal', { static: false })
-  componentInsideModals: ElementRef<any>;
+  member_folder = [{}];
+  del_checkbox = false;
+  selectedTreeList: any = [];
+  selectedTreePathList: any = [];
+  delParentFolderId: string;
+
+  @ViewChild('componentInsideModal', { static: false }) componentInsideModals: ElementRef<any>;
+  @ViewChild(TreeComponent, { static: false }) private tree: TreeComponent;
+
+  public options: ITreeOptions = {
+    useTriState: false,
+    useCheckbox: this.del_checkbox,
+    getChildren: (node: TreeNode) => {
+      this.memberService.readMemberFolderLists(node.data.id, node.data.name, node.data.path).subscribe(data => {
+        this.readMemberFolderRecursive(this.member_folder, node.data.path, data);
+      });
+    }
+  };
 
   constructor(private memberService: MemberService) {}
+
+  readMemberFolderRecursive(hasChildFolder: any, nodePath: string, data: any) {
+    hasChildFolder.forEach(childFolder => {
+      if (childFolder.hasChildren && nodePath.startsWith(childFolder.path)) {
+        if (childFolder.path === nodePath) {
+          childFolder.children = data;
+          this.tree.treeModel.update();
+        } else {
+          this.readMemberFolderRecursive(childFolder.children, nodePath, data);
+        }
+      } else {
+      }
+    });
+  }
 
   ngOnInit() {
     this.folder_state = true;
     this.member_state = false;
     this.memberService.initMembersFolder().subscribe(data => {
       this.member_folder = data;
-      console.log(this.member_folder);
     });
   }
 
@@ -99,10 +74,67 @@ export class MemberComponent implements OnInit {
   }
 
   del_confirm() {
-    console.log('selectedTreeList 의 구성요소를 삭제');
+    if (this.selectedTreeList.toString() !== '') {
+      this.deleteCheckRecursive(this.member_folder, this.delParentFolderId);
+      this.memberService.delMemberFolder(this.selectedTreePathList).subscribe(data => {
+        console.log(data);
+        console.log(this.selectedTreePathList);
+      });
+      this.deleteUpdateTree(this.member_folder);
+      this.tree.treeModel.update();
+      this.selectedTreeList = [];
+      this.selectedTreePathList = [];
+    } else {
+      console.log('SelectedTreeList is null');
+    }
+  }
+
+  deleteCheckRecursive(checkFolder: any, delParentFolderId: string) {
+    this.selectedTreeList.forEach(selectedIds => {
+      checkFolder.forEach(folder => {
+        if (folder.id === selectedIds) {
+          if (this.selectedTreePathList.indexOf(folder.path) === -1) {
+            this.selectedTreePathList.push(folder.path);
+          }
+          if (folder.hasChildren) {
+            delParentFolderId = folder.id + '-';
+          }
+        } else {
+          if (selectedIds.startsWith(delParentFolderId)) {
+          } else {
+            if (selectedIds.startsWith(folder.id)) {
+              this.deleteCheckRecursive(folder.children, delParentFolderId);
+            }
+          }
+        }
+      });
+    });
+  }
+
+  deleteUpdateTree(checkFolder: any) {
+    checkFolder.forEach((folder, index) => {
+      this.selectedTreePathList.forEach(selectedData => {
+        if (folder.path === selectedData) {
+          checkFolder.splice(index, 1);
+        } else {
+          if (selectedData.startsWith(folder.path)) {
+            this.deleteUpdateTree(folder.children);
+          }
+        }
+      });
+    });
   }
 
   onSelect(event) {
+    this.selectedTreeList = Object.entries(event.treeModel.selectedLeafNodeIds)
+      .filter(([key, value]) => {
+        return value === true;
+      })
+      .map(node => node[0]);
+    console.log(this.selectedTreeList);
+  }
+
+  deSelect(event) {
     this.selectedTreeList = Object.entries(event.treeModel.selectedLeafNodeIds)
       .filter(([key, value]) => {
         return value === true;
@@ -131,7 +163,7 @@ export class MemberComponent implements OnInit {
         this.memberService.makeMembersFolder(this.folderName).subscribe(newFolderName => {
           if (newFolderName !== 'fail') {
             console.log(newFolderName + ' mkdir success.');
-            this.member_folder.push({ name: newFolderName });
+            this.member_folder.push({ id: this.member_folder.length.toString(), name: newFolderName });
             this.tree.treeModel.update();
           } else {
             console.log('mkdir failed.');

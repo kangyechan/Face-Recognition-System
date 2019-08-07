@@ -8,7 +8,7 @@
     </div>
 
     <div class="members">
-        <tree-root #tree [nodes]="member_folder" [options]="options" (select)="onSelect($event)"></tree-root>
+        <tree-root #tree [nodes]="member_folder" [options]="options" (select)="onSelect($event)" (deselect)="deSelect($event)" ></tree-root>
     </div>
 </div>
 
