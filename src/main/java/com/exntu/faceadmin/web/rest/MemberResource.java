@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * REST controller for managing the member folder items.
@@ -52,8 +53,22 @@ public class MemberResource {
      * @param folderName MembersFolderName.
      */
     @GetMapping(path = "/member/read-member-folder-list")
-    public Object readMemberFolder(@RequestParam String folderId, String folderName) {
+    public Object readMemberFolder(@RequestParam String folderId, String folderName, String folderPath) {
         log.debug("read " + folderName + "'s all member read Get Request.");
-        return memberService.readMemberList(folderId, folderName);
+        return memberService.readMemberList(folderId, folderName, folderPath);
+    }
+
+    /**
+     * {@code GET   /member/delete-members-folder} : delete members folder.
+     * @param selectedList delete selected list.
+     */
+    @GetMapping(path = "/member/delete-members-folder")
+    public String deleteMembersFolder(@RequestParam ArrayList<String> selectedList) {
+        log.debug("Delete Members folder selected List.");
+        if(memberService.deleteFolder(selectedList)) {
+            return "success";
+        } else {
+            return "fail";
+        }
     }
 }

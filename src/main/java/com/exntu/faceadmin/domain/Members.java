@@ -3,11 +3,15 @@ package com.exntu.faceadmin.domain;
 public class Members {
     private String id;
     private String name;
+    private String path;
     private boolean hasChildren;
 
-    public Members(String id, String name) {
+    public Members() {}
+
+    public Members(String id, String name, String path) {
         this.id = id;
         this.name = name;
+        this.path = path;
     }
 
     public String getId() {
@@ -24,6 +28,14 @@ public class Members {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPath() {
+        return this.path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public boolean getHasChildren() {
