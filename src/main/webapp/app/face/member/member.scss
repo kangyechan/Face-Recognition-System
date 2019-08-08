@@ -73,3 +73,16 @@
     }
   }
 }
+
+modal {
+  .form-section {
+    width: 450px !important;
+    background: #e2f3f9;
+    border: 2px solid #e2f3f9;
+  }
+
+  label {
+    margin-top: 20px;
+    padding: 0 5px;
+  }
+}

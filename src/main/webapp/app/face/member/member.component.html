@@ -1,14 +1,15 @@
 <div class='member-list'>
     <div class='member-name'>
         <label>Members</label>
-        <button *ngIf="!del_checkbox" id="add_button" (click)='componentInsideModal.open()'><fa-icon icon="folder-plus"></fa-icon></button>
-        <button *ngIf="!del_checkbox" id="del_button" (click)="del_checkbox_toggle(true)"><fa-icon icon="folder-minus"></fa-icon></button>
-        <button *ngIf="del_checkbox" id="cancel_button" (click)="del_checkbox_toggle(false)"><fa-icon icon="window-close"></fa-icon></button>
-        <button *ngIf="del_checkbox" id="del_button" (click)="del_confirm()"><fa-icon icon="trash-alt"></fa-icon></button>
+        <button *ngIf="!del_checkbox" id="add_button" (click)="openAddModal()"><fa-icon icon="folder-plus"></fa-icon></button>
+        <button *ngIf="!del_checkbox" id="del_button" (click)="deleteCheckboxToggle(true)"><fa-icon icon="folder-minus"></fa-icon></button>
+        <button *ngIf="del_checkbox" id="cancel_button" (click)="deleteCheckboxToggle(false)"><fa-icon icon="window-close"></fa-icon></button>
+        <button *ngIf="del_checkbox" id="del_button" (click)="deleteConfirm()"><fa-icon icon="trash-alt"></fa-icon></button>
     </div>
 
     <div class="members">
-        <tree-root #tree [nodes]="member_folder" [options]="options" (select)="onSelect($event)" (deselect)="deSelect($event)" ></tree-root>
+        <tree-root #tree [nodes]="member_folder" [options]="options" (select)="onSelect($event)" (deselect)="deSelect($event)"
+        (activate)="onActivate($event)" (deactivate)="deActivate($event)"></tree-root>
     </div>
 </div>
 
@@ -19,19 +20,24 @@
     <ng-template #modalBody>
         <div class="member-menu-section">
             <div class="member-menu">
-                <div class="member-button" [ngStyle]="{'background-color': folder_state ? '#e2f3f9':'white'}" (click)="toggle_state('folder')">Folder</div>
+                <div class="member-button" [ngStyle]="{'background-color': folder_state ? '#e2f3f9':'white', 'border': folder_state ? '#e2f3f9':'white'}"
+                (click)="toggle_state('folder')">Folder</div>
             </div>
             <div class="member-menu">
-                <div class="member-button" [ngStyle]="{'background-color': member_state ? '#e2f3f9':'white'}" (click)="toggle_state('member')">Member</div>
+                <div class="member-button" [ngStyle]="{'background-color': member_state ? '#e2f3f9':'white', 'border': member_state ? '#e2f3f9':'white'}"
+                (click)="toggle_state('member')">Member</div>
             </div>
         </div>
         <div class="form-section" *ngIf="folder_state">
-            <label>Folder name</label>
+            <label>Folder Path : </label>
+            <label>{{ addRootPath }}{{ folderName }}</label>
             <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ fWarning }}" [(ngModel)]="folderName">
         </div>
         <div class="form-section" *ngIf="member_state">
-            <label>Member name</label>
-            <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ mWarning }}" [(ngModel)]="memberName">
+            <label>Member Path</label>
+            <label>{{ addRootPath }}{{ memberName }}</label>
+
+            <!-- <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ mWarning }}" [(ngModel)]="memberName"> -->
         </div>
     </ng-template>
     <ng-template #modalFooter>

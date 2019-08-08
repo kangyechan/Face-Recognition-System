@@ -17,12 +17,15 @@ export class MemberComponent implements OnInit {
   memberName: string;
   fWarning: string;
   mWarning: string;
+  addRootPath: string;
 
   member_folder = [{}];
   del_checkbox = false;
   selectedTreeList: any = [];
   selectedTreePathList: any = [];
   delParentFolderId: string;
+  activateId: string;
+  activatePath: string;
 
   @ViewChild('componentInsideModal', { static: false }) componentInsideModals: ElementRef<any>;
   @ViewChild(TreeComponent, { static: false }) private tree: TreeComponent;
@@ -68,12 +71,24 @@ export class MemberComponent implements OnInit {
     // });
   }
 
-  del_checkbox_toggle(use: boolean) {
+  openAddModal() {
+    this.folderName = undefined;
+    this.memberName = undefined;
+    this.componentInsideModals.open();
+    if (this.activatePath === undefined) {
+      this.addRootPath = 'Members/';
+    } else {
+      this.addRootPath = 'Members/' + this.activatePath;
+    }
+    console.log(this.addRootPath);
+  }
+
+  deleteCheckboxToggle(use: boolean) {
     this.del_checkbox = use;
     this.options.useCheckbox = use;
   }
 
-  del_confirm() {
+  deleteConfirm() {
     if (this.selectedTreeList.toString() !== '') {
       this.deleteCheckRecursive(this.member_folder, this.delParentFolderId);
       this.memberService.delMemberFolder(this.selectedTreePathList).subscribe(data => {
@@ -125,13 +140,25 @@ export class MemberComponent implements OnInit {
     });
   }
 
+  activateRecursive(checkFolder: any, id: string) {
+    checkFolder.forEach(folder => {
+      if (folder.id === id) {
+        this.activatePath = folder.path;
+        console.log('Activate Path : ' + this.activatePath);
+      } else if (id.startsWith(folder.id) && id.indexOf('-') !== -1) {
+        if (folder.hasChildren) {
+          this.activateRecursive(folder.children, id);
+        }
+      }
+    });
+  }
+
   onSelect(event) {
     this.selectedTreeList = Object.entries(event.treeModel.selectedLeafNodeIds)
       .filter(([key, value]) => {
         return value === true;
       })
       .map(node => node[0]);
-    console.log(this.selectedTreeList);
   }
 
   deSelect(event) {
@@ -140,7 +167,22 @@ export class MemberComponent implements OnInit {
         return value === true;
       })
       .map(node => node[0]);
-    console.log(this.selectedTreeList);
+  }
+
+  onActivate(event) {
+    // 상위 폴더 얻어와서 그 폴더 패스에 생성할 수 있게 하자.. 원할 경우 체크해제하면 루트폴더에 생성되게 한다.
+    this.activateId = Object.entries(event.treeModel.activeNodeIds)
+      .filter(([key, value]) => {
+        return value === true;
+      })
+      .map(node => node[0])
+      .toString();
+    console.log(this.activateId);
+    this.activateRecursive(this.member_folder, this.activateId);
+  }
+
+  deActivate(event) {
+    this.activatePath = undefined;
   }
 
   toggle_state(menu: string) {
@@ -160,17 +202,22 @@ export class MemberComponent implements OnInit {
       if (this.folderName === undefined) {
         this.fWarning = 'input folder name';
       } else {
-        this.memberService.makeMembersFolder(this.folderName).subscribe(newFolderName => {
-          if (newFolderName !== 'fail') {
-            console.log(newFolderName + ' mkdir success.');
-            this.member_folder.push({ id: this.member_folder.length.toString(), name: newFolderName });
-            this.tree.treeModel.update();
-          } else {
-            console.log('mkdir failed.');
-          }
-          this.folderName = undefined;
-          this.componentInsideModals.close();
-        });
+        if (this.activatePath === undefined) {
+          console.log('' + this.folderName + '/');
+        } else {
+          console.log(this.activatePath + this.folderName + '/');
+        }
+        // this.memberService.makeMembersFolder(this.folderName).subscribe(newFolderName => {
+        //   if (newFolderName !== 'fail') {
+        //     console.log(newFolderName + ' mkdir success.');
+        //     this.member_folder.push({ id: this.member_folder.length.toString(), name: newFolderName });
+        //     this.tree.treeModel.update();
+        //   } else {
+        //     console.log('mkdir failed.');
+        //   }
+        //   this.folderName = undefined;
+        //   this.componentInsideModals.close();
+        // });
       }
     } else {
       if (this.memberName === undefined) {
