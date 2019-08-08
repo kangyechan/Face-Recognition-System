@@ -4,14 +4,14 @@ import com.exntu.faceadmin.domain.Members;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Service for memver
+ * Service for member
  * <p>
  * We use the {@link Async} annotation to member manages asynchronously.
  */
@@ -147,23 +147,25 @@ public class MemberService {
         File folder = new File(path);
         try {
             if(folder.exists()) {
-                File[] folder_list = folder.listFiles();
-                if(folder_list != null) {
-                    for(int i = 0; i < folder_list.length; i++) {
-                        if(folder_list[i].isFile()) {
-                            folder_list[i].delete();
-                            log.debug(folder_list[i].getName() + " file is delete.");
-                        } else {
+                if(folder.isFile()) {
+                    folder.delete();
+                    log.debug(folder.getName() + " file is delete.");
+                } else {
+                    File[] folder_list = folder.listFiles();
+                    if(folder_list != null) {
+                        for(int i = 0; i < folder_list.length; i++) {
                             recursiveDeleteFolder(folder_list[i].getPath());
                             log.debug(folder_list[i].getName() + " folder is delete.");
+                            folder_list[i].delete();
                         }
-                        folder_list[i].delete();
+                        folder.delete();
+                    } else {
+                        log.error("recursive function NULL Point Exception.");
+                        return false;
                     }
-                    folder.delete();
-                } else {
-                    log.error("recursive function NULL Point Exception.");
-                    return false;
                 }
+            } else {
+                log.debug(path + "'s file or folder already deleted.");
             }
         } catch (Exception e) {
             e.printStackTrace();
