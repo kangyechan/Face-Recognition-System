@@ -1,13 +1,32 @@
 .picture-section {
-  width: 75%;
   float: left;
+  width: 80%;
+  height: 175px;
+  margin-top: 20px;
   padding: 10px 30px;
+  border-top: solid 1px #efefef;
 
-  .picture {
-    float: left;
+  .picture-section-overflow {
+    width: 100%;
+    height: 175px;
+    display: flex;
+    overflow-x: auto;
 
-    .picture-card {
-      margin-right: 20px;
+    .picture {
+      float: left;
+
+      .picture-card {
+        width: 150px;
+        height: 150px;
+        margin-right: 20px;
+        border: 1px solid #e2f3f9;
+        text-align: center;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
   }
 }

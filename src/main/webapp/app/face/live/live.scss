@@ -1,61 +1,69 @@
-.name-section {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
+.live-section {
+  float: left;
+  width: 60%;
+  height: 65vh;
+  border-top: solid 1px #efefef;
 
-  .name-text {
-    width: 50%;
-    float: left;
+  .name-section {
+    height: 5vh;
+    padding: 10px 30px;
 
-    label {
-      font-size: 1em;
-      font-weight: 500;
-    }
-  }
+    .name-text {
+      width: 50%;
+      float: left;
 
-  .button-section {
-    width: 50%;
-
-    button:hover {
-      box-shadow: 0 0 5px 1px #efefef;
-    }
-
-    .door-button {
-      float: right;
-      margin-right: 20px;
-
-      button {
-        font-size: 15px;
-        background: #e2f3f9;
-        border-radius: 30%;
-        border: none;
+      label {
+        font-size: 1em;
+        font-weight: 500;
       }
     }
 
-    .camera-button {
-      float: right;
+    .button-section {
+      width: 50%;
+      float: left;
 
       button {
+        width: 60px;
         font-size: 15px;
         background: #e2f3f9;
-        border-radius: 30%;
+        border-radius: 20%;
         border: none;
+      }
+
+      button:hover {
+        box-shadow: 0 0 5px 1px #efefef;
+      }
+
+      button {
+        float: right;
+        margin-right: 20px;
+      }
+
+      .camera-button {
+        float: right;
       }
     }
   }
-}
 
-.camera-section {
-  background: #ffffff;
-  height: 60vh;
-  text-align: center;
+  .camera-section {
+    background: #ffffff;
+    height: 60vh;
+    text-align: center;
+    padding: 5px 30px 10px;
 
-  div {
-    background: #efefef;
-    width: 100%;
-    height: 100%;
+    .live-section {
+      background: #efefef;
+      width: 100%;
+      height: 100%;
 
-    img {
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .image-section {
+      background: #e2f3f9;
       width: 100%;
       height: 100%;
     }

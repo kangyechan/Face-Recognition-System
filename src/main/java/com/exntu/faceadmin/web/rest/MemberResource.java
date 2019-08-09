@@ -37,12 +37,13 @@ public class MemberResource {
     /**
      * {@code GET   /member/make-members-folder} : members folder make function.
      * @param folderName new folderName.
+     * @param folderPath new folderPath include '/'.
      */
     @GetMapping(path = "/member/make-members-folder")
-    public String makeMembersFolder(@RequestParam String folderName) {
-        log.debug("Make member folder Post Request.");
-        if(memberService.makeNewFolder(folderName)) {
-            return folderName;
+    public String makeMembersFolder(@RequestParam String folderPath, String folderName) {
+        log.debug("Make member folder Get Request.");
+        if(memberService.makeNewFolder(folderPath, folderName)) {
+            return folderPath + folderName;
         } else {
             return "fail";
         }
@@ -51,6 +52,8 @@ public class MemberResource {
     /**
      * {@code GET   /member/read-member-folder-list} : read member folder lists.
      * @param folderName MembersFolderName.
+     * @param folderId MembersFolderId.
+     * @param folderPath MembersFolderPath.
      */
     @GetMapping(path = "/member/read-member-folder-list")
     public Object readMemberFolder(@RequestParam String folderId, String folderName, String folderPath) {

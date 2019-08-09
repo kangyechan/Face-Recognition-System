@@ -13,8 +13,8 @@ export class MemberService {
     return this.http.get(SERVER_API_URL + 'api/member/init-members', { responseType: 'json' });
   }
 
-  makeMembersFolder(folderName: string): Observable<any> {
-    return this.http.get(SERVER_API_URL + 'api/member/make-members-folder', { responseType: 'text', params: { folderName } });
+  makeMembersFolder(folderPath: string, folderName: string): Observable<any> {
+    return this.http.get(SERVER_API_URL + 'api/member/make-members-folder', { responseType: 'text', params: { folderPath, folderName } });
   }
 
   readMemberFolderLists(folderId: string, folderName: string, folderPath: string): Observable<any> {

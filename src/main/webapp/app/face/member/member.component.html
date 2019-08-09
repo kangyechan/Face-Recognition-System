@@ -37,7 +37,10 @@
             <label>Member Path</label>
             <label>{{ addRootPath }}{{ memberName }}</label>
 
-            <!-- <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ mWarning }}" [(ngModel)]="memberName"> -->
+            <div class="member-select-image">
+                image-section
+            </div>
+            <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ mWarning }}" [(ngModel)]="memberName">
         </div>
     </ng-template>
     <ng-template #modalFooter>
@@ -46,3 +49,7 @@
         <button *ngIf="member_state" type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>
     </ng-template>
 </modal>
+
+<jhi-live></jhi-live>
+
+<jhi-match></jhi-match>
