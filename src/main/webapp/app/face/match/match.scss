@@ -1,9 +1,28 @@
 .match-list {
-  height: 10vh;
+  width: 20%;
+  height: 65vh;
+  float: left;
+  padding: 10px 30px;
+  border-top: solid 1px #efefef;
+  border-left: solid 1px #efefef;
 
   .match-name {
     border-bottom: solid 2px black;
+    margin-bottom: 10px;
     padding: 0 5px;
+
+    button {
+      float: right;
+      width: 60px;
+      font-size: 15px;
+      background: #e2f3f9;
+      border-radius: 20%;
+      border: none;
+    }
+
+    button:hover {
+      box-shadow: 0 0 5px 1px #efefef;
+    }
 
     label {
       font-size: 1em;

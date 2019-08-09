@@ -46,6 +46,9 @@ public class MemberService {
                             if(memListFolder.length < 1) {
                                 membersList.setHasChildren(false);
                                 log.debug(rootFolderName.getName() + " This folder has not children.");
+                            } else if(memListFolder.length < 2 && memListFolder[0].getName().startsWith(".")) {
+                                membersList.setHasChildren(false);
+                                log.debug(rootFolderName.getName() + " This folder has not children. only one file : .DS_Storeis.");
                             } else {
                                 membersList.setHasChildren(true);
                                 log.debug(rootFolderName.getName() + " This folder has children.");
@@ -64,8 +67,8 @@ public class MemberService {
         return initMembers;
     }
 
-    public boolean makeNewFolder(String folderName) {
-        File newFolder = new File(membersFolderPath + folderName + "/");
+    public boolean makeNewFolder(String folderPath, String folderName) {
+        File newFolder = new File(membersFolderPath + folderPath + folderName + "/");
         if(!newFolder.exists()) {
             try {
                 newFolder.mkdir();
@@ -115,6 +118,9 @@ public class MemberService {
                             if(memListFolderChildren.length < 1) {
                                 memList.setHasChildren(false);
                                 log.debug(memFolderName.getName() + " This folder has not children.");
+                            } else if(memListFolderChildren.length < 2 && memListFolderChildren[0].getName().startsWith(".")) {
+                                memList.setHasChildren(false);
+                                log.debug(memFolderName.getName() + " This folder has not children. only one file : .DS_Storeis.");
                             } else {
                                 memList.setHasChildren(true);
                                 log.debug(memFolderName.getName() + " This folder has children.");
@@ -153,10 +159,10 @@ public class MemberService {
                 } else {
                     File[] folder_list = folder.listFiles();
                     if(folder_list != null) {
-                        for(int i = 0; i < folder_list.length; i++) {
-                            recursiveDeleteFolder(folder_list[i].getPath());
-                            log.debug(folder_list[i].getName() + " folder is delete.");
-                            folder_list[i].delete();
+                        for(File folderlistName: folder_list) {
+                            recursiveDeleteFolder(folderlistName.getPath());
+                            log.debug(folderlistName.getName() + " folder is delete.");
+                            folderlistName.delete();
                         }
                         folder.delete();
                     } else {

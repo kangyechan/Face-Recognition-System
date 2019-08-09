@@ -7,7 +7,7 @@ import { PictureComponent } from 'app/face/picture/picture.component';
   styleUrls: ['./detect.scss']
 })
 export class DetectComponent implements OnInit {
-  @ViewChild(PictureComponent, { static: false }) picture: PictureComponent;
+  @ViewChild(PictureComponent, { static: false }) private picture: PictureComponent;
 
   allCheckbox = true;
   memCheckbox = true;

@@ -2,11 +2,11 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MemberService } from 'app/face/member/member.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ITreeNode, ITreeOptions, TreeNode } from 'angular-tree-component/dist/defs/api';
-import { request } from 'http';
 import { TreeComponent } from 'angular-tree-component';
+import { LiveComponent } from 'app/face/live/live.component';
 
 @Component({
-  selector: 'jhi-list',
+  selector: 'jhi-member',
   templateUrl: './member.component.html',
   styleUrls: ['./member.scss']
 })
@@ -23,13 +23,12 @@ export class MemberComponent implements OnInit {
   del_checkbox = false;
   selectedTreeList: any = [];
   selectedTreePathList: any = [];
-  deletePathList: any = [];
-  delParentFolderId: string;
   activateId: string;
   activatePath: string;
 
   @ViewChild('componentInsideModal', { static: false }) componentInsideModals: any;
   @ViewChild(TreeComponent, { static: false }) private tree: TreeComponent;
+  @ViewChild(LiveComponent, { static: false }) private liveComponent: LiveComponent;
 
   public options: ITreeOptions = {
     useTriState: false,
@@ -52,7 +51,6 @@ export class MemberComponent implements OnInit {
         } else {
           this.readMemberFolderRecursive(childFolder.children, nodePath, data);
         }
-      } else {
       }
     });
   }
@@ -60,6 +58,8 @@ export class MemberComponent implements OnInit {
   ngOnInit() {
     this.folder_state = true;
     this.member_state = false;
+    this.mWarning = 'input member name';
+    this.fWarning = 'input folder name';
     this.memberService.initMembersFolder().subscribe(data => {
       this.member_folder = data;
     });
@@ -70,18 +70,6 @@ export class MemberComponent implements OnInit {
     // this.memberService.makeFolder().subscribe(data => {
     //   console.log(data);
     // });
-  }
-
-  openAddModal() {
-    this.folderName = undefined;
-    this.memberName = undefined;
-    this.componentInsideModals.open();
-    if (this.activatePath === undefined) {
-      this.addRootPath = 'Members/';
-    } else {
-      this.addRootPath = 'Members/' + this.activatePath;
-    }
-    console.log(this.addRootPath);
   }
 
   deleteCheckboxToggle(use: boolean) {
@@ -103,28 +91,23 @@ export class MemberComponent implements OnInit {
     });
   }
 
-  deleteUpdateTree(checkFolder: any) {
-    checkFolder.forEach((folder, index) => {
-      this.selectedTreePathList.forEach(selectedData => {
-        if (folder.path === selectedData) {
-          checkFolder.splice(index, 1);
-        } else {
-          if (selectedData.startsWith(folder.path)) {
-            this.deleteUpdateTree(folder.children);
-          }
-        }
-      });
-    });
-  }
-
   deleteConfirm() {
     if (this.selectedTreeList.toString() !== '') {
       this.selectedIdToPath(this.selectedTreeList, this.member_folder);
       this.memberService.delMemberFolder(this.selectedTreePathList).subscribe(data => {
         console.log('delete ' + data);
+        this.memberService.initMembersFolder().subscribe(refresh => {
+          this.member_folder = refresh;
+          this.tree.treeModel.selectedLeafNodes.forEach(node => {
+            this.tree.treeModel.setSelectedNode(node, false);
+          });
+          this.tree.treeModel.expandedNodes.forEach(expandNode => {
+            this.tree.treeModel.setExpandedNode(expandNode, false);
+          });
+          this.tree.treeModel.setActiveNode(this.tree.treeModel.getActiveNode(), false);
+          this.tree.treeModel.update();
+        });
       });
-      // this.deleteUpdateTree(this.member_folder);
-      // this.tree.treeModel.update();
       this.selectedTreeList = [];
       this.selectedTreePathList = [];
     } else {
@@ -136,7 +119,6 @@ export class MemberComponent implements OnInit {
     checkFolder.forEach(folder => {
       if (folder.id === id) {
         this.activatePath = folder.path;
-        console.log('Activate Path : ' + this.activatePath);
       } else if (id.startsWith(folder.id) && id.indexOf('-') !== -1) {
         if (folder.hasChildren) {
           this.activateRecursive(folder.children, id);
@@ -151,7 +133,6 @@ export class MemberComponent implements OnInit {
         return value === true;
       })
       .map(node => node[0]);
-    console.log(this.selectedTreeList);
   }
 
   deSelect(event) {
@@ -170,10 +151,12 @@ export class MemberComponent implements OnInit {
       .map(node => node[0])
       .toString();
     this.activateRecursive(this.member_folder, this.activateId);
+    console.log('Activate Path : ' + this.activatePath);
   }
 
   deActivate(event) {
     this.activatePath = undefined;
+    console.log('Activate Path : ' + this.activatePath);
   }
 
   toggle_state(menu: string) {
@@ -188,23 +171,65 @@ export class MemberComponent implements OnInit {
     }
   }
 
+  openAddModal() {
+    this.folderName = undefined;
+    this.memberName = undefined;
+    this.componentInsideModals.open();
+    if (this.activatePath === undefined) {
+      this.addRootPath = 'Members/';
+    } else {
+      this.addRootPath = 'Members/' + this.activatePath;
+    }
+    console.log(this.addRootPath);
+  }
+
+  recursiveAddFolder(memberFolder: any, destPath: string, newFolder: string) {
+    memberFolder.forEach(folder => {
+      if (destPath === folder.path) {
+        if (!folder.hasChildren) {
+          folder.hasChildren = true;
+          folder.children = [{ id: folder.id + '-0', name: newFolder, path: destPath + newFolder + '/', hasChildren: false }];
+        } else {
+          folder.children.push({
+            id: folder.id + '-' + folder.children.length.toString(),
+            name: newFolder,
+            path: destPath + newFolder + '/',
+            hasChildren: false
+          });
+        }
+      } else {
+        if (destPath.startsWith(folder.path) && folder.hasChildren) {
+          this.recursiveAddFolder(folder.children, destPath, newFolder);
+        }
+      }
+    });
+  }
+
   onSubmit() {
     if (this.folder_state) {
-      if (this.folderName === undefined) {
+      if (this.folderName === undefined || this.folderName === '') {
         this.fWarning = 'input folder name';
       } else {
         if (this.activatePath === undefined) {
-          this.memberService.makeMembersFolder(this.folderName).subscribe(newFolderName => {
+          this.memberService.makeMembersFolder('', this.folderName).subscribe(newFolderName => {
             if (newFolderName !== 'fail') {
               console.log(newFolderName + ' mkdir success.');
-              this.member_folder.push({ id: this.member_folder.length.toString(), name: newFolderName });
+              this.member_folder.push({ id: this.member_folder.length.toString(), name: newFolderName, path: newFolderName + '/' });
               this.tree.treeModel.update();
             } else {
-              console.log('mkdir failed.');
+              console.log(newFolderName + ' mkdir failed.');
             }
           });
         } else {
-          console.log(this.activatePath + this.folderName + '/');
+          this.memberService.makeMembersFolder(this.activatePath, this.folderName).subscribe(newFolderName => {
+            if (newFolderName !== 'fail') {
+              console.log(newFolderName + ' mkdir success.');
+              this.recursiveAddFolder(this.member_folder, this.activatePath, this.folderName);
+              this.tree.treeModel.update();
+            } else {
+              console.log(newFolderName + ' mkdir failed.');
+            }
+          });
         }
         this.componentInsideModals.close();
       }

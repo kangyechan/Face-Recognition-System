@@ -1,28 +1,36 @@
-<div class="name-section">
+<div class="live-section">
+    <div class="name-section">
 
-    <div class="name-text">
-        <label>Live On</label>
+        <div class="name-text">
+            <label>{{ sectionTitle }}</label>
+        </div>
+
+        <div class="button-section">
+            <div class="camera-button">
+                    <button (click)="toggleSection()">{{ cameraText }}</button>
+            </div>
+            <div class="door-button">
+                <button (click)="toggleDoor()">{{ doorText }}</button>
+            </div>
+            <div class="change-button">
+                <button (click)="toggleState()">{{ sectionState }}</button>
+            </div>
+        </div>
     </div>
 
-    <div class="button-section">
-        <div class="camera-button">
-                <button (click)="toggleCamera()">{{ cameraText }}</button>
-        </div>
-        <div class="door-button">
-            <button (click)="toggleDoor()">{{ doorText }}</button>
-        </div>
-        <div class="door-button">
-            <button (click)="getCapture()">test</button>
-        </div>
-    </div>
-</div>
+    <div class="camera-section">
 
-<div class="camera-section">
+        <div class="live-section" *ngIf="liveSection && cameraState">
 
-    <div *ngIf="cameraState">
+            <img class="NO-CACHE" border="1" [src]="">
 
-        <img class="NO-CACHE" border="1" [src]="">
+        </div>
+
+        <div class="image-section" *ngIf="liveSection && imageSection">
+
+
+
+        </div>
 
     </div>
-
 </div>
