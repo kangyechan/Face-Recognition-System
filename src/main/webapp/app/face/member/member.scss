@@ -56,30 +56,21 @@
 }
 
 modal {
-  .member-menu-section {
-    width: 100%;
-    height: 24px;
+  .member-menu {
+    float: left;
+    width: 50%;
+    text-align: center;
 
-    .form-section {
-      padding-top: 30px;
+    .member-button {
+      width: 100%;
+      height: 100%;
+      background-color: white;
     }
 
-    .member-menu {
-      float: left;
-      width: 50%;
-      text-align: center;
-
-      .member-button {
-        width: 100%;
-        height: 100%;
-        background-color: white;
-      }
-
-      .member-button:hover {
-        cursor: pointer;
-        background: #e2f3f9;
-        box-shadow: 0 0 3px 1px #efefef;
-      }
+    .member-button:hover {
+      cursor: pointer;
+      background: #e2f3f9;
+      box-shadow: 0 0 3px 1px #efefef;
     }
   }
 
@@ -87,12 +78,35 @@ modal {
     width: 450px !important;
     background: #e2f3f9;
     border: 2px solid #e2f3f9;
+    padding-top: 30px;
+    text-align: center;
 
     .member-select-image {
-      width: 180px;
-      height: 180px;
+      width: 400px;
+      height: 160px;
+      overflow-x: auto;
       margin: 10px auto;
-      text-align: center;
+
+      .select-card {
+        float: left;
+
+        .select-card-image {
+          width: 150px;
+          height: 150px;
+          display: flex;
+        }
+
+        img {
+          float: left;
+          width: 100%;
+          height: 100%;
+        }
+
+        img:hover {
+          cursor: pointer;
+          border: 5px solid #c26741;
+        }
+      }
     }
   }
 

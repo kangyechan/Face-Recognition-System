@@ -24,6 +24,8 @@ export class MemberComponent implements OnInit {
   selectedTreePathList: any = [];
   activateId: string;
   activatePath: string;
+  selectedCard: Array<any> = [];
+  selectedCardState: boolean;
 
   @ViewChild('componentInsideModal', { static: false }) componentInsideModals: any;
   @ViewChild(TreeComponent, { static: false }) private tree: TreeComponent;
@@ -57,11 +59,12 @@ export class MemberComponent implements OnInit {
   ngOnInit() {
     this.folder_state = true;
     this.member_state = false;
-    this.mWarning = 'input member name';
     this.fWarning = 'input folder name';
+    this.mWarning = 'input member name';
     this.memberService.initMembersFolder().subscribe(data => {
       this.member_folder = data;
     });
+    this.selectedCardState = false;
   }
 
   memberAdd() {
@@ -207,6 +210,12 @@ export class MemberComponent implements OnInit {
     this.folderName = undefined;
     this.memberName = undefined;
     this.componentInsideModals.open();
+    if (this.liveComponent.targetCardList.toString() !== '') {
+      this.selectedCard = this.liveComponent.targetCardList;
+      this.selectedCardState = true;
+    } else {
+      this.selectedCardState = false;
+    }
     if (this.activatePath === undefined) {
       this.addRootPath = 'Members/';
     } else {
@@ -265,11 +274,15 @@ export class MemberComponent implements OnInit {
         this.componentInsideModals.close();
       }
     } else {
-      if (this.memberName === undefined) {
+      if (this.memberName === undefined || this.memberName === '') {
         this.mWarning = 'input member name';
       } else {
         this.componentInsideModals.close();
       }
     }
+  }
+
+  deleteCard(face: any) {
+    this.selectedCard.splice(this.selectedCard.indexOf(face), 1);
   }
 }

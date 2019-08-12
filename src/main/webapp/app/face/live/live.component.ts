@@ -19,6 +19,7 @@ export class LiveComponent implements OnInit {
   isSelectImage: boolean;
   selectImage: any;
   imagePath: string;
+  targetCardList: Array<any> = [];
 
   constructor(private liveService: LiveService) {}
 
@@ -86,5 +87,11 @@ export class LiveComponent implements OnInit {
 
   cardClick(face) {
     face.isActive = !face.isActive;
+    if (face.isActive) {
+      this.targetCardList.push(face);
+    } else {
+      this.targetCardList.splice(this.targetCardList.indexOf(face), 1);
+    }
+    console.log(this.targetCardList);
   }
 }
