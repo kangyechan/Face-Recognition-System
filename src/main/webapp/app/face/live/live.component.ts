@@ -1,4 +1,4 @@
-import { Component, DoCheck, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { LiveService } from 'app/face/live/live.service';
 
 @Component({
@@ -16,6 +16,9 @@ export class LiveComponent implements OnInit {
   liveSection: boolean;
   faceList: Array<any> = [];
   emptyImage: boolean;
+  isSelectImage: boolean;
+  selectImage: any;
+  imagePath: string;
 
   constructor(private liveService: LiveService) {}
 
@@ -29,6 +32,9 @@ export class LiveComponent implements OnInit {
     this.liveSection = true;
     this.faceList = [];
     this.emptyImage = false;
+    this.selectImage = {};
+    this.isSelectImage = false;
+    this.imagePath = 'Members/';
   }
 
   toggleSection() {
@@ -49,7 +55,11 @@ export class LiveComponent implements OnInit {
 
   toggleState() {
     if (this.sectionState === 'IMAGE') {
-      this.emptyImage = this.faceList.toString() === '';
+      if (this.isSelectImage) {
+        this.emptyImage = false;
+      } else {
+        this.emptyImage = this.faceList.toString() === '';
+      }
       this.cameraState = false;
       this.imageSection = true;
       this.sectionState = 'LIVE';
@@ -72,5 +82,9 @@ export class LiveComponent implements OnInit {
   get captureURL() {
     console.log('reset');
     return this.liveService.getCaptureURL();
+  }
+
+  cardClick(face) {
+    face.isActive = !face.isActive;
   }
 }
