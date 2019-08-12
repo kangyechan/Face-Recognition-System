@@ -14,6 +14,8 @@ export class LiveComponent implements OnInit {
   cameraState: boolean;
   imageSection: boolean;
   liveSection: boolean;
+  faceList: Array<any> = [];
+  emptyImage: boolean;
 
   constructor(private liveService: LiveService) {}
 
@@ -25,6 +27,8 @@ export class LiveComponent implements OnInit {
     this.cameraState = true;
     this.imageSection = false;
     this.liveSection = true;
+    this.faceList = [];
+    this.emptyImage = false;
   }
 
   toggleSection() {
@@ -45,11 +49,13 @@ export class LiveComponent implements OnInit {
 
   toggleState() {
     if (this.sectionState === 'IMAGE') {
+      this.emptyImage = this.faceList.toString() === '';
       this.cameraState = false;
       this.imageSection = true;
       this.sectionState = 'LIVE';
       this.sectionTitle = 'Folder Contents';
     } else {
+      this.emptyImage = false;
       this.cameraState = true;
       this.imageSection = false;
       this.sectionState = 'IMAGE';

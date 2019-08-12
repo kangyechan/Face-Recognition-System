@@ -7,7 +7,7 @@
 
         <div class="button-section">
             <div class="camera-button">
-                    <button (click)="toggleSection()">{{ cameraText }}</button>
+                <button (click)="toggleSection()">{{ cameraText }}</button>
             </div>
             <div class="door-button">
                 <button (click)="toggleDoor()">{{ doorText }}</button>
@@ -19,18 +19,16 @@
     </div>
 
     <div class="camera-section">
-
         <div class="live-section" *ngIf="liveSection && cameraState">
-
-            <img class="NO-CACHE" border="1" [src]="">
-
+            <img class="NO-CACHE" border="1" [src]="imageURL"/>
         </div>
 
-        <div class="image-section" *ngIf="liveSection && imageSection">
-
-
-
+        <div class="image-section" *ngIf="liveSection && imageSection && !emptyImage">
+            <img class="face-card" *ngFor="let face of faceList" [src]='face' alt="face-image"/>
         </div>
 
+        <div class="empty-section" *ngIf="liveSection">
+            <p *ngIf="emptyImage">이미지가 존재하지 않습니다.</p>
+        </div>
     </div>
 </div>
