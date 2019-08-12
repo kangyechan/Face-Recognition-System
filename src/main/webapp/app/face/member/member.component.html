@@ -34,12 +34,16 @@
             <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ fWarning }}" [(ngModel)]="folderName">
         </div>
         <div class="form-section" *ngIf="member_state">
-            <label>Member Path</label>
-            <label>{{ addRootPath }}{{ memberName }}</label>
-
-            <div class="member-select-image">
-                image-section
+            <label>Member Save Path : </label>
+            <label>Members/{{ memberName }}</label>
+            <div class="member-select-image" *ngIf="selectedCardState">
+                <div class="select-card">
+                    <div class="select-card-image">
+                        <img *ngFor="let face of selectedCard" [src]='face.getPath' alt="testing" (click)="deleteCard(face)"/>
+                    </div>
+                </div>
             </div>
+            <p>총 {{ selectedCard.length }}개</p>
             <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ mWarning }}" [(ngModel)]="memberName">
         </div>
     </ng-template>
