@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Service for member
@@ -177,8 +178,8 @@ public class MemberService {
         return true;
     }
 
-    public ArrayList<String> getImagePathList(String selectPath) {
-        ArrayList<String> pathList = new ArrayList<>();
+    public ArrayList<HashMap<String, Object>> getImagePathList(String selectPath) {
+        ArrayList<HashMap<String, Object>> pathList = new ArrayList<>();
         String folderPath = membersFolderPath + selectPath;
         File selectFolder = new File(folderPath);
         if(!selectFolder.exists()) {
@@ -187,8 +188,12 @@ public class MemberService {
             File[] arrAllSelectFolder = selectFolder.listFiles();
             if(arrAllSelectFolder != null) {
                 for(File inFile: arrAllSelectFolder) {
+                    HashMap<String, Object> hashMap = new HashMap<>();
                     if(isImageFile(inFile.getName())) {
-                        pathList.add("api/member/image-list?imagePath=" + selectPath + inFile.getName());
+                        hashMap.put("realPath", selectPath + inFile.getName());
+                        hashMap.put("getPath", "api/member/image-list?imagePath=" + selectPath + inFile.getName());
+                        hashMap.put("isActive", false);
+                        pathList.add(hashMap);
                     }
                 }
             } else {

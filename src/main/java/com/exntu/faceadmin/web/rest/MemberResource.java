@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -83,7 +84,7 @@ public class MemberResource {
      * @param selectPath select folder path.
      */
     @GetMapping(path = "/member/get-member-image")
-    public ArrayList<String> getImagePath(@RequestParam String selectPath) {
+    public ArrayList<HashMap<String, Object>> getImagePath(@RequestParam String selectPath) {
         log.debug("Get ImagePath function call.");
         return memberService.getImagePathList(selectPath);
     }

@@ -1,7 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MemberService } from 'app/face/member/member.service';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ITreeNode, ITreeOptions, TreeNode } from 'angular-tree-component/dist/defs/api';
+import { ITreeOptions, TreeNode } from 'angular-tree-component/dist/defs/api';
 import { TreeComponent } from 'angular-tree-component';
 import { LiveComponent } from 'app/face/live/live.component';
 
@@ -151,24 +150,45 @@ export class MemberComponent implements OnInit {
       .map(node => node[0])
       .toString();
     this.activateRecursive(this.member_folder, this.activateId);
-    if (this.liveComponent.liveSection && this.liveComponent.imageSection) {
-      this.liveComponent.faceList = [];
+    this.liveComponent.faceList = [];
+    if (
+      this.activatePath.toLowerCase().endsWith('.jpg') ||
+      this.activatePath.toLowerCase().endsWith('.png') ||
+      this.activatePath.toLowerCase().endsWith('.jpeg') ||
+      this.activatePath.toLowerCase().endsWith('.gif') ||
+      this.activatePath.toLowerCase().endsWith('.bmp') ||
+      this.activatePath.toLowerCase().endsWith('.tif') ||
+      this.activatePath.toLowerCase().endsWith('.tiff')
+    ) {
+      this.liveComponent.isSelectImage = true;
+      this.liveComponent.emptyImage = false;
+      this.liveComponent.selectImage = {
+        realPath: this.activatePath,
+        getPath: 'api/member/image-list?imagePath=' + this.activatePath,
+        isActive: false
+      };
+    } else {
+      this.liveComponent.isSelectImage = false;
       this.memberService.getImagePath(this.activatePath).subscribe(imagePathList => {
         if (imagePathList.toString() !== '') {
           this.liveComponent.emptyImage = false;
           this.liveComponent.faceList = imagePathList;
         } else {
           this.liveComponent.emptyImage = true;
+          this.liveComponent.imagePath = 'Members/' + this.activatePath;
         }
       });
-    } else {
-      console.log('Activate Path : ' + this.activatePath);
     }
+    // console.log('Activate Path : ' + this.activatePath);
   }
 
   deActivate(event) {
     this.activatePath = undefined;
-    console.log('DeActivate Path : ' + this.activatePath);
+    this.liveComponent.isSelectImage = false;
+    this.liveComponent.emptyImage = true;
+    this.liveComponent.faceList = [];
+    this.liveComponent.imagePath = 'Members/';
+    // console.log('DeActivate Path : ' + this.activatePath);
   }
 
   toggle_state(menu: string) {
@@ -192,7 +212,6 @@ export class MemberComponent implements OnInit {
     } else {
       this.addRootPath = 'Members/' + this.activatePath;
     }
-    console.log(this.addRootPath);
   }
 
   recursiveAddFolder(memberFolder: any, destPath: string, newFolder: string) {

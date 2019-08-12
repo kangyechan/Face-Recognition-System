@@ -24,11 +24,14 @@
         </div>
 
         <div class="image-section" *ngIf="liveSection && imageSection && !emptyImage">
-            <img class="face-card" *ngFor="let face of faceList" [src]='face' alt="face-image"/>
+            <img class="one-face-card" *ngIf="isSelectImage" [src]="selectImage.getPath" alt="select-image"
+            (click)="cardClick(selectImage)" [ngClass]="{'active': selectImage.isActive}"/>
+            <img class="face-card"  *ngFor="let face of faceList" [src]='face.getPath' alt="face-image"
+            (click)="cardClick(face)" [ngClass]="{'active': face.isActive}"/>
         </div>
 
-        <div class="empty-section" *ngIf="liveSection">
-            <p *ngIf="emptyImage">이미지가 존재하지 않습니다.</p>
+        <div class="empty-section" *ngIf="liveSection && imageSection && emptyImage">
+            <p>{{ imagePath }} 폴더에 이미지가 존재하지 않습니다.</p>
         </div>
     </div>
 </div>
