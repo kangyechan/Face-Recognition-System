@@ -151,12 +151,24 @@ export class MemberComponent implements OnInit {
       .map(node => node[0])
       .toString();
     this.activateRecursive(this.member_folder, this.activateId);
-    console.log('Activate Path : ' + this.activatePath);
+    if (this.liveComponent.liveSection && this.liveComponent.imageSection) {
+      this.liveComponent.faceList = [];
+      this.memberService.getImagePath(this.activatePath).subscribe(imagePathList => {
+        if (imagePathList.toString() !== '') {
+          this.liveComponent.emptyImage = false;
+          this.liveComponent.faceList = imagePathList;
+        } else {
+          this.liveComponent.emptyImage = true;
+        }
+      });
+    } else {
+      console.log('Activate Path : ' + this.activatePath);
+    }
   }
 
   deActivate(event) {
     this.activatePath = undefined;
-    console.log('Activate Path : ' + this.activatePath);
+    console.log('DeActivate Path : ' + this.activatePath);
   }
 
   toggle_state(menu: string) {

@@ -18,6 +18,6 @@ export class LiveService {
   }
 
   getCaptureURL() {
-    return SERVER_API_URL + 'api/camera/live';
+    return require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/live.jpg');
   }
 }

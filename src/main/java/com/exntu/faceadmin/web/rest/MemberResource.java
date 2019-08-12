@@ -2,11 +2,14 @@ package com.exntu.faceadmin.web.rest;
 
 import com.exntu.faceadmin.domain.Members;
 import com.exntu.faceadmin.service.MemberService;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
+import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,5 +76,26 @@ public class MemberResource {
         } else {
             return "fail";
         }
+    }
+
+    /**
+     * {@code GET   /member/get-member-image} : get member image path.
+     * @param selectPath select folder path.
+     */
+    @GetMapping(path = "/member/get-member-image")
+    public ArrayList<String> getImagePath(@RequestParam String selectPath) {
+        log.debug("Get ImagePath function call.");
+        return memberService.getImagePathList(selectPath);
+    }
+
+    /**
+     * {@code GET   /member/image-list/ imagePath} : get imageSrc.
+     */
+    @GetMapping(
+        path = "/member/image-list",
+        produces = MediaType.IMAGE_JPEG_VALUE
+    )
+    public @ResponseBody byte[] getImageSrc(@RequestParam() String imagePath) throws IOException {
+        return memberService.getImgSrc(imagePath);
     }
 }

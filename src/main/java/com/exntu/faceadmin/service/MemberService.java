@@ -1,13 +1,15 @@
 package com.exntu.faceadmin.service;
 
 import com.exntu.faceadmin.domain.Members;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -99,13 +101,7 @@ public class MemberService {
                         folderPath + memFolderName.getName() + "/" );
                     if(!memFolderName.isDirectory()) {
                         log.debug(memFolderName.getName() + "is NOT Directory.");
-                        if(memFolderName.getName().toLowerCase().endsWith(".png") ||
-                            memFolderName.getName().toLowerCase().endsWith(".jpg") ||
-                            memFolderName.getName().toLowerCase().endsWith(".jpeg") ||
-                            memFolderName.getName().toLowerCase().endsWith(".gif") ||
-                            memFolderName.getName().toLowerCase().endsWith(".bmp") ||
-                            memFolderName.getName().toLowerCase().endsWith(".tif") ||
-                            memFolderName.getName().toLowerCase().endsWith(".tiff")) {
+                        if(isImageFile(memFolderName.getName())) {
                             memList.setPath(folderPath + memFolderName.getName().toLowerCase());
                             memFolderId++;
                         } else {
@@ -179,5 +175,41 @@ public class MemberService {
             return false;
         }
         return true;
+    }
+
+    public ArrayList<String> getImagePathList(String selectPath) {
+        ArrayList<String> pathList = new ArrayList<>();
+        String folderPath = membersFolderPath + selectPath;
+        File selectFolder = new File(folderPath);
+        if(!selectFolder.exists()) {
+            log.error(selectPath + " is not exists.");
+        } else {
+            File[] arrAllSelectFolder = selectFolder.listFiles();
+            if(arrAllSelectFolder != null) {
+                for(File inFile: arrAllSelectFolder) {
+                    if(isImageFile(inFile.getName())) {
+                        pathList.add("api/member/image-list?imagePath=" + selectPath + inFile.getName());
+                    }
+                }
+            } else {
+                log.debug("arrAllSelectFolder is NULL Point Exception.");
+            }
+        }
+        return pathList;
+    }
+
+    private boolean isImageFile(String fileName) {
+        return (fileName.toLowerCase().endsWith(".png") ||
+            fileName.toLowerCase().endsWith(".jpg") ||
+            fileName.toLowerCase().endsWith(".jpeg") ||
+            fileName.toLowerCase().endsWith(".gif") ||
+            fileName.toLowerCase().endsWith(".bmp") ||
+            fileName.toLowerCase().endsWith(".tif") ||
+            fileName.toLowerCase().endsWith(".tiff"));
+    }
+
+    public byte[] getImgSrc(String imagePath) throws IOException {
+        FileInputStream fin = new FileInputStream(this.membersFolderPath + imagePath);
+        return IOUtils.toByteArray(fin);
     }
 }
