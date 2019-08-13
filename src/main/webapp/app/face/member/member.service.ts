@@ -42,4 +42,12 @@ export class MemberService {
       params: { selectPath }
     });
   }
+
+  copySelectMember(destPath: string, copyList: any, copyNameList: any): Observable<any> {
+    console.log(copyNameList);
+    return this.http.get(SERVER_API_URL + 'api/member/copy-member-list', {
+      responseType: 'text',
+      params: { copyList, copyNameList, destPath }
+    });
+  }
 }
