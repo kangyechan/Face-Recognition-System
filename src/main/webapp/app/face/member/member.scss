@@ -90,22 +90,34 @@ modal {
 
       .select-card {
         float: left;
+        display: flex;
 
         .select-card-image {
+          position: relative;
           width: 150px;
           height: 150px;
-          display: flex;
+
+          fa-icon {
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: red;
+            font-size: 1.2em !important;
+          }
+
+          fa-icon:hover {
+            cursor: pointer;
+          }
+
+          img:hover {
+            border: solid 1px #efefef;
+          }
         }
 
         img {
           float: left;
           width: 100%;
           height: 100%;
-        }
-
-        img:hover {
-          cursor: pointer;
-          border: 5px solid #c26741;
         }
       }
     }

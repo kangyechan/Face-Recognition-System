@@ -24,10 +24,14 @@
         </div>
 
         <div class="image-section" *ngIf="liveSection && imageSection && !emptyImage">
-            <img class="one-face-card" *ngIf="isSelectImage" [src]="selectImage.getPath" alt="select-image"
-            (click)="cardClick(selectImage)" [ngClass]="{'active': selectImage.isActive}"/>
-            <img class="face-card"  *ngFor="let face of faceList" [src]='face.getPath' alt="face-image"
-            (click)="cardClick(face)" [ngClass]="{'active': face.isActive}"/>
+            <div class="one-face-card" *ngIf="isSelectImage" (click)="cardClick(selectImage)">
+                <fa-icon *ngIf="selectImage.isActive" icon="check-square"></fa-icon>
+                <img [src]="selectImage.getPath" alt="select-image"/>
+            </div>
+            <div class="face-card" *ngFor="let face of faceList" (click)="cardClick(face)">
+                <fa-icon *ngIf="face.isActive" icon="check-square"></fa-icon>
+                <img [src]='face.getPath' alt="face-image"/>
+            </div>
         </div>
 
         <div class="empty-section" *ngIf="liveSection && imageSection && emptyImage">
