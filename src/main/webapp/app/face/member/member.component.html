@@ -15,7 +15,9 @@
 
 <modal #componentInsideModal>
     <ng-template class="member-modal-header" #modalHeader>
-        <h2>Add member</h2>
+        <div class="title-section">
+            <h2>Add member</h2>
+        </div>
     </ng-template>
     <ng-template #modalBody>
         <div class="member-menu-section">
@@ -48,7 +50,6 @@
         </div>
     </ng-template>
     <ng-template #modalFooter>
-        <!-- <button type="button" class="btn btn-outline-dark" (click)="componentInsideModal.close()">Save</button> -->
         <button *ngIf="folder_state" type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>
         <button *ngIf="member_state" type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>
     </ng-template>

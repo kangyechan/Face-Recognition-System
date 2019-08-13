@@ -25,6 +25,8 @@ export class MemberComponent implements OnInit {
   activateId: string;
   activatePath: string;
   selectedCard: Array<any> = [];
+  selectedCardName = [];
+  selectedCardPath = [];
   selectedCardState: boolean;
 
   @ViewChild('componentInsideModal', { static: false }) componentInsideModals: any;
@@ -67,35 +69,30 @@ export class MemberComponent implements OnInit {
     this.selectedCardState = false;
   }
 
-  memberAdd() {
-    // console.log(this.memberPath);
-    // this.memberService.makeFolder().subscribe(data => {
-    //   console.log(data);
-    // });
-  }
-
   deleteCheckboxToggle(use: boolean) {
     this.del_checkbox = use;
     this.options.useCheckbox = use;
   }
 
-  selectedIdToPath(selectedList: any, memberFolder: any) {
-    selectedList.forEach(selectedId => {
-      memberFolder.forEach(folder => {
-        if (folder.id === selectedId && this.selectedTreePathList.indexOf(folder.path) === -1) {
-          this.selectedTreePathList.push(folder.path);
-        } else if (selectedId.startsWith(folder.id) && selectedId.indexOf('-') !== -1) {
+  selectedIdToPath(selectedId: string, memberFolder: any[]) {
+    memberFolder.forEach(folder => {
+      if (folder.id === selectedId && this.selectedTreePathList.indexOf(folder.path) === -1) {
+        this.selectedTreePathList.push(folder.path);
+      } else {
+        if (selectedId.startsWith(folder.id) && selectedId.indexOf('-') !== -1) {
           if (folder.hasChildren) {
-            this.selectedIdToPath(selectedList, folder.children);
+            this.selectedIdToPath(selectedId, folder.children);
           }
         }
-      });
+      }
     });
   }
 
   deleteConfirm() {
     if (this.selectedTreeList.toString() !== '') {
-      this.selectedIdToPath(this.selectedTreeList, this.member_folder);
+      this.selectedTreeList.forEach(selectedId => {
+        this.selectedIdToPath(selectedId, this.member_folder);
+      });
       this.memberService.delMemberFolder(this.selectedTreePathList).subscribe(data => {
         console.log('delete ' + data);
         this.memberService.initMembersFolder().subscribe(refresh => {
@@ -154,15 +151,7 @@ export class MemberComponent implements OnInit {
       .toString();
     this.activateRecursive(this.member_folder, this.activateId);
     this.liveComponent.faceList = [];
-    if (
-      this.activatePath.toLowerCase().endsWith('.jpg') ||
-      this.activatePath.toLowerCase().endsWith('.png') ||
-      this.activatePath.toLowerCase().endsWith('.jpeg') ||
-      this.activatePath.toLowerCase().endsWith('.gif') ||
-      this.activatePath.toLowerCase().endsWith('.bmp') ||
-      this.activatePath.toLowerCase().endsWith('.tif') ||
-      this.activatePath.toLowerCase().endsWith('.tiff')
-    ) {
+    if (this.isImage(this.activatePath)) {
       this.liveComponent.isSelectImage = true;
       this.liveComponent.emptyImage = false;
       this.liveComponent.selectImage = {
@@ -182,7 +171,7 @@ export class MemberComponent implements OnInit {
         }
       });
     }
-    // console.log('Activate Path : ' + this.activatePath);
+    console.log(this.activatePath);
   }
 
   deActivate(event) {
@@ -191,7 +180,12 @@ export class MemberComponent implements OnInit {
     this.liveComponent.emptyImage = true;
     this.liveComponent.faceList = [];
     this.liveComponent.imagePath = 'Members/';
-    // console.log('DeActivate Path : ' + this.activatePath);
+    this.liveComponent.targetCardList.forEach(target => {
+      target.isActive = false;
+    });
+    this.liveComponent.targetCardList = [];
+    this.selectedCard = [];
+    console.log(this.activatePath);
   }
 
   toggle_state(menu: string) {
@@ -209,17 +203,24 @@ export class MemberComponent implements OnInit {
   openAddModal() {
     this.folderName = undefined;
     this.memberName = undefined;
+    this.selectedCard = [];
     this.componentInsideModals.open();
-    if (this.liveComponent.targetCardList.toString() !== '') {
-      this.selectedCard = this.liveComponent.targetCardList;
-      this.selectedCardState = true;
-    } else {
-      this.selectedCardState = false;
-    }
     if (this.activatePath === undefined) {
       this.addRootPath = 'Members/';
     } else {
       this.addRootPath = 'Members/' + this.activatePath;
+    }
+    if (this.liveComponent.targetCardList.toString() !== '') {
+      this.member_state = true;
+      this.folder_state = false;
+      this.selectedCard = this.liveComponent.targetCardList;
+      this.liveComponent.targetCardList.forEach(target => {
+        target.isActive = false;
+      });
+      this.liveComponent.targetCardList = [];
+      this.selectedCardState = true;
+    } else {
+      this.selectedCardState = false;
     }
   }
 
@@ -271,18 +272,53 @@ export class MemberComponent implements OnInit {
             }
           });
         }
-        this.componentInsideModals.close();
       }
     } else {
       if (this.memberName === undefined || this.memberName === '') {
         this.mWarning = 'input member name';
       } else {
-        this.componentInsideModals.close();
+        if (!this.memberName.endsWith('/')) {
+          this.memberName = this.memberName + '/';
+        }
+        this.selectedCard.forEach(card => {
+          this.selectedCardName.push(card.name);
+          this.selectedCardPath.push(card.realPath);
+        });
+        this.memberService.copySelectMember(this.memberName, this.selectedCardPath, this.selectedCardName).subscribe(result => {
+          if (result === 'true') {
+            this.memberService.initMembersFolder().subscribe(refresh => {
+              this.member_folder = refresh;
+              this.tree.treeModel.update();
+            });
+          } else {
+            console.log('copy error');
+          }
+        });
       }
     }
+    this.selectedCardName = [];
+    this.selectedCardPath = [];
+    this.selectedCard = [];
+    this.liveComponent.targetCardList.forEach(target => {
+      target.isActive = false;
+    });
+    this.liveComponent.targetCardList = [];
+    this.componentInsideModals.close();
   }
 
   deleteCard(face: any) {
     this.selectedCard.splice(this.selectedCard.indexOf(face), 1);
+  }
+
+  isImage(file: string): boolean {
+    return (
+      file.toLowerCase().endsWith('.jpg') ||
+      file.toLowerCase().endsWith('.png') ||
+      file.toLowerCase().endsWith('.jpeg') ||
+      file.toLowerCase().endsWith('.gif') ||
+      file.toLowerCase().endsWith('.bmp') ||
+      file.toLowerCase().endsWith('.tif') ||
+      file.toLowerCase().endsWith('.tiff')
+    );
   }
 }

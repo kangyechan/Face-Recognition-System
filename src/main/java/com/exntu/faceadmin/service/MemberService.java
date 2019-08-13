@@ -5,10 +5,12 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -190,6 +192,7 @@ public class MemberService {
                 for(File inFile: arrAllSelectFolder) {
                     HashMap<String, Object> hashMap = new HashMap<>();
                     if(isImageFile(inFile.getName())) {
+                        hashMap.put("name", inFile.getName());
                         hashMap.put("realPath", selectPath + inFile.getName());
                         hashMap.put("getPath", "api/member/image-list?imagePath=" + selectPath + inFile.getName());
                         hashMap.put("isActive", false);
@@ -216,5 +219,42 @@ public class MemberService {
     public byte[] getImgSrc(String imagePath) throws IOException {
         FileInputStream fin = new FileInputStream(this.membersFolderPath + imagePath);
         return IOUtils.toByteArray(fin);
+    }
+
+    public boolean copyMember(ArrayList<String> copyList, ArrayList<String> copyNameList, String destPath) {
+        FileInputStream sourceF = null;
+        FileOutputStream destF = null;
+        File copyFolder = new File(membersFolderPath + destPath);
+        if(!copyFolder.exists()) {
+            try {
+                copyFolder.mkdir();
+                log.debug(destPath + " folder make success.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("copyMember Mkdir Exception.");
+                return false;
+            }
+        }
+        log.debug("Your selectCard List alive destPath.");
+        System.out.println(copyList);
+        for(int i = 0; i < copyList.size(); i++) {
+            File sourceFile = new File(membersFolderPath + copyList.get(i));
+            try {
+                sourceF = new FileInputStream(sourceFile);
+                destF = new FileOutputStream(new File(membersFolderPath + destPath + copyNameList.get(i)));
+                int readBuffer = 0;
+                while ((readBuffer = sourceF.read()) != -1) {
+                    destF.write(readBuffer);
+                }
+                log.debug(copyList.get(i) + copyNameList.get(i) + " image file copy success.");
+                sourceF.close();
+                destF.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                log.error("copyMember IOException.");
+                return false;
+            }
+        }
+        return true;
     }
 }

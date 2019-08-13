@@ -44,7 +44,7 @@ public class MemberResource {
      * @param folderPath new folderPath include '/'.
      */
     @GetMapping(path = "/member/make-members-folder")
-    public String makeMembersFolder(@RequestParam String folderPath, String folderName) {
+    public String makeMembersFolder(@RequestParam String folderPath, @RequestParam String folderName) {
         log.debug("Make member folder Get Request.");
         if(memberService.makeNewFolder(folderPath, folderName)) {
             return folderPath + folderName;
@@ -60,7 +60,7 @@ public class MemberResource {
      * @param folderPath MembersFolderPath.
      */
     @GetMapping(path = "/member/read-member-folder-list")
-    public Object readMemberFolder(@RequestParam String folderId, String folderName, String folderPath) {
+    public Object readMemberFolder(@RequestParam String folderId, @RequestParam String folderName, @RequestParam String folderPath) {
         log.debug("read " + folderName + "'s all member read Get Request.");
         return memberService.readMemberList(folderId, folderName, folderPath);
     }
@@ -96,7 +96,21 @@ public class MemberResource {
         path = "/member/image-list",
         produces = MediaType.IMAGE_JPEG_VALUE
     )
-    public @ResponseBody byte[] getImageSrc(@RequestParam() String imagePath) throws IOException {
+    public @ResponseBody byte[] getImageSrc(@RequestParam String imagePath) throws IOException {
         return memberService.getImgSrc(imagePath);
     }
+
+    /**
+     * {@code GET   /member/copy-member-list} : copy selectMember to other folder.
+     * @param destPath copy destPath.
+     * @param copyList select member image card.
+     * @param copyNameList select member name.
+     */
+    @GetMapping(path = "/member/copy-member-list")
+    public boolean copyMemberList(@RequestParam ArrayList<String> copyList, @RequestParam ArrayList<String> copyNameList, @RequestParam String destPath) {
+        log.debug("copyMemberList from Member Resource");
+        return memberService.copyMember(copyList, copyNameList, destPath);
+    }
+    // destPath를 첫번째 param으로 할때 전달되는 list 값이 없어지는 오류가 있음.
+    // 순서를 바꾸면 문제없음...
 }
