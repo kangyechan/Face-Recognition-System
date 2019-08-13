@@ -92,6 +92,5 @@ export class LiveComponent implements OnInit {
     } else {
       this.targetCardList.splice(this.targetCardList.indexOf(face), 1);
     }
-    console.log(this.targetCardList);
   }
 }

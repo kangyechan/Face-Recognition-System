@@ -151,7 +151,15 @@ export class MemberComponent implements OnInit {
       .toString();
     this.activateRecursive(this.member_folder, this.activateId);
     this.liveComponent.faceList = [];
-    if (this.isImage(this.activatePath)) {
+    if (
+      this.activatePath.toLowerCase().endsWith('.jpg') ||
+      this.activatePath.toLowerCase().endsWith('.png') ||
+      this.activatePath.toLowerCase().endsWith('.jpeg') ||
+      this.activatePath.toLowerCase().endsWith('.gif') ||
+      this.activatePath.toLowerCase().endsWith('.bmp') ||
+      this.activatePath.toLowerCase().endsWith('.tif') ||
+      this.activatePath.toLowerCase().endsWith('.tiff')
+    ) {
       this.liveComponent.isSelectImage = true;
       this.liveComponent.emptyImage = false;
       this.liveComponent.selectImage = {
@@ -308,17 +316,5 @@ export class MemberComponent implements OnInit {
 
   deleteCard(face: any) {
     this.selectedCard.splice(this.selectedCard.indexOf(face), 1);
-  }
-
-  isImage(file: string): boolean {
-    return (
-      file.toLowerCase().endsWith('.jpg') ||
-      file.toLowerCase().endsWith('.png') ||
-      file.toLowerCase().endsWith('.jpeg') ||
-      file.toLowerCase().endsWith('.gif') ||
-      file.toLowerCase().endsWith('.bmp') ||
-      file.toLowerCase().endsWith('.tif') ||
-      file.toLowerCase().endsWith('.tiff')
-    );
   }
 }

@@ -85,7 +85,7 @@
 
       .one-face-card:hover {
         cursor: pointer;
-        border: solid 5px #e2f3f9;
+        box-shadow: 0 0 0 5px #e2f3f9;
       }
 
       .face-card {
@@ -99,7 +99,7 @@
 
       .face-card:hover {
         cursor: pointer;
-        border: solid 5px #e2f3f9;
+        box-shadow: 0 0 0 5px #e2f3f9;
       }
 
       fa-icon {
