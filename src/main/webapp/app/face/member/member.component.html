@@ -40,8 +40,9 @@
             <label>Members/{{ memberName }}</label>
             <div class="member-select-image" *ngIf="selectedCardState">
                 <div class="select-card">
-                    <div class="select-card-image">
-                        <img *ngFor="let face of selectedCard" [src]='face.getPath' alt="testing" (click)="deleteCard(face)"/>
+                    <div class="select-card-image" *ngFor="let face of selectedCard" >
+                        <fa-icon icon="window-close" (click)="deleteCard(face)"></fa-icon>
+                        <img [src]='face.getPath' alt="testing"/>
                     </div>
                 </div>
             </div>
