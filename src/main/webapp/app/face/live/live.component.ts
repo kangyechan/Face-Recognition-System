@@ -45,16 +45,20 @@ export class LiveComponent implements OnInit {
     if (this.liveSection) {
       this.cameraText = 'ON';
       this.liveSection = false;
+      this.liveService.listen('OFF').subscribe(data => {
+        console.log(data);
+      });
     } else {
+      this.liveService.listen('ON').subscribe(data => {
+        console.log(data);
+      });
       this.cameraText = 'OFF';
       this.liveSection = true;
     }
   }
 
   toggleDoor() {
-    this.liveService.doorOpen('ON').subscribe(data => {
-      console.log('Door open');
-    });
+    this.liveService.doorOpen().subscribe();
   }
 
   dtsSelected(selectedCard) {
@@ -87,12 +91,6 @@ export class LiveComponent implements OnInit {
       this.sectionState = 'IMAGE';
       this.sectionTitle = 'Live On';
     }
-  }
-
-  getCapture() {
-    this.liveService.listen().subscribe(data => {
-      console.log(data);
-    });
   }
 
   get captureURL() {
