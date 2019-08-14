@@ -23,16 +23,17 @@
             <img class="NO-CACHE" border="1" [src]="imageURL"/>
         </div>
 
-        <div class="image-section" *ngIf="liveSection && imageSection && !emptyImage">
+        <dts-select-container #container="dts-select-container" (itemSelected)="dtsSelected($event)"
+        class="image-section" *ngIf="liveSection && imageSection && !emptyImage">
             <div class="one-face-card" *ngIf="isSelectImage" (click)="cardClick(selectImage)">
                 <fa-icon *ngIf="selectImage.isActive" icon="check-square"></fa-icon>
-                <img [src]="selectImage.getPath" alt="select-image"/>
+                <img [src]="selectImage.getPath" alt="select-image" [ngClass]="{'active': selectImage.isActive}"/>
             </div>
-            <div class="face-card" *ngFor="let face of faceList" (click)="cardClick(face)">
+            <div [dtsSelectItem]="face" class="face-card" *ngFor="let face of faceList">
                 <fa-icon *ngIf="face.isActive" icon="check-square"></fa-icon>
-                <img [src]='face.getPath' alt="face-image"/>
+                <img [src]='face.getPath' alt="face-image" [ngClass]="{'active': face.isActive}"/>
             </div>
-        </div>
+        </dts-select-container>
 
         <div class="empty-section" *ngIf="liveSection && imageSection && emptyImage">
             <p>{{ imagePath }} 폴더에 이미지가 존재하지 않습니다.</p>
