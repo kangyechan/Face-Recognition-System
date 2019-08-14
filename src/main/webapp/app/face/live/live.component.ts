@@ -52,11 +52,9 @@ export class LiveComponent implements OnInit {
   }
 
   toggleDoor() {
-    // console.log(this.selectContainer.selectedItems);
-    // console.log(this.selectedCards);
-    // this.liveService.doorOpen('ON').subscribe(data => {
-    //   console.log('Door open');
-    // });
+    this.liveService.doorOpen('ON').subscribe(data => {
+      console.log('Door open');
+    });
   }
 
   dtsSelected(selectedCard) {
