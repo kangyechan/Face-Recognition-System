@@ -75,6 +75,10 @@
         height: 100%;
         top: 0;
         left: 0;
+
+        &.active {
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
       }
 
       .one-face-card {
@@ -85,7 +89,7 @@
 
       .one-face-card:hover {
         cursor: pointer;
-        box-shadow: 0 0 0 5px #e2f3f9;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
       }
 
       .face-card {
@@ -99,7 +103,7 @@
 
       .face-card:hover {
         cursor: pointer;
-        box-shadow: 0 0 0 5px #e2f3f9;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
       }
 
       fa-icon {

@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { LiveService } from 'app/face/live/live.service';
+import { SelectContainerComponent } from 'ngx-drag-to-select';
 
 @Component({
   selector: 'jhi-live',
@@ -7,6 +8,8 @@ import { LiveService } from 'app/face/live/live.service';
   styleUrls: ['./live.scss']
 })
 export class LiveComponent implements OnInit {
+  @ViewChild(SelectContainerComponent, { static: false }) private selectContainer: SelectContainerComponent;
+
   cameraText: string;
   doorText: string;
   sectionState: string;
@@ -54,6 +57,15 @@ export class LiveComponent implements OnInit {
     });
   }
 
+  dtsSelected(selectedCard) {
+    selectedCard.isActive = !selectedCard.isActive;
+    if (this.targetCardList.indexOf(selectedCard) === -1) {
+      this.targetCardList.push(selectedCard);
+    } else {
+      this.targetCardList.splice(this.targetCardList.indexOf(selectedCard), 1);
+    }
+  }
+
   toggleState() {
     if (this.sectionState === 'IMAGE') {
       if (this.isSelectImage) {
@@ -66,6 +78,9 @@ export class LiveComponent implements OnInit {
       this.sectionState = 'LIVE';
       this.sectionTitle = 'Folder Contents';
     } else {
+      if (this.targetCardList.toString() !== '') {
+        this.cancelSelect();
+      }
       this.emptyImage = false;
       this.cameraState = true;
       this.imageSection = false;
@@ -92,5 +107,18 @@ export class LiveComponent implements OnInit {
     } else {
       this.targetCardList.splice(this.targetCardList.indexOf(face), 1);
     }
+    console.log(this.targetCardList);
+  }
+
+  cancelSelect() {
+    this.targetCardList
+      .filter(selectCard => {
+        return selectCard.isActive === true;
+      })
+      .map(selectCard => {
+        return (selectCard.isActive = false);
+      });
+    this.targetCardList = [];
+    this.selectContainer.clearSelection();
   }
 }

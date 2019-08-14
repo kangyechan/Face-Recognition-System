@@ -13,10 +13,10 @@ import { LnbComponent } from './lnb/lnb.component';
 import { LearningModalComponent, PreworkModalComponent } from './modal/modal.component';
 import { ModalModule } from 'angular-custom-modal';
 import { TreeModule } from 'angular-tree-component';
-// import { WebCamModule } from 'ack-angular-webcam';
+import { DragToSelectModule } from 'ngx-drag-to-select';
 
 @NgModule({
-  imports: [FaceAdminSharedModule, RouterModule.forChild([FACE_ROUTE]), ModalModule, TreeModule.forRoot()],
+  imports: [FaceAdminSharedModule, RouterModule.forChild([FACE_ROUTE]), ModalModule, TreeModule.forRoot(), DragToSelectModule.forRoot()],
   declarations: [
     FaceComponent,
     MemberComponent,
