@@ -20,7 +20,7 @@
 
     <div class="camera-section">
         <div class="live-section" *ngIf="liveSection && cameraState">
-            <img class="NO-CACHE" border="1" [src]="imageURL"/>
+            <img class="NO-CACHE" border="1" [src]="1"/>
         </div>
 
         <dts-select-container #container="dts-select-container" (itemSelected)="dtsSelected($event)"

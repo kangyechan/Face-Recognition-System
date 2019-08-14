@@ -155,3 +155,4 @@ python:
   fileName:
     camera: camera.py
     door: door.py
+    stream: streaming.py

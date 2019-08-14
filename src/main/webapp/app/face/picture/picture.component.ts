@@ -17,73 +17,73 @@ export class PictureComponent implements OnInit {
       {
         name: 'member1',
         type: 'member',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/123.jpg'),
+        src: '',
         show: true
       },
       {
         name: 'whitelist1',
         type: 'whiteList',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/live.jpg'),
+        src: '',
         show: true
       },
       {
         name: 'blacklist1',
         type: 'blackList',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/live1.jpg'),
+        src: '',
         show: true
       },
       {
         name: 'unknown1',
         type: 'unknown',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/live2.jpg'),
+        src: '',
         show: true
       },
       {
         name: 'member2',
         type: 'member',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/1234.jpg'),
+        src: '',
         show: true
       },
       {
         name: 'whitelist2',
         type: 'whiteList',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/12345.jpg'),
+        src: '',
         show: true
       },
       {
         name: 'blacklist2',
         type: 'blackList',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/live.jpg'),
+        src: '',
         show: true
       },
       {
         name: 'unknown2',
         type: 'unknown',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/live.jpg'),
+        src: '',
         show: true
       },
       {
         name: 'member3',
         type: 'member',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/live1.jpg'),
+        src: '',
         show: true
       },
       {
         name: 'whitelist3',
         type: 'whiteList',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/live2.jpg'),
+        src: '',
         show: true
       },
       {
         name: 'blacklist3',
         type: 'blackList',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/123.jpg'),
+        src: '',
         show: true
       },
       {
         name: 'unknown3',
         type: 'unknown',
-        src: require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/live.jpg'),
+        src: '',
         show: true
       }
     ];

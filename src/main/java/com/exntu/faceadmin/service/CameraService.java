@@ -1,14 +1,11 @@
 package com.exntu.faceadmin.service;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.xml.ws.Action;
-import java.awt.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,10 +34,9 @@ public class CameraService {
     private final Logger log = LoggerFactory.getLogger(CameraService.class);
 
     @Async
-    public void cameraOnOff() {
-
+    public void cameraOn() {
         try {
-            List<String> cmd = new ArrayList<String>();
+            List<String> cmd = new ArrayList<>();
             cmd.add(environment.getProperty("python.path"));
 
             // Path
@@ -57,7 +53,7 @@ public class CameraService {
             // Add Directory Info
             bld.directory(new File(Paths.get(currentPath.toString(), "src", "main", "python").toString()));
 
-            log.debug("camera on button click!");
+            log.debug("camera start!");
             if(process == null) process = bld.start();
             else log.debug("Already exist Process!");
 
