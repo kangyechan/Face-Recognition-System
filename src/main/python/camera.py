@@ -10,8 +10,6 @@ while True:
 
     cv2.imshow('Live Camera', camera)
 
-    # cv2.imwrite('live.jpg', camera)
-
     if cv2.waitKey(1) > 0: break;
 
 capture.release()
