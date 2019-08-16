@@ -66,9 +66,9 @@ public class FaceAdminApp implements InitializingBean {
         Environment env = app.run(args).getEnvironment();
         CameraService cameraService = new CameraService(env);
         StreamService streamService = new StreamService(env);
-        streamService.startCheck();
         logApplicationStartup(env);
         cameraService.cameraOn();
+        streamService.liveStreaming();
     }
 
     private static void logApplicationStartup(Environment env) {

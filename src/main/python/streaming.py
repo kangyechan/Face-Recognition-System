@@ -1,18 +1,25 @@
+from flask import Flask, Response
+import imutils
 import cv2
-import socket
-import numpy
+app = Flask(__name__)
 
-capture = cv2.VideoCapture(0)
-capture.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+def streaming():
+    vs = cv2.VideoCapture(0)
+    while True:
+        ret, frame = vs.read()
+        frame = imutils.resize(frame, width=900)
+        frame = cv2.flip(frame, 1)
+        byte_frame = cv2.imencode('.jpeg', frame)[1].tobytes()
+        yield (b'--frame\r\n' \
+               b'Content-Type: image/jpeg\r\n\r\n' + byte_frame + b'\r\n')
+    cv2.destroyAllWindows()
+    print("[INFO] Stream Empty")
+    yield (b'--frame\r\n'
+           b'Content-Type: image/jpeg\r\n\r\n' + bytes(0) + b'\r\n')
 
-while True:
-    ret, frame = capture.read()
-    stream = cv2.flip(frame, 1)
+@app.route('/streaming/live')
+def get_streaming():
+    return Response(streaming(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-    cv2.imshow('Streaming', stream)
-
-    if cv2.waitKey(1) > 0: break;
-
-stream.release()
-cv2.destroyAllWindows()
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=9001)
