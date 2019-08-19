@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { LearningModalComponent, PreworkModalComponent } from 'app/face/modal/modal.component';
+import { LnbService } from './lnb.service';
 
 @Component({
   selector: 'jhi-lnb',
@@ -43,31 +43,26 @@ import { LearningModalComponent, PreworkModalComponent } from 'app/face/modal/mo
 })
 export class LnbComponent implements OnInit {
   buttonState = false;
-  // buttonArrow = '>';
 
-  constructor(private modalService: NgbModal) {}
+  constructor(private modalService: NgbModal, private lnbService: LnbService) {}
 
   ngOnInit() {}
 
-  prework() {
+  preWork() {
     console.log('전처리 테스트');
-    const modalRef = this.modalService.open(PreworkModalComponent);
-    modalRef.componentInstance.contents = '전처리 창입니다.';
+    this.lnbService.makeAligndata().subscribe(data => {
+      console.log(data);
+    });
   }
 
   learning() {
     console.log('학습 테스트');
-    const modalRef = this.modalService.open(LearningModalComponent);
-    modalRef.componentInstance.contents = '학습 창입니다.';
+    this.lnbService.makeClassifier().subscribe(data => {
+      console.log(data);
+    });
   }
 
   lnbToggle() {
     this.buttonState = !this.buttonState;
-
-    // if (this.buttonState) {
-    //   this.buttonArrow = '<';
-    // } else {
-    //   this.buttonArrow = '>';
-    // }
   }
 }

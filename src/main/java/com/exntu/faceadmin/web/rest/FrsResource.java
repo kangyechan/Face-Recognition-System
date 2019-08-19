@@ -1,31 +1,29 @@
 package com.exntu.faceadmin.web.rest;
 
-import com.exntu.faceadmin.domain.Members;
 import com.exntu.faceadmin.service.MemberService;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
- * REST controller for managing the member folder items.
+ * REST controller for Face Recognition.
  */
 @RestController
 @RequestMapping("/api")
-public class MemberResource {
+public class FrsResource {
+    private Environment environment;
 
-    private final Logger log = LoggerFactory.getLogger(MemberResource.class);
+    private final Logger log = LoggerFactory.getLogger(FrsResource.class);
 
     private final MemberService memberService;
 
-    public MemberResource(MemberService memberService) {
+    public FrsResource(MemberService memberService) {
         this.memberService = memberService;
     }
 
@@ -111,6 +109,4 @@ public class MemberResource {
         log.debug("copyMemberList from Member Resource");
         return memberService.copyMember(copyList, copyNameList, destPath);
     }
-    // destPath를 첫번째 param으로 할때 전달되는 list 값이 없어지는 오류가 있음.
-    // 순서를 바꾸면 문제없음...
 }
