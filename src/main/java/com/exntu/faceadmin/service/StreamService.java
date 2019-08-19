@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Service for Live Streaming.
- * We use th {@link Async} annotyateion to live streaming manages asynchronously.
+ * We use the {@link Async} annotation to live streaming manages asynchronously.
  */
 @Service
 public class StreamService {
@@ -28,7 +28,6 @@ public class StreamService {
     }
 
     private final Logger log = LoggerFactory.getLogger(StreamService.class);
-
 
     @Async
     public void liveStreaming() {

@@ -1,32 +1,41 @@
 package com.exntu.faceadmin.web.rest;
 
-import com.exntu.faceadmin.domain.Members;
+import com.exntu.faceadmin.service.CameraService;
+import com.exntu.faceadmin.service.LnbService;
 import com.exntu.faceadmin.service.MemberService;
-import org.apache.commons.io.IOUtils;
+import com.exntu.faceadmin.service.StreamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
- * REST controller for managing the member folder items.
+ * REST controller for Face Recognition.
  */
 @RestController
 @RequestMapping("/api")
-public class MemberResource {
+public class FrsResource {
+    private Environment environment;
 
-    private final Logger log = LoggerFactory.getLogger(MemberResource.class);
+    private final Logger log = LoggerFactory.getLogger(FrsResource.class);
 
+    private final CameraService cameraService;
+    private final StreamService streamService;
+    private final LnbService lnbService;
     private final MemberService memberService;
 
-    public MemberResource(MemberService memberService) {
-        this.memberService = memberService;
+    public FrsResource(Environment env) {
+        this.environment = env;
+        this.cameraService = new CameraService(env);
+        this.streamService = new StreamService(env);
+        this.lnbService = new LnbService(env);
+        this.memberService = new MemberService();
+        this.cameraService.
     }
 
     /**
@@ -111,6 +120,22 @@ public class MemberResource {
         log.debug("copyMemberList from Member Resource");
         return memberService.copyMember(copyList, copyNameList, destPath);
     }
-    // destPath를 첫번째 param으로 할때 전달되는 list 값이 없어지는 오류가 있음.
-    // 순서를 바꾸면 문제없음...
+
+    /**
+     * {@code GET  /camera/door-open} : Door Control
+     */
+    @GetMapping(path = "/camera/door-open")
+    public void cameraDoorOpen() {
+        log.debug("------------------- door open -------------------");
+        cameraService.doorOpen();
+    }
+
+    /**
+     * {@code GET   /lnb/make-align-data} : lnb preWork Control.
+     */
+    @GetMapping(path = "/lnb/make-align-data")
+    public void makeAlignData() {
+        log.debug("FACE RECOGNITION PREWORK.");
+        LnbService.preWork();
+    }
 }

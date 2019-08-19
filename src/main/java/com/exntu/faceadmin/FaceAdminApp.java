@@ -4,6 +4,7 @@ import com.exntu.faceadmin.config.ApplicationProperties;
 import com.exntu.faceadmin.config.DefaultProfileUtil;
 
 import com.exntu.faceadmin.service.CameraService;
+import com.exntu.faceadmin.service.LnbService;
 import com.exntu.faceadmin.service.StreamService;
 import io.github.jhipster.config.JHipsterConstants;
 

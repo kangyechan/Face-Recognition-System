@@ -4,6 +4,7 @@ import cv2
 app = Flask(__name__)
 
 def streaming():
+    print('streaming start')
     vs = cv2.VideoCapture(0)
     while True:
         ret, frame = vs.read()
@@ -12,6 +13,7 @@ def streaming():
         byte_frame = cv2.imencode('.jpeg', frame)[1].tobytes()
         yield (b'--frame\r\n' \
                b'Content-Type: image/jpeg\r\n\r\n' + byte_frame + b'\r\n')
+
     cv2.destroyAllWindows()
     print("[INFO] Stream Empty")
     yield (b'--frame\r\n'

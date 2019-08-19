@@ -29,6 +29,8 @@ public class CameraService {
 
     public CameraService(Environment env) {
         this.environment = env;
+        this.process = null;
+        this.dProcess = null;
     }
 
     private final Logger log = LoggerFactory.getLogger(CameraService.class);
