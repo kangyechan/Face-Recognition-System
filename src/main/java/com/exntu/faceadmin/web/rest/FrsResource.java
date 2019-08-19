@@ -1,9 +1,6 @@
 package com.exntu.faceadmin.web.rest;
 
-import com.exntu.faceadmin.service.CameraService;
-import com.exntu.faceadmin.service.LnbService;
 import com.exntu.faceadmin.service.MemberService;
-import com.exntu.faceadmin.service.StreamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -24,18 +21,10 @@ public class FrsResource {
 
     private final Logger log = LoggerFactory.getLogger(FrsResource.class);
 
-    private final CameraService cameraService;
-    private final StreamService streamService;
-    private final LnbService lnbService;
     private final MemberService memberService;
 
-    public FrsResource(Environment env) {
-        this.environment = env;
-        this.cameraService = new CameraService(env);
-        this.streamService = new StreamService(env);
-        this.lnbService = new LnbService(env);
-        this.memberService = new MemberService();
-        this.cameraService.
+    public FrsResource(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     /**
@@ -119,23 +108,5 @@ public class FrsResource {
     public boolean copyMemberList(@RequestParam ArrayList<String> copyList, @RequestParam ArrayList<String> copyNameList, @RequestParam String destPath) {
         log.debug("copyMemberList from Member Resource");
         return memberService.copyMember(copyList, copyNameList, destPath);
-    }
-
-    /**
-     * {@code GET  /camera/door-open} : Door Control
-     */
-    @GetMapping(path = "/camera/door-open")
-    public void cameraDoorOpen() {
-        log.debug("------------------- door open -------------------");
-        cameraService.doorOpen();
-    }
-
-    /**
-     * {@code GET   /lnb/make-align-data} : lnb preWork Control.
-     */
-    @GetMapping(path = "/lnb/make-align-data")
-    public void makeAlignData() {
-        log.debug("FACE RECOGNITION PREWORK.");
-        LnbService.preWork();
     }
 }
