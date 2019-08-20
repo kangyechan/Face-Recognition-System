@@ -48,16 +48,14 @@ export class LnbComponent implements OnInit {
 
   ngOnInit() {}
 
-  preWork() {
-    console.log('전처리 테스트');
-    this.lnbService.makeAligndata().subscribe(data => {
+  preProcessing() {
+    this.lnbService.preProcessing().subscribe(data => {
       console.log(data);
     });
   }
 
   learning() {
-    console.log('학습 테스트');
-    this.lnbService.makeClassifier().subscribe(data => {
+    this.lnbService.learning().subscribe(data => {
       console.log(data);
     });
   }

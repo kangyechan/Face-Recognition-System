@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { SERVER_API_URL } from 'app/app.constants';
+import { FLASK_SERVER_API_URL } from 'app/app.constants';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,11 +9,11 @@ import { Observable } from 'rxjs';
 export class LnbService {
   constructor(private http: HttpClient) {}
 
-  makeAligndata(): Observable<any> {
-    return this.http.get(SERVER_API_URL + ' api/lnb/make-align-data', { responseType: 'text' });
+  preProcessing(): Observable<any> {
+    return this.http.get(FLASK_SERVER_API_URL + 'lnb/preprocessing', { responseType: 'json' });
   }
 
-  makeClassifier(): Observable<any> {
-    return this.http.get(SERVER_API_URL + 'api/lnb/make-classifier', { responseType: 'text' });
+  learning(): Observable<any> {
+    return this.http.get(FLASK_SERVER_API_URL + 'lnb/learning', { responseType: 'json' });
   }
 }
