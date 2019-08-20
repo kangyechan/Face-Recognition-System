@@ -37,6 +37,7 @@ export class MemberComponent implements OnInit {
     useTriState: false,
     useCheckbox: this.del_checkbox,
     getChildren: (node: TreeNode) => {
+      console.log(node.data.id, node.data.name, node.data.path);
       this.memberService.readMemberFolderLists(node.data.id, node.data.name, node.data.path).subscribe(data => {
         this.readMemberFolderRecursive(this.member_folder, node.data.path, data);
       });
@@ -45,23 +46,33 @@ export class MemberComponent implements OnInit {
 
   constructor(private memberService: MemberService) {}
 
-  readMemberFolderRecursive(hasChildFolder: any, nodePath: string, data: any) {
-    hasChildFolder.forEach(childFolder => {
-      if (childFolder.hasChildren && nodePath.startsWith(childFolder.path)) {
-        if (childFolder.path === nodePath) {
+  readMemberFolderRecursive(hasChildFolder: any[], nodePath: string, data: any) {
+    if (nodePath.startsWith('root/')) {
+      hasChildFolder.forEach(childFolder => {
+        if (childFolder.hasChildren && nodePath.endsWith(childFolder.name)) {
           childFolder.children = data;
           this.tree.treeModel.update();
-        } else {
-          this.readMemberFolderRecursive(childFolder.children, nodePath, data);
         }
-      }
-    });
+      });
+    } else {
+      hasChildFolder.forEach(childFolder => {
+        if (childFolder.hasChildren) {
+          if (childFolder.path === nodePath) {
+            childFolder.children = data;
+            this.tree.treeModel.update();
+          } else if (nodePath.startsWith(childFolder.name)) {
+            this.readMemberFolderRecursive(childFolder.children, nodePath, data);
+          } else {
+          }
+        }
+      });
+    }
   }
 
   ngOnInit() {
     this.folder_state = true;
     this.member_state = false;
-    this.fWarning = 'input folder name';
+    this.fWarning = 'New Folder Name';
     this.mWarning = 'input member name';
     this.memberService.initMembersFolder().subscribe(data => {
       this.member_folder = data;
@@ -256,7 +267,7 @@ export class MemberComponent implements OnInit {
   onSubmit() {
     if (this.folder_state) {
       if (this.folderName === undefined || this.folderName === '') {
-        this.fWarning = 'input folder name';
+        this.fWarning = 'New Folder Name';
       } else {
         if (this.activatePath === undefined) {
           this.memberService.makeMembersFolder('', this.folderName).subscribe(newFolderName => {

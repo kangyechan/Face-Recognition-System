@@ -24,46 +24,68 @@ import java.util.HashMap;
 public class MemberService {
 
     private final Logger log = LoggerFactory.getLogger(MemberService.class);
-    private String membersFolderPath;
+    private String rootFolderPath;
 
     public MemberService() {
-        this.membersFolderPath = "/Users/kang-yechan/Desktop/frs/flask-frs/dataset/";
+        this.rootFolderPath = "/Users/kang-yechan/Desktop/frs/flask-frs/dataset/";
     }
 
     public Object readRootFolder() {
         int folderId = 0;
         ArrayList<Members> initMembers = new ArrayList<>();
-        File rootFolder = new File(membersFolderPath);
+        ArrayList<String> rootMemberNameList = new ArrayList<>();
+        File rootFolder = new File(rootFolderPath);
         if(!rootFolder.exists()) {
             log.error("Root Folder is not found");
         } else {
+            File rootUnknownFolder = new File(rootFolderPath + "Unknown/");
+            if(!rootUnknownFolder.exists()) {
+                rootUnknownFolder.mkdir();
+                log.debug("Unknown folder make success.");
+            }
+            rootMemberNameList.add("Unknown");
             File[] arrRootFolder = rootFolder.listFiles();
             if(arrRootFolder != null) {
                 for(File rootFolderName: arrRootFolder) {
-                    Members membersList = new Members(String.valueOf(folderId), rootFolderName.getName(), rootFolderName.getName() + "/");
                     if(!rootFolderName.isDirectory()) {
                         log.debug(rootFolderName.getName() + "is NOT Directory.");
-                        continue;
                     } else {
-                        File memList = new File(membersFolderPath + rootFolderName.getName() + "/");
-                        File[] memListFolder = memList.listFiles();
-                        if(memListFolder != null) {
-                            if(memListFolder.length < 1) {
-                                membersList.setHasChildren(false);
-                                log.debug(rootFolderName.getName() + " This folder has not children.");
-                            } else if(memListFolder.length < 2 && memListFolder[0].getName().startsWith(".")) {
-                                membersList.setHasChildren(false);
-                                log.debug(rootFolderName.getName() + " This folder has not children. only one file : .DS_Storeis.");
+                        Members member = new Members();
+                        if(!rootFolderName.getName().equals("Unknown")) {
+                            String[] arrRootFolderName = rootFolderName.getName().split(" ");
+                            if(!rootMemberNameList.contains(arrRootFolderName[0])) {
+                                rootMemberNameList.add(arrRootFolderName[0]);
+                                member.setId(String.valueOf(folderId));
+                                member.setName(arrRootFolderName[0]);
+                                member.setPath("root/" + arrRootFolderName[0]);
+                                member.setHasChildren(true);
                             } else {
-                                membersList.setHasChildren(true);
-                                log.debug(rootFolderName.getName() + " This folder has children.");
+                                continue;
                             }
                         } else {
-                            log.error("MembersListFolder NULL Point Exception.");
+                            member.setId(String.valueOf(folderId));
+                            member.setName(rootFolderName.getName());
+                            member.setPath("root/" + rootFolderName.getName());
+                            File memList = new File(rootFolderPath + rootFolderName.getName() + "/");
+                            File[] memListFolder = memList.listFiles();
+                            if(memListFolder != null) {
+                                if(memListFolder.length < 1) {
+                                    member.setHasChildren(false);
+                                    log.debug(rootFolderName.getName() + " This folder has not children.");
+                                } else if(memListFolder.length == 1 && memListFolder[0].getName().startsWith(".")) {
+                                    member.setHasChildren(false);
+                                    log.debug(rootFolderName.getName() + " This folder has not children. only one file : .DS_Storeis.");
+                                } else {
+                                    member.setHasChildren(true);
+                                    log.debug(rootFolderName.getName() + " This folder has children.");
+                                }
+                            } else {
+                                log.error("MembersListFolder NULL Point Exception.");
+                            }
                         }
                         folderId++;
+                        initMembers.add(member);
                     }
-                    initMembers.add(membersList);
                 }
             } else {
                 log.debug("arrRootFolder is NULL Point Exception.");
@@ -73,7 +95,7 @@ public class MemberService {
     }
 
     public boolean makeNewFolder(String folderPath, String folderName) {
-        File newFolder = new File(membersFolderPath + folderPath + folderName + "/");
+        File newFolder = new File(rootFolderPath + folderPath + folderName + "/");
         if(!newFolder.exists()) {
             try {
                 newFolder.mkdir();
@@ -90,49 +112,119 @@ public class MemberService {
 
     public Object readMemberList(String folderId, String folderName, String folderPath) {
         int memFolderId = 0;
-        String readMembersFolderPath = membersFolderPath + folderPath;
         ArrayList<Members> readMembers = new ArrayList<>();
-        File memberFolder = new File(readMembersFolderPath);
-        if(!memberFolder.exists()) {
-            log.error(folderName + " is not found");
-        } else {
-            File[] arrMemFolder = memberFolder.listFiles();
-            if(arrMemFolder != null) {
-                for(File memFolderName: arrMemFolder) {
-                    Members memList =  new Members(
-                        folderId + "-" + String.valueOf(memFolderId), memFolderName.getName(),
-                        folderPath + memFolderName.getName() + "/" );
-                    if(!memFolderName.isDirectory()) {
-                        log.debug(memFolderName.getName() + "is NOT Directory.");
-                        if(isImageFile(memFolderName.getName())) {
-                            memList.setPath(folderPath + memFolderName.getName().toLowerCase());
+
+        if(folderPath.startsWith("root/")) {
+            if(folderPath.equals("root/Unknown")) {
+                String unknownFolderPath = rootFolderPath + "Unknown/";
+                File unknownFolder = new File(unknownFolderPath);
+                File[] arrUnknownFolder = unknownFolder.listFiles();
+                if(arrUnknownFolder != null) {
+                    for(File unknownFolderChild: arrUnknownFolder) {
+                        if(!unknownFolderChild.isDirectory()) {
+                            Members member = new Members(
+                                folderId + "-" + String.valueOf(memFolderId), unknownFolderChild.getName(),
+                                "Unknown/" + unknownFolderChild.getName());
                             memFolderId++;
+                            readMembers.add(member);
                         } else {
-                            continue;
+                            log.debug(unknownFolderChild.getName() + " is directory.");
                         }
-                    } else {
-                        File memListFolder = new File(readMembersFolderPath + memFolderName.getName() + "/");
-                        File[] memListFolderChildren = memListFolder.listFiles();
-                        if(memListFolderChildren != null) {
-                            if(memListFolderChildren.length < 1) {
-                                memList.setHasChildren(false);
-                                log.debug(memFolderName.getName() + " This folder has not children.");
-                            } else if(memListFolderChildren.length < 2 && memListFolderChildren[0].getName().startsWith(".")) {
-                                memList.setHasChildren(false);
-                                log.debug(memFolderName.getName() + " This folder has not children. only one file : .DS_Storeis.");
-                            } else {
-                                memList.setHasChildren(true);
-                                log.debug(memFolderName.getName() + " This folder has children.");
-                            }
-                        } else {
-                            log.error("memListFolderChildren is NULL Point Exception.");
-                        }
-                        memFolderId++;
                     }
-                    readMembers.add(memList);
+                } else {
+                    log.error("arrUnknownFolder Null point Exception.");
                 }
             } else {
-                log.debug("arrMemberFolder is NULL Point Exception.");
+                File rootFolder = new File(rootFolderPath);
+                File[] arrRootFolder = rootFolder.listFiles();
+                if(arrRootFolder != null) {
+                    for(File rootFolderChild: arrRootFolder) {
+                        if(rootFolderChild.isDirectory() && !rootFolderChild.getName().equals("Unknown")) {
+                            String[] arrRootFolderChildName = rootFolderChild.getName().split(" ");
+                            StringBuilder folderChildName = new StringBuilder();
+                            for(int i = 1; i < arrRootFolderChildName.length; i++) {
+                                if(i == 1) {
+                                    folderChildName.append(arrRootFolderChildName[i]);
+                                } else {
+                                    folderChildName.append(" ");
+                                    folderChildName.append(arrRootFolderChildName[i]);
+                                }
+                            }
+                            if(arrRootFolderChildName[0].equals(folderName)) {
+                                Members member = new Members(
+                                    folderId + "-" + String.valueOf(memFolderId), folderChildName.toString(),
+                                    rootFolderChild.getName() + "/");
+                                File childFolder = new File(rootFolderPath + rootFolderChild.getName() + "/");
+                                File[] arrChildFolder = childFolder.listFiles();
+                                if (arrChildFolder != null) {
+                                    if(arrChildFolder.length < 1) {
+                                        member.setHasChildren(false);
+                                        log.debug(rootFolderChild.getName() + " This folder has not children.");
+                                    } else if(arrChildFolder.length == 1 && arrChildFolder[0].getName().startsWith(".")) {
+                                        member.setHasChildren(false);
+                                        log.debug(rootFolderChild.getName() + " This folder has not children. only one file : .DS_Storeis.");
+                                    } else {
+                                        member.setHasChildren(true);
+                                        log.debug(rootFolderChild.getName() + " This folder has children.");
+                                    }
+                                } else {
+                                    log.error("arrChildFolder is Null point Exception.");
+                                }
+                                memFolderId++;
+                                readMembers.add(member);
+                            }
+                        } else {
+                            log.error(rootFolderChild.getName() + " is not directory or Unknown Folder.");
+                        }
+                    }
+                } else {
+                    log.error("arrRootFolder Null point Exception.");
+                }
+            }
+        } else {
+            String readMembersFolderPath = rootFolderPath + folderPath;
+            File memberFolder = new File(readMembersFolderPath);
+            if(!memberFolder.exists()) {
+                log.error(folderName + " is not found");
+            } else {
+                File[] arrMemFolder = memberFolder.listFiles();
+                if(arrMemFolder != null) {
+                    for(File memFolderName: arrMemFolder) {
+                        Members memList =  new Members(
+                            folderId + "-" + String.valueOf(memFolderId), memFolderName.getName(),
+                            folderPath + memFolderName.getName() + "/" );
+                        if(!memFolderName.isDirectory()) {
+                            log.debug(memFolderName.getName() + "is NOT Directory.");
+                            if(isImageFile(memFolderName.getName())) {
+                                memList.setPath(folderPath + memFolderName.getName().toLowerCase());
+                                memFolderId++;
+                            } else {
+                                continue;
+                            }
+                        } else {
+                            File memListFolder = new File(readMembersFolderPath + memFolderName.getName() + "/");
+                            File[] memListFolderChildren = memListFolder.listFiles();
+                            if(memListFolderChildren != null) {
+                                if(memListFolderChildren.length < 1) {
+                                    memList.setHasChildren(false);
+                                    log.debug(memFolderName.getName() + " This folder has not children.");
+                                } else if(memListFolderChildren.length < 2 && memListFolderChildren[0].getName().startsWith(".")) {
+                                    memList.setHasChildren(false);
+                                    log.debug(memFolderName.getName() + " This folder has not children. only one file : .DS_Storeis.");
+                                } else {
+                                    memList.setHasChildren(true);
+                                    log.debug(memFolderName.getName() + " This folder has children.");
+                                }
+                            } else {
+                                log.error("memListFolderChildren is NULL Point Exception.");
+                            }
+                            memFolderId++;
+                        }
+                        readMembers.add(memList);
+                    }
+                } else {
+                    log.debug("arrMemberFolder is NULL Point Exception.");
+                }
             }
         }
         return readMembers;
@@ -140,7 +232,7 @@ public class MemberService {
 
     public boolean deleteFolder(ArrayList<String> selectedList) {
         for(String delFolderPath: selectedList) {
-            if(recursiveDeleteFolder(membersFolderPath + delFolderPath)) {
+            if(recursiveDeleteFolder(rootFolderPath + delFolderPath)) {
                 log.debug(delFolderPath + " is delete success.");
             }
             else return false;
@@ -182,7 +274,7 @@ public class MemberService {
 
     public ArrayList<HashMap<String, Object>> getImagePathList(String selectPath) {
         ArrayList<HashMap<String, Object>> pathList = new ArrayList<>();
-        String folderPath = membersFolderPath + selectPath;
+        String folderPath = rootFolderPath + selectPath;
         File selectFolder = new File(folderPath);
         if(!selectFolder.exists()) {
             log.error(selectPath + " is not exists.");
@@ -217,14 +309,14 @@ public class MemberService {
     }
 
     public byte[] getImgSrc(String imagePath) throws IOException {
-        FileInputStream fin = new FileInputStream(this.membersFolderPath + imagePath);
+        FileInputStream fin = new FileInputStream(this.rootFolderPath + imagePath);
         return IOUtils.toByteArray(fin);
     }
 
     public boolean copyMember(ArrayList<String> copyList, ArrayList<String> copyNameList, String destPath) {
         FileInputStream sourceF = null;
         FileOutputStream destF = null;
-        File copyFolder = new File(membersFolderPath + destPath);
+        File copyFolder = new File(rootFolderPath + destPath);
         if(!copyFolder.exists()) {
             try {
                 copyFolder.mkdir();
@@ -238,10 +330,10 @@ public class MemberService {
         log.debug("Your selectCard List alive destPath.");
         System.out.println(copyList);
         for(int i = 0; i < copyList.size(); i++) {
-            File sourceFile = new File(membersFolderPath + copyList.get(i));
+            File sourceFile = new File(rootFolderPath + copyList.get(i));
             try {
                 sourceF = new FileInputStream(sourceFile);
-                destF = new FileOutputStream(new File(membersFolderPath + destPath + copyNameList.get(i)));
+                destF = new FileOutputStream(new File(rootFolderPath + destPath + copyNameList.get(i)));
                 int readBuffer = 0;
                 while ((readBuffer = sourceF.read()) != -1) {
                     destF.write(readBuffer);
