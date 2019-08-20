@@ -9,16 +9,7 @@ import { FLASK_SERVER_API_URL } from 'app/app.constants';
 export class LiveService {
   constructor(private http: HttpClient) {}
 
-  listen(state: string): Observable<any> {
-    console.log(state);
-    return this.http.post(SERVER_API_URL + 'api/stream/live', state);
-  }
-
   doorOpen(): Observable<any> {
     return this.http.get(FLASK_SERVER_API_URL + 'door/open');
-  }
-
-  getCaptureURL() {
-    // return require('/Users/kang-yechan/Desktop/jhipster-frs/src/main/resources/images/live.jpg');
   }
 }

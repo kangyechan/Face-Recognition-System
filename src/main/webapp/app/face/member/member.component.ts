@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { MemberService } from 'app/face/member/member.service';
 import { ITreeOptions, TreeNode } from 'angular-tree-component/dist/defs/api';
 import { TreeComponent } from 'angular-tree-component';
@@ -193,7 +193,6 @@ export class MemberComponent implements OnInit {
     });
     this.liveComponent.targetCardList = [];
     this.selectedCard = [];
-    console.log(this.activatePath);
   }
 
   toggle_state(menu: string) {

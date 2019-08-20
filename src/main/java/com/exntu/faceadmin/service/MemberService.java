@@ -27,7 +27,7 @@ public class MemberService {
     private String membersFolderPath;
 
     public MemberService() {
-        this.membersFolderPath = "src/main/resources/members/";
+        this.membersFolderPath = "/Users/kang-yechan/Desktop/frs/flask-frs/dataset/";
     }
 
     public Object readRootFolder() {

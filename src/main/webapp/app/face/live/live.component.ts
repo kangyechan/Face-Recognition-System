@@ -10,6 +10,7 @@ import { SelectContainerComponent } from 'ngx-drag-to-select';
 export class LiveComponent implements OnInit {
   @ViewChild(SelectContainerComponent, { static: false }) private selectContainer: SelectContainerComponent;
 
+  imgURL: string;
   cameraText: string;
   doorText: string;
   sectionState: string;
@@ -39,19 +40,14 @@ export class LiveComponent implements OnInit {
     this.selectImage = {};
     this.isSelectImage = false;
     this.imagePath = 'Members/';
+    this.imgURL = 'http://localhost:9001/streaming/live';
   }
 
   toggleSection() {
     if (this.liveSection) {
       this.cameraText = 'ON';
       this.liveSection = false;
-      this.liveService.listen('OFF').subscribe(data => {
-        console.log(data);
-      });
     } else {
-      this.liveService.listen('ON').subscribe(data => {
-        console.log(data);
-      });
       this.cameraText = 'OFF';
       this.liveSection = true;
     }
@@ -91,11 +87,6 @@ export class LiveComponent implements OnInit {
       this.sectionState = 'IMAGE';
       this.sectionTitle = 'Live On';
     }
-  }
-
-  get captureURL() {
-    console.log('reset');
-    return this.liveService.getCaptureURL();
   }
 
   cardClick(face) {
