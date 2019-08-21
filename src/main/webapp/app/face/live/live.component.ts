@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LiveService } from 'app/face/live/live.service';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
+import { FLASK_SERVER_API_URL } from 'app/app.constants';
 
 @Component({
   selector: 'jhi-live',
@@ -22,7 +23,6 @@ export class LiveComponent implements OnInit {
   emptyImage: boolean;
   isSelectImage: boolean;
   selectImage: any;
-  imagePath: string;
   targetCardList: Array<any> = [];
 
   constructor(private liveService: LiveService) {}
@@ -39,8 +39,7 @@ export class LiveComponent implements OnInit {
     this.emptyImage = false;
     this.selectImage = {};
     this.isSelectImage = false;
-    this.imagePath = 'Members/';
-    this.imgURL = 'http://localhost:9001/streaming/live';
+    this.imgURL = FLASK_SERVER_API_URL + 'streaming/live';
   }
 
   toggleSection() {
@@ -64,6 +63,7 @@ export class LiveComponent implements OnInit {
     } else {
       this.targetCardList.splice(this.targetCardList.indexOf(selectedCard), 1);
     }
+    console.log(this.targetCardList);
   }
 
   toggleState() {
@@ -78,7 +78,7 @@ export class LiveComponent implements OnInit {
       this.sectionState = 'LIVE';
       this.sectionTitle = 'Folder Contents';
     } else {
-      if (this.targetCardList.toString() !== '') {
+      if (this.targetCardList.length !== 0) {
         this.cancelSelect();
       }
       this.emptyImage = false;

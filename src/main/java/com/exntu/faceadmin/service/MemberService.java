@@ -232,10 +232,26 @@ public class MemberService {
 
     public boolean deleteFolder(ArrayList<String> selectedList) {
         for(String delFolderPath: selectedList) {
-            if(recursiveDeleteFolder(rootFolderPath + delFolderPath)) {
-                log.debug(delFolderPath + " is delete success.");
+            String[] delFolderPathSplit = delFolderPath.split("/");
+            if(delFolderPathSplit[0].equals("root")) {
+                File rootFolder = new File(rootFolderPath);
+                File[] rootFolderList = rootFolder.listFiles();
+                if(rootFolderList != null) {
+                    for(File rootFolderAllList: rootFolderList) {
+                        if(rootFolderAllList.getName().split(" ")[0].equals(delFolderPathSplit[1])) {
+                            if(recursiveDeleteFolder(rootFolderPath + rootFolderAllList.getName())) {
+                                log.debug(delFolderPath + " is delete success.");
+                            } else return false;
+                        }
+                    }
+                } else {
+                    log.error("Delete RootFolderList Null Point Exception.");
+                }
+            } else {
+                if(recursiveDeleteFolder(rootFolderPath + delFolderPath)) {
+                    log.debug(delFolderPath + " is delete success.");
+                } else return false;
             }
-            else return false;
         }
         return true;
     }
@@ -250,10 +266,10 @@ public class MemberService {
                 } else {
                     File[] folder_list = folder.listFiles();
                     if(folder_list != null) {
-                        for(File folderlistName: folder_list) {
-                            recursiveDeleteFolder(folderlistName.getPath());
-                            log.debug(folderlistName.getName() + " folder is delete.");
-                            folderlistName.delete();
+                        for(File folderListName: folder_list) {
+                            recursiveDeleteFolder(folderListName.getPath());
+                            log.debug(folderListName.getName() + " folder is delete.");
+                            folderListName.delete();
                         }
                         folder.delete();
                     } else {
@@ -270,6 +286,21 @@ public class MemberService {
             return false;
         }
         return true;
+    }
+
+    public HashMap<String, Object> getImagePath(String selectPath) {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        String folderPath = rootFolderPath + selectPath;
+        File selectFile = new File(folderPath);
+        if(!selectFile.exists()) {
+            log.error(selectFile + " is not exists.");
+        } else {
+            hashMap.put("name", selectFile.getName());
+            hashMap.put("realPath", selectPath);
+            hashMap.put("getPath", "api/member/image-list?imagePath="+ selectPath);
+            hashMap.put("isActive", false);
+        }
+        return hashMap;
     }
 
     public ArrayList<HashMap<String, Object>> getImagePathList(String selectPath) {
@@ -292,7 +323,7 @@ public class MemberService {
                     }
                 }
             } else {
-                log.debug("arrAllSelectFolder is NULL Point Exception.");
+                log.error("arrAllSelectFolder is NULL Point Exception.");
             }
         }
         return pathList;
