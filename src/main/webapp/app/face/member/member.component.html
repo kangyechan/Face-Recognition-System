@@ -30,11 +30,17 @@
                 (click)="toggle_state('member')">Member</div>
             </div>
         </div>
-        <div class="form-section" *ngIf="folder_state">
-            <label>Folder Name Example : </label>
-            <label>{{ folderName }}</label>
-            <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ fWarning }}" [(ngModel)]="folderName">
-            <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ fWarning }}" [(ngModel)]="folderName">
+        <div class="form-section" id="folder-form" *ngIf="folder_state">
+            <div class="folder-form-text">
+                <label class="folderExample"><span>Folder Name Example :</span>exntu Young Yoo</label>
+                <label class="folderExample"><span>New Folder Name :</span><p> {{ fCompanyName }} {{ fMemberName }} </p></label>
+            </div>
+            <div class="folder-form-input">
+                <label id="input-label">Company : </label><input type="text" name="fName" id="fCompany" class="form-control" placeholder="Input Company Name" [(ngModel)]="fCompanyName">
+            </div>
+            <div class="folder-form-input">
+                <label id="input-label">Name : </label><input type="text" name="fName" id="fName" class="form-control" placeholder="Input Member Name" [(ngModel)]="fMemberName">
+            </div>
         </div>
         <div class="form-section" *ngIf="member_state">
             <label>Member Save Path : </label>
