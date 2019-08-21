@@ -81,6 +81,57 @@ modal {
     padding-top: 30px;
     text-align: center;
 
+    &#folder-form {
+      padding-bottom: 20px;
+
+      input {
+        &.form-control {
+          width: 70%;
+          float: left;
+        }
+      }
+
+      .folder-form-input {
+        width: 100%;
+        height: calc(1.5em + 0.75rem + 2px);
+
+        #input-label {
+          text-align: right;
+          height: calc(1.5em + 0.75rem + 2px);
+          width: 25%;
+          float: left;
+          margin: 0;
+          padding-right: 10px;
+          line-height: calc(1.5em + 0.75rem + 2px);
+        }
+      }
+
+      .folder-form-text {
+        margin: 20px 0 10px 0;
+        padding: 0 5px;
+        width: 100%;
+
+        .folderExample {
+          margin: 0 0 5px 0;
+          width: 100%;
+          padding: 0 10%;
+          text-align: left;
+
+          span {
+            float: left;
+            margin-right: 5px;
+          }
+
+          p {
+            color: blue;
+            float: left;
+            font-weight: bold;
+            margin: 0;
+          }
+        }
+      }
+    }
+
     .member-select-image {
       width: 400px;
       height: 160px;
@@ -121,10 +172,5 @@ modal {
         }
       }
     }
-  }
-
-  label {
-    margin-top: 20px;
-    padding: 0 5px;
   }
 }

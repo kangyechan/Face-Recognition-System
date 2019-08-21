@@ -12,11 +12,12 @@ import { LiveComponent } from 'app/face/live/live.component';
 export class MemberComponent implements OnInit {
   folder_state;
   member_state;
-  folderName: string;
   memberName: string;
-  fWarning: string;
   mWarning: string;
   addRootPath: string;
+  fCompanyName: string;
+  fMemberName: string;
+  folderName: string;
 
   member_folder = [{}];
   del_checkbox = false;
@@ -72,7 +73,6 @@ export class MemberComponent implements OnInit {
   ngOnInit() {
     this.folder_state = true;
     this.member_state = false;
-    this.fWarning = 'New Folder Name';
     this.mWarning = 'input member name';
     this.memberService.initMembersFolder().subscribe(data => {
       this.member_folder = data;
@@ -214,11 +214,14 @@ export class MemberComponent implements OnInit {
     } else {
       this.folder_state = false;
       this.member_state = true;
-      this.folderName = undefined;
+      this.fCompanyName = undefined;
+      this.fMemberName = undefined;
     }
   }
 
   openAddModal() {
+    this.fCompanyName = undefined;
+    this.fMemberName = undefined;
     this.folderName = undefined;
     this.memberName = undefined;
     this.selectedCard = [];
@@ -266,9 +269,9 @@ export class MemberComponent implements OnInit {
 
   onSubmit() {
     if (this.folder_state) {
-      if (this.folderName === undefined || this.folderName === '') {
-        this.fWarning = 'New Folder Name';
-      } else {
+      if (!(this.fMemberName === undefined || this.fCompanyName === undefined || this.fMemberName === '' || this.fCompanyName === '')) {
+        this.folderName = this.fCompanyName + ' ' + this.fMemberName;
+
         if (this.activatePath === undefined) {
           this.memberService.makeMembersFolder('', this.folderName).subscribe(newFolderName => {
             if (newFolderName !== 'fail') {
@@ -324,7 +327,7 @@ export class MemberComponent implements OnInit {
     this.componentInsideModals.close();
   }
 
-  deleteCard(face: any) {
-    this.selectedCard.splice(this.selectedCard.indexOf(face), 1);
-  }
+  // deleteCard(face: any) {
+  //   this.selectedCard.splice(this.selectedCard.indexOf(face), 1);
+  // }
 }
