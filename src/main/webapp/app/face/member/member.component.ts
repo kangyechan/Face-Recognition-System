@@ -13,11 +13,9 @@ export class MemberComponent implements OnInit {
   folder_state;
   member_state;
   memberName: string;
-  mWarning: string;
-  addRootPath: string;
-  fCompanyName: string;
-  fMemberName: string;
   folderName: string;
+  inputCompanyName: string;
+  inputMemberName: string;
 
   member_folder = [{}];
   del_checkbox = false;
@@ -73,7 +71,6 @@ export class MemberComponent implements OnInit {
   ngOnInit() {
     this.folder_state = true;
     this.member_state = false;
-    this.mWarning = 'input member name';
     this.memberService.initMembersFolder().subscribe(data => {
       this.member_folder = data;
     });
@@ -214,23 +211,18 @@ export class MemberComponent implements OnInit {
     } else {
       this.folder_state = false;
       this.member_state = true;
-      this.fCompanyName = undefined;
-      this.fMemberName = undefined;
+      this.inputCompanyName = undefined;
+      this.inputMemberName = undefined;
     }
   }
 
   openAddModal() {
-    this.fCompanyName = undefined;
-    this.fMemberName = undefined;
+    this.inputCompanyName = undefined;
+    this.inputMemberName = undefined;
     this.folderName = undefined;
     this.memberName = undefined;
     this.selectedCard = [];
     this.componentInsideModals.open();
-    if (this.activatePath === undefined) {
-      this.addRootPath = 'Members/';
-    } else {
-      this.addRootPath = 'Members/' + this.activatePath;
-    }
     if (this.liveComponent.targetCardList.toString() !== '') {
       this.member_state = true;
       this.folder_state = false;
@@ -269,38 +261,36 @@ export class MemberComponent implements OnInit {
 
   onSubmit() {
     if (this.folder_state) {
-      if (!(this.fMemberName === undefined || this.fCompanyName === undefined || this.fMemberName === '' || this.fCompanyName === '')) {
-        this.folderName = this.fCompanyName + ' ' + this.fMemberName;
-
-        if (this.activatePath === undefined) {
-          this.memberService.makeMembersFolder('', this.folderName).subscribe(newFolderName => {
-            if (newFolderName !== 'fail') {
-              console.log(newFolderName + ' mkdir success.');
-              this.member_folder.push({ id: this.member_folder.length.toString(), name: newFolderName, path: newFolderName + '/' });
-              this.tree.treeModel.update();
-            } else {
-              console.log(newFolderName + ' mkdir failed.');
-            }
-          });
-        } else {
-          this.memberService.makeMembersFolder(this.activatePath, this.folderName).subscribe(newFolderName => {
-            if (newFolderName !== 'fail') {
-              console.log(newFolderName + ' mkdir success.');
-              this.recursiveAddFolder(this.member_folder, this.activatePath, this.folderName);
-              this.tree.treeModel.update();
-            } else {
-              console.log(newFolderName + ' mkdir failed.');
-            }
-          });
-        }
+      if (
+        !(
+          this.inputMemberName === undefined ||
+          this.inputCompanyName === undefined ||
+          this.inputMemberName === '' ||
+          this.inputCompanyName === ''
+        )
+      ) {
+        this.folderName = this.inputCompanyName + ' ' + this.inputMemberName;
+        this.memberService.makeMembersFolder('', this.folderName).subscribe(newFolderName => {
+          if (newFolderName !== 'fail') {
+            console.log(newFolderName + ' mkdir success.');
+            this.member_folder.push({ id: this.member_folder.length.toString(), name: newFolderName, path: newFolderName + '/' });
+            this.tree.treeModel.update();
+          } else {
+            console.log(newFolderName + ' mkdir failed.');
+          }
+        });
       }
     } else {
-      if (this.memberName === undefined || this.memberName === '') {
-        this.mWarning = 'input member name';
+      if (
+        !(
+          this.inputMemberName === undefined ||
+          this.inputCompanyName === undefined ||
+          this.inputMemberName === '' ||
+          this.inputCompanyName === ''
+        )
+      ) {
+        this.memberName = this.inputCompanyName + ' ' + this.inputMemberName;
       } else {
-        if (!this.memberName.endsWith('/')) {
-          this.memberName = this.memberName + '/';
-        }
         this.selectedCard.forEach(card => {
           this.selectedCardName.push(card.name);
           this.selectedCardPath.push(card.realPath);

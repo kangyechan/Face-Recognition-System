@@ -78,57 +78,53 @@ modal {
     width: 450px !important;
     background: #e2f3f9;
     border: 2px solid #e2f3f9;
-    padding-top: 30px;
+    padding: 30px 0 20px;
     text-align: center;
 
-    &#folder-form {
-      padding-bottom: 20px;
-
-      input {
-        &.form-control {
-          width: 70%;
-          float: left;
-        }
+    input {
+      &.form-control {
+        width: 70%;
+        float: left;
       }
+    }
 
-      .folder-form-input {
+    .form-text {
+      margin: 20px 0 10px 0;
+      padding: 0 5px;
+      width: 100%;
+
+      .example {
+        margin: 0 0 5px 0;
         width: 100%;
-        height: calc(1.5em + 0.75rem + 2px);
+        padding: 0 10%;
+        text-align: left;
 
-        #input-label {
-          text-align: right;
-          height: calc(1.5em + 0.75rem + 2px);
-          width: 25%;
+        span {
           float: left;
+          margin-right: 5px;
+        }
+
+        p {
+          color: blue;
+          float: left;
+          font-weight: bold;
           margin: 0;
-          padding-right: 10px;
-          line-height: calc(1.5em + 0.75rem + 2px);
         }
       }
+    }
 
-      .folder-form-text {
-        margin: 20px 0 10px 0;
-        padding: 0 5px;
-        width: 100%;
+    .form-input {
+      width: 100%;
+      height: calc(1.5em + 0.75rem + 2px);
 
-        .folderExample {
-          margin: 0 0 5px 0;
-          width: 100%;
-          padding: 0 10%;
-          text-align: left;
-
-          span {
-            float: left;
-            margin-right: 5px;
-          }
-
-          p {
-            color: blue;
-            float: left;
-            font-weight: bold;
-            margin: 0;
-          }
-        }
+      #input-label {
+        text-align: right;
+        height: calc(1.5em + 0.75rem + 2px);
+        width: 25%;
+        float: left;
+        margin: 0;
+        padding-right: 10px;
+        line-height: calc(1.5em + 0.75rem + 2px);
       }
     }
 
