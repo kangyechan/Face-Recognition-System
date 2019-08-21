@@ -12,12 +12,9 @@ import { LiveComponent } from 'app/face/live/live.component';
 export class MemberComponent implements OnInit {
   folder_state;
   member_state;
-  memberName: string;
-  mWarning: string;
-  addRootPath: string;
-  fCompanyName: string;
-  fMemberName: string;
-  folderName: string;
+  inputName: string;
+  inputCompanyName: string;
+  inputMemberName: string;
 
   member_folder = [{}];
   del_checkbox = false;
@@ -73,7 +70,6 @@ export class MemberComponent implements OnInit {
   ngOnInit() {
     this.folder_state = true;
     this.member_state = false;
-    this.mWarning = 'input member name';
     this.memberService.initMembersFolder().subscribe(data => {
       this.member_folder = data;
     });
@@ -100,7 +96,7 @@ export class MemberComponent implements OnInit {
   }
 
   deleteConfirm() {
-    if (this.selectedTreeList.toString() !== '') {
+    if (this.selectedTreeList.length !== 0) {
       this.selectedTreeList.forEach(selectedId => {
         this.selectedIdToPath(selectedId, this.member_folder);
       });
@@ -172,13 +168,19 @@ export class MemberComponent implements OnInit {
       this.activatePath.toLowerCase().endsWith('.tiff')
     ) {
       this.liveComponent.isSelectImage = true;
-      this.liveComponent.emptyImage = false;
-      this.liveComponent.selectImage = {
-        realPath: this.activatePath,
-        getPath: 'api/member/image-list?imagePath=' + this.activatePath,
-        isActive: false
-      };
+      this.memberService.getSingleImagePath(this.activatePath).subscribe(imagePathList => {
+        console.log(this.activatePath);
+        if (imagePathList.toString() !== '') {
+          this.liveComponent.emptyImage = false;
+          this.liveComponent.selectImage = imagePathList;
+        } else {
+          this.liveComponent.emptyImage = true;
+        }
+      });
     } else {
+      if (this.activatePath.startsWith('root/')) {
+        this.activatePath = this.activatePath.split('/')[1] + '/';
+      }
       this.liveComponent.isSelectImage = false;
       this.memberService.getImagePath(this.activatePath).subscribe(imagePathList => {
         if (imagePathList.toString() !== '') {
@@ -186,7 +188,6 @@ export class MemberComponent implements OnInit {
           this.liveComponent.faceList = imagePathList;
         } else {
           this.liveComponent.emptyImage = true;
-          this.liveComponent.imagePath = 'Members/' + this.activatePath;
         }
       });
     }
@@ -198,7 +199,6 @@ export class MemberComponent implements OnInit {
     this.liveComponent.isSelectImage = false;
     this.liveComponent.emptyImage = true;
     this.liveComponent.faceList = [];
-    this.liveComponent.imagePath = 'Members/';
     this.liveComponent.targetCardList.forEach(target => {
       target.isActive = false;
     });
@@ -210,28 +210,27 @@ export class MemberComponent implements OnInit {
     if (menu === 'folder') {
       this.folder_state = true;
       this.member_state = false;
-      this.memberName = undefined;
+      this.inputName = undefined;
+      this.inputCompanyName = undefined;
+      this.inputMemberName = undefined;
+      this.selectedCard = [];
+      this.selectedCardState = false;
     } else {
       this.folder_state = false;
       this.member_state = true;
-      this.fCompanyName = undefined;
-      this.fMemberName = undefined;
+      this.inputName = undefined;
+      this.inputCompanyName = undefined;
+      this.inputMemberName = undefined;
     }
   }
 
   openAddModal() {
-    this.fCompanyName = undefined;
-    this.fMemberName = undefined;
-    this.folderName = undefined;
-    this.memberName = undefined;
+    this.inputCompanyName = undefined;
+    this.inputMemberName = undefined;
+    this.inputName = undefined;
     this.selectedCard = [];
     this.componentInsideModals.open();
-    if (this.activatePath === undefined) {
-      this.addRootPath = 'Members/';
-    } else {
-      this.addRootPath = 'Members/' + this.activatePath;
-    }
-    if (this.liveComponent.targetCardList.toString() !== '') {
+    if (this.liveComponent.targetCardList.length !== 0) {
       this.member_state = true;
       this.folder_state = false;
       this.selectedCard = this.liveComponent.targetCardList;
@@ -268,44 +267,34 @@ export class MemberComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.folder_state) {
-      if (!(this.fMemberName === undefined || this.fCompanyName === undefined || this.fMemberName === '' || this.fCompanyName === '')) {
-        this.folderName = this.fCompanyName + ' ' + this.fMemberName;
-
-        if (this.activatePath === undefined) {
-          this.memberService.makeMembersFolder('', this.folderName).subscribe(newFolderName => {
-            if (newFolderName !== 'fail') {
-              console.log(newFolderName + ' mkdir success.');
-              this.member_folder.push({ id: this.member_folder.length.toString(), name: newFolderName, path: newFolderName + '/' });
-              this.tree.treeModel.update();
-            } else {
-              console.log(newFolderName + ' mkdir failed.');
-            }
-          });
-        } else {
-          this.memberService.makeMembersFolder(this.activatePath, this.folderName).subscribe(newFolderName => {
-            if (newFolderName !== 'fail') {
-              console.log(newFolderName + ' mkdir success.');
-              this.recursiveAddFolder(this.member_folder, this.activatePath, this.folderName);
-              this.tree.treeModel.update();
-            } else {
-              console.log(newFolderName + ' mkdir failed.');
-            }
-          });
-        }
-      }
+    if (
+      this.inputMemberName === undefined ||
+      this.inputCompanyName === undefined ||
+      this.inputMemberName === '' ||
+      this.inputCompanyName === ''
+    ) {
+      this.inputMemberName = undefined;
+      this.inputCompanyName = undefined;
     } else {
-      if (this.memberName === undefined || this.memberName === '') {
-        this.mWarning = 'input member name';
+      this.inputName = this.inputCompanyName + ' ' + this.inputMemberName;
+      if (this.folder_state) {
+        this.memberService.makeMembersFolder('', this.inputName).subscribe(newFolderName => {
+          if (newFolderName !== 'fail') {
+            console.log(newFolderName + ' mkdir success.');
+            this.memberService.initMembersFolder().subscribe(refresh => {
+              this.member_folder = refresh;
+              this.tree.treeModel.update();
+            });
+          } else {
+            console.log(newFolderName + ' mkdir failed.');
+          }
+        });
       } else {
-        if (!this.memberName.endsWith('/')) {
-          this.memberName = this.memberName + '/';
-        }
         this.selectedCard.forEach(card => {
           this.selectedCardName.push(card.name);
           this.selectedCardPath.push(card.realPath);
         });
-        this.memberService.copySelectMember(this.memberName, this.selectedCardPath, this.selectedCardName).subscribe(result => {
+        this.memberService.copySelectMember(this.inputName + '/', this.selectedCardPath, this.selectedCardName).subscribe(result => {
           if (result === 'true') {
             this.memberService.initMembersFolder().subscribe(refresh => {
               this.member_folder = refresh;
@@ -316,18 +305,18 @@ export class MemberComponent implements OnInit {
           }
         });
       }
+      this.selectedCardName = [];
+      this.selectedCardPath = [];
+      this.selectedCard = [];
+      this.liveComponent.targetCardList.forEach(target => {
+        target.isActive = false;
+      });
+      this.liveComponent.targetCardList = [];
+      this.componentInsideModals.close();
     }
-    this.selectedCardName = [];
-    this.selectedCardPath = [];
-    this.selectedCard = [];
-    this.liveComponent.targetCardList.forEach(target => {
-      target.isActive = false;
-    });
-    this.liveComponent.targetCardList = [];
-    this.componentInsideModals.close();
   }
 
-  // deleteCard(face: any) {
-  //   this.selectedCard.splice(this.selectedCard.indexOf(face), 1);
-  // }
+  deleteCard(face: any) {
+    this.selectedCard.splice(this.selectedCard.indexOf(face), 1);
+  }
 }

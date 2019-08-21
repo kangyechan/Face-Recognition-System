@@ -31,20 +31,24 @@
             </div>
         </div>
         <div class="form-section" id="folder-form" *ngIf="folder_state">
-            <div class="folder-form-text">
-                <label class="folderExample"><span>Folder Name Example :</span>exntu Young Yoo</label>
-                <label class="folderExample"><span>New Folder Name :</span><p> {{ fCompanyName }} {{ fMemberName }} </p></label>
+            <div class="form-text">
+                <label class="example"><span>Folder Name Example :</span>exntu Young Yoo</label>
+                <label class="example"><span>New Folder Name :</span><p> {{ inputCompanyName }} {{ inputMemberName }} </p></label>
             </div>
-            <div class="folder-form-input">
-                <label id="input-label">Company : </label><input type="text" name="fName" id="fCompany" class="form-control" placeholder="Input Company Name" [(ngModel)]="fCompanyName">
+            <div class="form-input">
+                <label id="input-label">Company : </label>
+                <input type="text" name="fName" class="form-control" placeholder="Input Company Name" [(ngModel)]="inputCompanyName">
             </div>
-            <div class="folder-form-input">
-                <label id="input-label">Name : </label><input type="text" name="fName" id="fName" class="form-control" placeholder="Input Member Name" [(ngModel)]="fMemberName">
+            <div class="form-input">
+                <label id="input-label">Name : </label>
+                <input type="text" name="fName" class="form-control" placeholder="Input Member Name" [(ngModel)]="inputMemberName">
             </div>
         </div>
-        <div class="form-section" *ngIf="member_state">
-            <label>Member Save Path : </label>
-            <label>Members/{{ memberName }}</label>
+        <div class="form-section" id="member-form" *ngIf="member_state">
+            <div class="form-text">
+                <label class="example"><span>Save Path Example :</span>exntu Young Yoo</label>
+                <label class="example"><span>Save Path :</span><p> {{ inputCompanyName }} {{ inputMemberName }} </p></label>
+            </div>
             <div class="member-select-image" *ngIf="selectedCardState">
                 <div class="select-card">
                     <div class="select-card-image" *ngFor="let face of selectedCard" >
@@ -54,7 +58,14 @@
                 </div>
             </div>
             <p>총 {{ selectedCard.length }}개</p>
-            <input type="text" name="fName" id="fName" class="form-control" placeholder="{{ mWarning }}" [(ngModel)]="memberName">
+            <div class="form-input">
+                <label id="input-label">Company : </label>
+                <input type="text" name="mName" class="form-control" placeholder="Input Company Name" [(ngModel)]="inputCompanyName">
+            </div>
+            <div class="form-input">
+                <label id="input-label">Name : </label>
+                <input type="text" name="mName" class="form-control" placeholder="Input Member Name" [(ngModel)]="inputMemberName">
+            </div>
         </div>
     </ng-template>
     <ng-template #modalFooter>

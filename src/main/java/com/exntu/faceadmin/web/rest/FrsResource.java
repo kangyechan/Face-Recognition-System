@@ -88,6 +88,16 @@ public class FrsResource {
     }
 
     /**
+     * {@code GET   /member/get-single-member-image} : get single member image path.
+     * @param selectPath select folder path.
+     */
+    @GetMapping(path = "/member/get-single-member-image")
+    public HashMap<String, Object> getSingleImagePath(@RequestParam String selectPath) {
+        log.debug("Get ImagePath function call.");
+        return memberService.getImagePath(selectPath);
+    }
+
+    /**
      * {@code GET   /member/image-list/ imagePath} : get imageSrc.
      */
     @GetMapping(

@@ -29,13 +29,6 @@ export class MemberService {
     });
   }
 
-  delMemberFolder(selectedList: any): Observable<any> {
-    return this.http.get(SERVER_API_URL + 'api/member/delete-members-folder', {
-      responseType: 'text',
-      params: { selectedList }
-    });
-  }
-
   getImagePath(selectPath: string): Observable<any> {
     return this.http.get(SERVER_API_URL + 'api/member/get-member-image', {
       responseType: 'json',
@@ -43,8 +36,21 @@ export class MemberService {
     });
   }
 
+  getSingleImagePath(selectPath: string): Observable<any> {
+    return this.http.get(SERVER_API_URL + 'api/member/get-single-member-image', {
+      responseType: 'json',
+      params: { selectPath }
+    });
+  }
+
+  delMemberFolder(selectedList: any): Observable<any> {
+    return this.http.get(SERVER_API_URL + 'api/member/delete-members-folder', {
+      responseType: 'text',
+      params: { selectedList }
+    });
+  }
+
   copySelectMember(destPath: string, copyList: any, copyNameList: any): Observable<any> {
-    console.log(copyNameList);
     return this.http.get(SERVER_API_URL + 'api/member/copy-member-list', {
       responseType: 'text',
       params: { copyList, copyNameList, destPath }

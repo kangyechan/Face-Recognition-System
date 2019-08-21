@@ -92,6 +92,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/member/make-members-folder").permitAll()
             .antMatchers("/api/member/read-member-folder-list").permitAll()
             .antMatchers("/api/member/get-member-image").permitAll()
+            .antMatchers("/api/member/get-single-member-image").permitAll()
             .antMatchers("/api/member/image-list").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
