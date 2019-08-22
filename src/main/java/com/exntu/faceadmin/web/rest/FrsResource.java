@@ -1,5 +1,6 @@
 package com.exntu.faceadmin.web.rest;
 
+import com.exntu.faceadmin.service.MatchService;
 import com.exntu.faceadmin.service.MemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,11 @@ public class FrsResource {
     private final Logger log = LoggerFactory.getLogger(FrsResource.class);
 
     private final MemberService memberService;
+    private final MatchService matchService;
 
-    public FrsResource(MemberService memberService) {
+    public FrsResource(MemberService memberService, MatchService matchService) {
         this.memberService = memberService;
+        this.matchService = matchService;
     }
 
     /**
@@ -118,5 +121,38 @@ public class FrsResource {
     public boolean copyMemberList(@RequestParam ArrayList<String> copyList, @RequestParam ArrayList<String> copyNameList, @RequestParam String destPath) {
         log.debug("copyMemberList from Member Resource");
         return memberService.copyMember(copyList, copyNameList, destPath);
+    }
+
+
+    /**
+     * {@code GET   /match/get-origin-image} : match member origin image.
+     * @param name match MemberName.
+     */
+    @GetMapping(path = "/match/get-origin-image")
+    public HashMap<String, Object> getOriginImagePath(@RequestParam String name) {
+        log.debug("Get Match Origin ImagePath function call.");
+        return matchService.getOriginImagePath(name);
+    }
+
+    /**
+     * {@code GET   /match/image-origin/ imagePath} : get imageSrc.
+     */
+    @GetMapping(
+        path = "/match/image-origin",
+        produces = MediaType.IMAGE_JPEG_VALUE
+    )
+    public @ResponseBody byte[] getOriginImageSrc(@RequestParam String imagePath) throws IOException {
+        return matchService.getImgSrc(imagePath);
+    }
+
+    /**
+     * {@code GET   /match/image-origin/ imagePath} : get imageSrc.
+     */
+    @GetMapping(
+        path = "/match/image-match",
+        produces = MediaType.IMAGE_JPEG_VALUE
+    )
+    public @ResponseBody byte[] getMatchImageSrc(@RequestParam String imagePath) throws IOException {
+        return matchService.getMatchImgSrc(imagePath);
     }
 }

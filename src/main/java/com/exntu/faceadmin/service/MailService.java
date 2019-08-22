@@ -91,21 +91,9 @@ public class MailService {
     }
 
     @Async
-    public void sendCustomActivationEmail(User user) {
-        log.debug("Sending activation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/activationCustomEmail", "email.activation.title");
-    }
-
-    @Async
     public void sendCreationEmail(User user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
-    }
-
-    @Async
-    public void sendCustomSearchMail(User user) {
-        log.debug("Sending username search email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/usernameCustomSearchEmail", "email.reset.title");
     }
 
     @Async
@@ -114,9 +102,4 @@ public class MailService {
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
     }
 
-    @Async
-    public void sendCustomPasswordResetMail(User user) {
-        log.debug("Sending password reset email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/passwordCustomResetEmail", "email.reset.title");
-    }
 }
