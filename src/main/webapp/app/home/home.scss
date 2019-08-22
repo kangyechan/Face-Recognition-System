@@ -2,11 +2,43 @@
 Main page styles
 ========================================================================== */
 
+.home {
+  width: 100%;
+  height: 50vh;
+  padding: 0 5%;
+}
+
+.home-logo-section {
+  width: 20%;
+  height: 100%;
+  float: left;
+  display: table;
+  text-align: center;
+
+  .middle-logo {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+
+.home-text-section {
+  width: 70%;
+  height: 100%;
+  float: left;
+  display: table;
+
+  .middle-text {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+
 .hipster {
   display: inline-block;
-  width: 347px;
-  height: 497px;
-  background: url('../../content/images/jhipster_family_member_2.svg') no-repeat center top;
+  width: 5em;
+  height: 5em;
+  margin: auto;
+  background: url('../../content/images/exntuLogo.png') no-repeat center top;
   background-size: contain;
 }
 
@@ -17,7 +49,7 @@ Main page styles
   only screen and (min-resolution: 192dpi),
   only screen and (min-resolution: 2dppx) {
   .hipster {
-    background: url('../../content/images/jhipster_family_member_2.svg') no-repeat center top;
+    background: url('../../content/images/exntuLogo.png') no-repeat center top;
     background-size: contain;
   }
 }

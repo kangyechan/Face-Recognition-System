@@ -5,7 +5,7 @@
     "menu": {
       "home": "Home",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
-      "face recognition": {
+      "face-recognition": {
         "main": "Face Recognition",
         "title": "Face Recognition"
       },

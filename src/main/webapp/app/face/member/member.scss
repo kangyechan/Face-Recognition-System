@@ -25,6 +25,7 @@
     button {
       float: right;
       border: none;
+      background-color: white;
     }
 
     fa-icon {
@@ -34,12 +35,14 @@
     #add_button {
       fa-icon {
         color: blue;
+        background-color: white;
       }
     }
 
     #del_button {
       fa-icon {
         color: red;
+        background-color: white;
       }
       margin-right: 5px;
     }
@@ -69,15 +72,15 @@ modal {
 
     .member-button:hover {
       cursor: pointer;
-      background: #e2f3f9;
+      background: #d4edda;
       box-shadow: 0 0 3px 1px #efefef;
     }
   }
 
   .form-section {
     width: 450px !important;
-    background: #e2f3f9;
-    border: 2px solid #e2f3f9;
+    background: #d4edda;
+    border: 2px solid #c3e6cb;
     padding: 30px 0 20px;
     text-align: center;
 
@@ -105,7 +108,7 @@ modal {
         }
 
         p {
-          color: blue;
+          color: #007bff;
           float: left;
           font-weight: bold;
           margin: 0;
@@ -133,7 +136,7 @@ modal {
       height: 160px;
       overflow-x: auto;
       margin: 10px auto;
-      border: solid 2px #d6e2f9;
+      border: solid 2px #c3e6cb;
 
       .select-card {
         float: left;
