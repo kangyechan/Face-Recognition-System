@@ -23,11 +23,12 @@
       float: left;
 
       button {
-        width: 60px;
+        width: 70px;
         font-size: 15px;
-        background: #e2f3f9;
+        color: #155724;
+        background: #d4edda;
         border-radius: 20%;
-        border: none;
+        border-color: #c3e6cb;
       }
 
       button:hover {
@@ -97,7 +98,7 @@
         width: 12%;
         height: 20%;
         margin: 8px;
-        border: 1px solid #e2f3f9;
+        border: 1px solid #efefef;
         float: left;
       }
 

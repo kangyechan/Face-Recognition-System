@@ -11,7 +11,7 @@ export const auditsRoute: Route = {
     pagingParams: JhiResolvePagingParams
   },
   data: {
-    pageTitle: 'audits.title',
+    pageTitle: 'home.title',
     defaultSort: 'auditEventDate,desc'
   }
 };

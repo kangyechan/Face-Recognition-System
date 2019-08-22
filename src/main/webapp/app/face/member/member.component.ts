@@ -35,7 +35,6 @@ export class MemberComponent implements OnInit {
     useTriState: false,
     useCheckbox: this.del_checkbox,
     getChildren: (node: TreeNode) => {
-      console.log(node.data.id, node.data.name, node.data.path);
       this.memberService.readMemberFolderLists(node.data.id, node.data.name, node.data.path).subscribe(data => {
         this.readMemberFolderRecursive(this.member_folder, node.data.path, data);
       });
@@ -169,7 +168,6 @@ export class MemberComponent implements OnInit {
     ) {
       this.liveComponent.isSelectImage = true;
       this.memberService.getSingleImagePath(this.activatePath).subscribe(imagePathList => {
-        console.log(this.activatePath);
         if (imagePathList.toString() !== '') {
           this.liveComponent.emptyImage = false;
           this.liveComponent.selectImage = imagePathList;
@@ -191,7 +189,6 @@ export class MemberComponent implements OnInit {
         }
       });
     }
-    console.log(this.activatePath);
   }
 
   deActivate(event) {

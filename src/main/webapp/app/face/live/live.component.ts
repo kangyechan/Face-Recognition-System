@@ -63,7 +63,6 @@ export class LiveComponent implements OnInit {
     } else {
       this.targetCardList.splice(this.targetCardList.indexOf(selectedCard), 1);
     }
-    console.log(this.targetCardList);
   }
 
   toggleState() {
@@ -96,7 +95,6 @@ export class LiveComponent implements OnInit {
     } else {
       this.targetCardList.splice(this.targetCardList.indexOf(face), 1);
     }
-    console.log(this.targetCardList);
   }
 
   cancelSelect() {
