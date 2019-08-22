@@ -7,7 +7,6 @@ import { SessionStorageService } from 'ngx-webstorage';
 import { VERSION } from 'app/app.constants';
 import { JhiLanguageHelper, AccountService, LoginModalService, LoginService } from 'app/core';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { CustomLoginModalService } from 'app/core/login/custom-login-modal.service';
 
 @Component({
   selector: 'jhi-navbar',
@@ -29,7 +28,6 @@ export class NavbarComponent implements OnInit {
     private sessionStorage: SessionStorageService,
     private accountService: AccountService,
     private loginModalService: LoginModalService,
-    private customLoginModalService: CustomLoginModalService,
     private profileService: ProfileService,
     private router: Router
   ) {
@@ -63,10 +61,6 @@ export class NavbarComponent implements OnInit {
 
   login() {
     this.modalRef = this.loginModalService.open();
-  }
-
-  customLogin() {
-    this.modalRef = this.customLoginModalService.open();
   }
 
   logout() {

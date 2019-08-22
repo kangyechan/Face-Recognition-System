@@ -66,18 +66,6 @@
                     </li>
                 </ul>
             </li>
-            <li ngbDropdown class="nav-item dropdown pointer" *ngIf="languages && languages.length > 1">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
-                    <span>
-                        <span jhiTranslate="global.menu.language">Language</span>
-                    </span>
-                </a>
-                <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
-                    <li *ngFor="let language of languages">
-                        <a class="dropdown-item" [jhiActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{language | findLanguageFromKey}}</a>
-                    </li>
-                </ul>
-            </li>
             <li ngbDropdown class="nav-item dropdown pointer" placement="bottom-right" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
                   <span *ngIf="!getImageUrl()">
@@ -113,33 +101,6 @@
                     <li *ngSwitchCase="false">
                         <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
                             <span jhiTranslate="global.menu.account.register">Register</span>
-                        </a>
-                    </li>
-
-                    <li *ngSwitchCase="false">
-                        <a class="dropdown-item" (click)="customLogin()" id="customlogin">
-                            <span>Custom login</span>
-                        </a>
-                    </li>
-                    <li *ngSwitchCase="false">
-                        <a class="dropdown-item" routerLink="customRegister" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span>Custom Register</span>
-                        </a>
-                    </li>
-
-                    <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="customSettings" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span>Custom Settings</span>
-                        </a>
-                    </li>
-                    <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="customPassword" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span>Custom Password</span>
-                        </a>
-                    </li>
-                    <li *ngSwitchCase="true">
-                        <a class="dropdown-item" (click)="logout()" id="customLogout">
-                            <span>Custom Logout</span>
                         </a>
                     </li>
                 </ul>
