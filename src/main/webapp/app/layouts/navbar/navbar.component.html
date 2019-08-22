@@ -10,7 +10,7 @@
             <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
                     <span>
-                        <span jhiTranslate="global.menu.home">Home</span>
+                        <span>Home</span>
                     </span>
                 </a>
             </li>
@@ -25,43 +25,43 @@
             <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>
-                        <span jhiTranslate="global.menu.admin.main">Administration</span>
+                        <span>Administration</span>
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
                     <li>
                         <a class="dropdown-item" routerLink="admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span jhiTranslate="global.menu.admin.userManagement">User management</span>
+                            <span>User management</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="admin/jhi-metrics" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span jhiTranslate="global.menu.admin.metrics">Metrics</span>
+                            <span>Metrics</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="admin/jhi-health" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span jhiTranslate="global.menu.admin.health">Health</span>
+                            <span>Health</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="admin/jhi-configuration" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span jhiTranslate="global.menu.admin.configuration">Configuration</span>
+                            <span>Configuration</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="admin/audits" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span jhiTranslate="global.menu.admin.audits">Audits</span>
+                            <span>Audits</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="admin/logs" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span jhiTranslate="global.menu.admin.logs">Logs</span>
+                            <span>Logs</span>
                         </a>
                     </li>
                     <li *ngIf="swaggerEnabled">
                         <a class="dropdown-item" routerLink="admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span jhiTranslate="global.menu.admin.apidocs">API</span>
+                            <span>API</span>
                         </a>
                     </li>
                 </ul>
@@ -69,7 +69,7 @@
             <li ngbDropdown class="nav-item dropdown pointer" placement="bottom-right" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
                   <span *ngIf="!getImageUrl()">
-                    <span jhiTranslate="global.menu.account.main">
+                    <span>
                       Account
                     </span>
                   </span>
@@ -80,27 +80,27 @@
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" routerLink="settings" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span jhiTranslate="global.menu.account.settings">Settings</span>
+                            <span>Settings</span>
                         </a>
                     </li>
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" routerLink="password" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span jhiTranslate="global.menu.account.password">Password</span>
+                            <span>Password</span>
                         </a>
                     </li>
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" (click)="logout()" id="logout">
-                            <span jhiTranslate="global.menu.account.logout">Sign out</span>
+                            <span>Sign out</span>
                         </a>
                     </li>
                     <li *ngSwitchCase="false">
                         <a class="dropdown-item" (click)="login()" id="login">
-                            <span jhiTranslate="global.menu.account.login">Sign in</span>
+                            <span>Sign in</span>
                         </a>
                     </li>
                     <li *ngSwitchCase="false">
                         <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
-                            <span jhiTranslate="global.menu.account.register">Register</span>
+                            <span>Register</span>
                         </a>
                     </li>
                 </ul>
