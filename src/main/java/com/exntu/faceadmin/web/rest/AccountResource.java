@@ -68,24 +68,6 @@ public class AccountResource {
         mailService.sendActivationEmail(user);
     }
 
-    /**
-     * {@code POST  /customRegister} : register the user.
-     *
-     * @param managedUserVM the managed user View Model.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
-     */
-    @PostMapping("/customRegister")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void customRegisterAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        if (!checkPasswordLength(managedUserVM.getPassword())) {
-            throw new InvalidPasswordException();
-        }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendCustomActivationEmail(user);
-    }
-
 
     /**
      * {@code GET  /activate} : activate the registered user.
@@ -95,20 +77,6 @@ public class AccountResource {
      */
     @GetMapping("/activate")
     public void activateAccount(@RequestParam(value = "key") String key) {
-        Optional<User> user = userService.activateRegistration(key);
-        if (!user.isPresent()) {
-            throw new AccountResourceException("No user was found for this activation key");
-        }
-    }
-
-    /**
-     * {@code GET  /customActivate} : activate the registered user.
-     *
-     * @param key the activation key.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
-     */
-    @GetMapping("/customActivate")
-    public void customActivateAccount(@RequestParam(value = "key") String key) {
         Optional<User> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
@@ -177,34 +145,6 @@ public class AccountResource {
         userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
     }
 
-    /**
-     * {@code POST  /account/custom-change-password} : changes the current user's password.
-     *
-     * @param passwordChangeDto current and new password.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
-     */
-    @PostMapping(path = "/account/custom-change-password")
-    public void customChangePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
-        if (!checkPasswordLength(passwordChangeDto.getNewPassword())) {
-            throw new InvalidPasswordException();
-        }
-        userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
-    }
-
-    // username search custom mail
-    /**
-     * {@code POST   /account/customSearch/mail} : Send an email to reset the password of the user.
-     *
-     * @param mail the mail of the user.
-     * @throws EmailNotFoundException {@code 400 (Bad Request)} if the email address is not registered.
-     */
-    @PostMapping(path = "/account/customSearch/mail")
-    public void customRequestUsernameSearch(@RequestBody String mail) {
-        mailService.sendCustomSearchMail(
-            userService.requestUsernameSearch(mail)
-                .orElseThrow(EmailNotFoundException::new)
-        );
-    }
 
     /**
      * {@code POST   /account/reset-password/init} : Send an email to reset the password of the user.
@@ -220,21 +160,6 @@ public class AccountResource {
        );
     }
 
-    // password reset custom mail
-    /**
-     * {@code POST   /account/custom-reset-password/init} : Send an email to reset the password of the user.
-     *
-     * @param mail the mail of the user.
-     * @throws EmailNotFoundException {@code 400 (Bad Request)} if the email address is not registered.
-     */
-    @PostMapping(path = "/account/custom-reset-password/init")
-    public void customRequestPasswordReset(@RequestBody String mail) {
-        mailService.sendCustomPasswordResetMail(
-            userService.requestPasswordReset(mail)
-                .orElseThrow(EmailNotFoundException::new)
-        );
-    }
-
 
     /**
      * {@code POST   /account/reset-password/finish} : Finish to reset the password of the user.
@@ -245,25 +170,6 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/finish")
     public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
-        if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
-            throw new InvalidPasswordException();
-        }
-        Optional<User> user =
-            userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
-
-        if (!user.isPresent()) {
-            throw new AccountResourceException("No user was found for this reset key");
-        }
-    }
-    /**
-     * {@code POST   /account/custom-reset-password/finish} : Finish to reset the password of the user.
-     *
-     * @param keyAndPassword the generated key and the new password.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the password could not be reset.
-     */
-    @PostMapping(path = "/account/custom-reset-password/finish")
-    public void customFinishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }
