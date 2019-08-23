@@ -18,8 +18,6 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/api")
 public class FrsResource {
-    private Environment environment;
-
     private final Logger log = LoggerFactory.getLogger(FrsResource.class);
 
     private final MemberService memberService;
