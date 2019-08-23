@@ -4,8 +4,7 @@ import com.exntu.faceadmin.domain.Members;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.parameters.P;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -17,18 +16,16 @@ import java.util.HashMap;
 
 /**
  * Service for member
- * <p>
- * We use the {@link Async} annotation to member manages asynchronously.
  */
 @Service
 public class MemberService {
 
     private final Logger log = LoggerFactory.getLogger(MemberService.class);
+
+    @Value("${flask.root.path}")
     private String rootFolderPath;
 
-    public MemberService() {
-        this.rootFolderPath = "/Users/kang-yechan/Desktop/frs/flask-frs/dataset/";
-    }
+    public MemberService() { }
 
     public Object readRootFolder() {
         int folderId = 0;
