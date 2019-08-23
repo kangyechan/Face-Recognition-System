@@ -5,11 +5,12 @@
     </div>
 
     <div class="detect-menu">
-        <label id="all"><input type="checkbox" [(ngModel)]="allCheckbox" (change)="checkAll()"/>All</label>
-        <label><input type="checkbox" [(ngModel)]="memCheckbox" (change)="checkMem()"/>Member</label>
-        <label><input type="checkbox" [(ngModel)]="whiteCheckbox" (change)="checkWhite()"/>WhiteList</label>
-        <label><input type="checkbox" [(ngModel)]="blackCheckbox" (change)="checkBlack()"/>BlackList</label>
-        <label><input type="checkbox" [(ngModel)]="unknownCheckbox" (change)="checkUnknown()"/>Unknown</label>
+        <label id="all"><input type="checkbox" [(ngModel)]="allCheckbox" (change)="checkAll()"/>{{ all }}</label>
+        <label><input type="checkbox" [(ngModel)]="member1Checkbox" (change)="checkState(member1, member1Checkbox)"/>{{ member1 }}</label>
+        <label><input type="checkbox" [(ngModel)]="member2Checkbox" (change)="checkState(member2, member2Checkbox)"/>{{ member2 }}</label>
+        <label><input type="checkbox" [(ngModel)]="whiteCheckbox" (change)="checkState(whiteList, whiteCheckbox)"/>{{ whiteList }}</label>
+        <label><input type="checkbox" [(ngModel)]="blackCheckbox" (change)="checkState(blackList, blackCheckbox)"/>{{ blackList }}</label>
+        <label><input type="checkbox" [(ngModel)]="unknownCheckbox" (change)="checkState(unKnown, unknownCheckbox)"/>{{ unKnown }}</label>
     </div>
 
 </div>
