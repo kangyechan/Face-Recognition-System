@@ -3,7 +3,7 @@ package com.exntu.faceadmin.service;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -14,22 +14,22 @@ import java.util.HashMap;
 
 /**
  * Service for member
- * <p>
- * We use the {@link Async} annotation to member manages asynchronously.
  */
 @Service
 public class MatchService {
 
     private final Logger log = LoggerFactory.getLogger(MemberService.class);
+
+    @Value("${flask.root.path}")
     private String rootFolderPath;
+
+    @Value("${flask.match.path}")
     private String matchPath;
+
+    @Value("${flask.detect.path}")
     private String detectPath;
 
-    public MatchService() {
-        this.rootFolderPath = "/Users/kang-yechan/Desktop/frs/flask-frs/dataset/";
-        this.matchPath = "/Users/kang-yechan/Desktop/frs/flask-frs/frs_matchset/";
-        this.detectPath = "/Users/kang-yechan/Desktop/frs/flask-frs/frs_detectset/";
-    }
+    public MatchService() { }
 
     public HashMap<String, Object> getOriginImagePath(String name) {
         HashMap<String, Object> hashMap = new HashMap<>();

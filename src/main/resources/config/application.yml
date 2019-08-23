@@ -149,10 +149,8 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-## application:
-#python:
-#  path: /Library/Frameworks/Python.framework/Versions/3.4/bin/python3.4
-#  fileName:
-#    camera: camera.py
-#    door: door.py
-#    stream: streaming.py
+# application:
+flask:
+  root.path: /Users/kang-yechan/Desktop/frs/flask-frs/dataset/
+  match.path: /Users/kang-yechan/Desktop/frs/flask-frs/frs_matchset/
+  detect.path: /Users/kang-yechan/Desktop/frs/flask-frs/frs_detectset/
