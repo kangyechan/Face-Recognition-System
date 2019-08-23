@@ -155,4 +155,31 @@ public class FrsResource {
     public @ResponseBody byte[] getMatchImageSrc(@RequestParam String imagePath) throws IOException {
         return matchService.getMatchImgSrc(imagePath);
     }
+
+
+    /**
+     * {@code GET   /detect/get-detect-image} : match member origin image.
+     * @param info match MemberName.
+     * @param nameList name List.
+     * @param checkList check State.
+     */
+    @GetMapping(path = "/detect/get-detect-image")
+    public HashMap<String, Object> getDetectImagePath(@RequestParam String info, @RequestParam ArrayList<String> nameList, @RequestParam ArrayList<Boolean> checkList) {
+        log.debug("Get Detect ImagePath function call.");
+        System.out.println(checkList);
+        System.out.println(nameList);
+        return matchService.getDetectImagePath(info, nameList, checkList);
+    }
+
+    /**
+     * {@code GET   /match/image-origin/ imagePath} : get imageSrc.
+     */
+    @GetMapping(
+        path = "/detect/image-detect",
+        produces = MediaType.IMAGE_JPEG_VALUE
+    )
+    public @ResponseBody byte[] getDetectImageSrc(@RequestParam String imagePath) throws IOException {
+        return matchService.getDetectImgSrc(imagePath);
+    }
+
 }

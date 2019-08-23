@@ -10,114 +10,77 @@ export class DetectComponent implements OnInit {
   @ViewChild(PictureComponent, { static: false }) private picture: PictureComponent;
 
   allCheckbox = true;
-  memCheckbox = true;
+  member1Checkbox = true;
+  member2Checkbox = true;
   whiteCheckbox = true;
   blackCheckbox = true;
   unknownCheckbox = true;
 
-  constructor() {}
+  all: string;
+  member1: string;
+  member2: string;
+  whiteList: string;
+  blackList: string;
+  unKnown: string;
 
-  ngOnInit() {}
+  constructor() {
+    this.all = 'all';
+    this.member1 = 'exntu';
+    this.member2 = 'magenta';
+    this.whiteList = 'whitelist';
+    this.blackList = 'blacklist';
+    this.unKnown = 'unknown';
+  }
+
+  ngOnInit() {
+    this.member1Checkbox = true;
+    this.member2Checkbox = true;
+    this.whiteCheckbox = true;
+    this.blackCheckbox = true;
+    this.unknownCheckbox = true;
+  }
 
   checkAll() {
     if (this.allCheckbox) {
-      this.memCheckbox = true;
+      this.member1Checkbox = true;
+      this.member2Checkbox = true;
       this.whiteCheckbox = true;
       this.blackCheckbox = true;
       this.unknownCheckbox = true;
       this.picture.allType = true;
-      this.picture.peopleList.forEach(people => {
-        people.show = true;
+      this.picture.detectSourceList.forEach(detectSource => {
+        detectSource.show = true;
       });
     } else {
-      this.memCheckbox = false;
+      this.member1Checkbox = false;
+      this.member2Checkbox = false;
       this.whiteCheckbox = false;
       this.blackCheckbox = false;
       this.unknownCheckbox = false;
       this.picture.allType = false;
-      this.picture.peopleList.forEach(people => {
-        people.show = false;
+      this.picture.detectSourceList.forEach(detectSource => {
+        detectSource.show = false;
       });
     }
+    this.picture.checkList = [this.member1Checkbox, this.member2Checkbox, this.whiteCheckbox, this.blackCheckbox, this.unknownCheckbox];
   }
 
-  checkMem() {
-    if (this.memCheckbox) {
-      console.log('mem: ' + this.memCheckbox);
-      this.picture.peopleList.forEach(people => {
-        if (people.type === 'member') {
-          people.show = true;
+  checkState(checkMember: string, checkBool: boolean) {
+    if (checkBool) {
+      this.picture.detectSourceList.forEach(detectSource => {
+        if (detectSource.type.toLowerCase() === checkMember.toLowerCase()) {
+          detectSource.show = true;
         }
       });
     } else {
-      console.log('mem: ' + this.memCheckbox);
-      this.picture.peopleList.forEach(people => {
-        if (people.type === 'member') {
-          people.show = false;
+      this.picture.detectSourceList.forEach(detectSource => {
+        if (detectSource.type.toLowerCase() === checkMember.toLowerCase()) {
+          detectSource.show = false;
         }
       });
       this.allCheckbox = false;
       this.picture.allType = false;
     }
-  }
-
-  checkWhite() {
-    if (this.whiteCheckbox) {
-      console.log('white: ' + this.whiteCheckbox);
-      this.picture.peopleList.forEach(people => {
-        if (people.type === 'whiteList') {
-          people.show = true;
-        }
-      });
-    } else {
-      console.log('white: ' + this.whiteCheckbox);
-      this.picture.peopleList.forEach(people => {
-        if (people.type === 'whiteList') {
-          people.show = false;
-        }
-      });
-      this.allCheckbox = false;
-      this.picture.allType = false;
-    }
-  }
-
-  checkBlack() {
-    if (this.blackCheckbox) {
-      console.log('black: ' + this.blackCheckbox);
-      this.picture.peopleList.forEach(people => {
-        if (people.type === 'blackList') {
-          people.show = true;
-        }
-      });
-    } else {
-      console.log('black: ' + this.blackCheckbox);
-      this.picture.peopleList.forEach(people => {
-        if (people.type === 'blackList') {
-          people.show = false;
-        }
-      });
-      this.allCheckbox = false;
-      this.picture.allType = false;
-    }
-  }
-
-  checkUnknown() {
-    if (this.unknownCheckbox) {
-      console.log('unKnown: ' + this.unknownCheckbox);
-      this.picture.peopleList.forEach(people => {
-        if (people.type === 'unknown') {
-          people.show = true;
-        }
-      });
-    } else {
-      console.log('unKnown: ' + this.unknownCheckbox);
-      this.picture.peopleList.forEach(people => {
-        if (people.type === 'unknown') {
-          people.show = false;
-        }
-      });
-      this.allCheckbox = false;
-      this.picture.allType = false;
-    }
+    this.picture.checkList = [this.member1Checkbox, this.member2Checkbox, this.whiteCheckbox, this.blackCheckbox, this.unknownCheckbox];
   }
 }

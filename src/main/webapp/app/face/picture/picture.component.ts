@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { PictureService } from './picture.service';
+import { interval } from 'rxjs';
+import { startWith, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-picture',
@@ -6,86 +9,48 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./picture.scss']
 })
 export class PictureComponent implements OnInit {
-  peopleList: Array<any> = [];
   allType: boolean;
 
-  constructor() {}
+  detectList: Array<any> = [];
+  detectSourceList: Array<any> = [];
+  initSecond: number;
+  sameTime: number;
+  nameList: Array<any>;
+  checkList: Array<any>;
+
+  constructor(private pictureService: PictureService) {}
 
   ngOnInit() {
-    this.allType = true;
-    this.peopleList = [
-      {
-        name: 'member1',
-        type: 'member',
-        src: '',
-        show: true
-      },
-      {
-        name: 'whitelist1',
-        type: 'whiteList',
-        src: '',
-        show: true
-      },
-      {
-        name: 'blacklist1',
-        type: 'blackList',
-        src: '',
-        show: true
-      },
-      {
-        name: 'unknown1',
-        type: 'unknown',
-        src: '',
-        show: true
-      },
-      {
-        name: 'member2',
-        type: 'member',
-        src: '',
-        show: true
-      },
-      {
-        name: 'whitelist2',
-        type: 'whiteList',
-        src: '',
-        show: true
-      },
-      {
-        name: 'blacklist2',
-        type: 'blackList',
-        src: '',
-        show: true
-      },
-      {
-        name: 'unknown2',
-        type: 'unknown',
-        src: '',
-        show: true
-      },
-      {
-        name: 'member3',
-        type: 'member',
-        src: '',
-        show: true
-      },
-      {
-        name: 'whitelist3',
-        type: 'whiteList',
-        src: '',
-        show: true
-      },
-      {
-        name: 'blacklist3',
-        type: 'blackList',
-        src: '',
-        show: true
-      },
-      {
-        name: 'unknown3',
-        type: 'unknown',
-        src: '',
-        show: true
-      }
-    ];
+    this.nameList = ['exntu', 'magenta', 'whitelist', 'blacklist', 'unknown'];
+    this.checkList = [true, true, true, true, true];
+    this.initSecond = 1000;
+    this.sameTime = 0;
+    this.detectList = [];
+    this.detectSourceList = [];
+    interval(this.initSecond)
+      .pipe(
+        startWith(0),
+        switchMap(() => this.pictureService.getDetectList())
+      )
+      .subscribe(infoList => {
+        if (infoList.length !== 0) {
+          if (this.detectList.toString() !== infoList.toString()) {
+            this.sameTime = 0;
+            this.initSecond = 1000;
+            this.detectList = infoList;
+            this.detectSourceList = [];
+            infoList.forEach(info => {
+              this.pictureService.getDetectImage(info, this.nameList, this.checkList).subscribe(infoData => {
+                this.detectSourceList.push(infoData);
+              });
+            });
+          } else {
+            this.sameTime++;
+            if (this.sameTime > 1800) {
+              this.initSecond = 100000;
+            }
+          }
+        }
+      });
   }
 }

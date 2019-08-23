@@ -1,13 +1,13 @@
 <div class="picture-section">
     <div class="picture-section-overflow">
-        <div class="picture" id="memPicture" *ngFor="let card of peopleList">
+        <div class="picture" id="memPicture" *ngFor="let card of detectSourceList">
             <div class="picture-card" *ngIf="allType">
                 <img [src]='card.src' alt="image"/>
                 {{ card.name }}
             </div>
 
             <div class="picture-card" *ngIf="!allType && card.show">
-                <img [src]='' alt="image"/>
+                <img [src]='card.src' alt="image"/>
                 {{ card.name }}
             </div>
         </div>
