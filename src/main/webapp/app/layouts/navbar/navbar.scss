@@ -27,6 +27,7 @@ Navbar
   ul.navbar-nav {
     .nav-item {
       margin-left: 0.5em;
+      margin-right: 0.5em;
     }
   }
 
@@ -45,10 +46,14 @@ Navbar
 Logo styles
 ========================================================================== */
 .logo-img {
-  height: 45px;
-  width: 45px;
+  height: 35px;
+  width: 35px;
   display: inline-block;
   vertical-align: middle;
-  background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
+  background: url('../../../content/images/exntuLogo.png') no-repeat center center;
   background-size: contain;
+}
+
+.navbar-title {
+  margin-left: 0.5em;
 }

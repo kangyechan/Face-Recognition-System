@@ -44,7 +44,8 @@ import {
   faFolderPlus,
   faFolderMinus,
   faWindowClose,
-  faTrashRestoreAlt
+  faTrashRestoreAlt,
+  faCheckCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 // Adds the SVG icon to the library so you can use it in your page
@@ -87,5 +88,5 @@ library.add(faFolderPlus);
 library.add(faFolderMinus);
 library.add(faWindowClose);
 library.add(faTrashRestoreAlt);
-
+library.add(faCheckCircle);
 // jhipster-needle-add-element-to-vendor - JHipster will add new menu items here

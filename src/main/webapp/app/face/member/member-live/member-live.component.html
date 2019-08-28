@@ -26,11 +26,11 @@
         <dts-select-container #container="dts-select-container" (itemSelected)="dtsSelected($event)"
                               class="image-section" *ngIf="liveSection && imageSection && !emptyImage">
             <div class="one-face-card" *ngIf="isSelectImage" (click)="cardClick(selectImage)">
-                <fa-icon *ngIf="selectImage.isActive" icon="check-square"></fa-icon>
+                <fa-icon *ngIf="selectImage.isActive" icon="check-circle"></fa-icon>
                 <img [src]="selectImage.getPath" alt="select-image" [ngClass]="{'active': selectImage.isActive}"/>
             </div>
             <div [dtsSelectItem]="face" class="face-card" *ngFor="let face of faceList">
-                <fa-icon *ngIf="face.isActive" icon="check-square"></fa-icon>
+                <fa-icon *ngIf="face.isActive" icon="check-circle"></fa-icon>
                 <img [src]='face.getPath' alt="face-image" [ngClass]="{'active': face.isActive}"/>
             </div>
         </dts-select-container>

@@ -123,3 +123,8 @@ jhipster:
 # ===================================================================
 
 # application:
+
+flask:
+  root.path: /Users/kang-yechan/Desktop/frs/flask-frs/dataset/
+  match.path: /Users/kang-yechan/Desktop/frs/flask-frs/frs_matchset/
+  detect.path: /Users/kang-yechan/Desktop/frs/flask-frs/frs_detectset/

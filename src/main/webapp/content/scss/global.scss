@@ -2,6 +2,8 @@
 @import '~bootstrap/scss/functions';
 @import '~bootswatch/dist/litera/variables';
 @import '~bootstrap/scss/variables';
+@import '~angular-tree-component/dist/angular-tree-component.css';
+@import '~ngx-drag-to-select/scss/ngx-drag-to-select';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -13,6 +15,10 @@ h2,
 h3,
 h4 {
   font-weight: 300;
+}
+
+body {
+  height: 100%;
 }
 
 a:hover {
