@@ -1,0 +1,38 @@
+.detect-list {
+  width: 20%;
+  float: left;
+  margin-top: 20px;
+  padding: 10px 30px;
+  border-right: solid 1px #efefef;
+  border-top: solid 1px #efefef;
+
+  .detect-name {
+    border-bottom: solid 2px black;
+    padding: 0 5px;
+
+    label {
+      font-size: 1em;
+      font-weight: 500;
+    }
+  }
+
+  .detect-menu {
+    padding: 5px;
+
+    label {
+      display: block;
+      font-size: 0.8em;
+      margin-bottom: 0;
+
+      &#all {
+        border-bottom: 1px solid #efefef;
+        padding: 5px 0;
+        margin-bottom: 5px;
+      }
+
+      input {
+        margin-right: 10px;
+      }
+    }
+  }
+}

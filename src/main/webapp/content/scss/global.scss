@@ -75,6 +75,11 @@ Generic styles
 
 .footer {
   border-top: 1px solid rgba(0, 0, 0, 0.125);
+
+  p {
+    font-size: 12px;
+    letter-spacing: -0.5px;
+  }
 }
 
 .hand,

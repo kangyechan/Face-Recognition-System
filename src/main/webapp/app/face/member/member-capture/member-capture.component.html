@@ -1,0 +1,19 @@
+<div class="match-list">
+
+    <div class="match-name">
+        <label>All Matched</label>
+    </div>
+
+    <div class="match-image-section">
+        <div class="match-member-card" *ngFor="let matchMember of matchSourceList">
+            <div class="match-origin">
+                <img class="match-member" [src]="matchMember.getPath" alt="match origin card"/>
+            </div>
+            <div class="match-recog">
+                <img class="match-member" [src]="matchMember.matchPath" alt="capture card"/>
+            </div>
+            <p>{{ matchMember.name }}</p>
+        </div>
+    </div>
+
+</div>
