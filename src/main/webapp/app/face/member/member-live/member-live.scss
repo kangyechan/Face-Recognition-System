@@ -1,7 +1,6 @@
 .live-section {
   float: left;
   width: 60%;
-  height: 65vh;
   border-top: solid 1px #efefef;
 
   .name-section {
@@ -47,7 +46,7 @@
   }
 
   .camera-section {
-    height: 60vh;
+    height: 55vh;
     text-align: center;
     padding: 5px 30px 10px;
 
@@ -111,7 +110,7 @@
         position: absolute;
         z-index: 1;
         font-size: 1.2em;
-        color: #67a1ff;
+        color: white;
         top: 0;
         left: 0;
       }
