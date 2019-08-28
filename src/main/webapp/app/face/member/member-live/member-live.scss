@@ -1,0 +1,125 @@
+.live-section {
+  float: left;
+  width: 60%;
+  height: 65vh;
+  border-top: solid 1px #efefef;
+
+  .name-section {
+    height: 5vh;
+    padding: 10px 30px;
+
+    .name-text {
+      width: 50%;
+      float: left;
+
+      label {
+        font-size: 1em;
+        font-weight: 500;
+      }
+    }
+
+    .button-section {
+      width: 50%;
+      float: left;
+
+      button {
+        width: 70px;
+        font-size: 15px;
+        color: #155724;
+        background: #d4edda;
+        border-radius: 20%;
+        border-color: #c3e6cb;
+      }
+
+      button:hover {
+        box-shadow: 0 0 5px 1px #efefef;
+      }
+
+      button {
+        float: right;
+        margin-right: 20px;
+      }
+
+      .camera-button {
+        float: right;
+      }
+    }
+  }
+
+  .camera-section {
+    height: 60vh;
+    text-align: center;
+    padding: 5px 30px 10px;
+
+    .live-section {
+      background: #efefef;
+      width: 100%;
+      height: 100%;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .image-section {
+      overflow: auto;
+      border: 1px solid #efefef;
+      padding: 8px;
+      width: 100%;
+      height: 100%;
+
+      img {
+        position: absolute;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+
+        &.active {
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      .one-face-card {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      .one-face-card:hover {
+        cursor: pointer;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+      }
+
+      .face-card {
+        position: relative;
+        width: 12%;
+        height: 20%;
+        margin: 8px;
+        border: 1px solid #efefef;
+        float: left;
+      }
+
+      .face-card:hover {
+        cursor: pointer;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+      }
+
+      fa-icon {
+        position: absolute;
+        z-index: 1;
+        font-size: 1.2em;
+        color: #67a1ff;
+        top: 0;
+        left: 0;
+      }
+    }
+
+    .empty-section {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

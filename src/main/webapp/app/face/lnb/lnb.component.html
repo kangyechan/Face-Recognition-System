@@ -1,0 +1,15 @@
+<div [@slideInOut]="buttonState ? 'in' : 'out'" class="lnb-container">
+    <div class="lnb-contents">
+        <a (click)="preProcessing()">
+            전처리
+        </a>
+        <a (click)="learning()">
+            학습
+        </a>
+        <div>
+            <button [@buttonRotation]="buttonState ? 'in' : 'out'" class="lnb-button" (click)="lnbToggle()">
+                <fa-icon [icon]="'arrow-right'"></fa-icon>
+            </button>
+        </div>
+    </div>
+</div>

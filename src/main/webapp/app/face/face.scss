@@ -1,0 +1,16 @@
+@import '~angular-tree-component/dist/angular-tree-component.css';
+@import '~ngx-drag-to-select/scss/ngx-drag-to-select';
+
+.face-container {
+  margin: -15px -20px;
+
+  .face-top-container {
+    width: 100%;
+    height: inherit;
+  }
+
+  .face-bottom-container {
+    width: 100%;
+    height: inherit;
+  }
+}

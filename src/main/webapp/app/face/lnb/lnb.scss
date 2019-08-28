@@ -1,0 +1,50 @@
+.lnb-container {
+  position: absolute;
+  top: 50%;
+  z-index: 99;
+  width: 120px;
+  height: 90px;
+  margin-top: -45px;
+  box-shadow: 0 0 5px 1px #efefef;
+  background-color: #e9f7fb;
+
+  .lnb-contents {
+    height: 100%;
+
+    a {
+      position: relative;
+      width: 100%;
+      height: 50%;
+      display: inline-block;
+      text-align: center;
+      font-size: 1em;
+      font-weight: 400;
+      line-height: 45px;
+    }
+
+    a:hover {
+      box-shadow: 0 0 5px 1px #efefef;
+      background-color: #f8fdff;
+    }
+
+    .lnb-button {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      height: 40px;
+      width: 40px;
+      z-index: 100;
+      background-color: #f8fdff;
+      margin-right: -20px;
+      margin-top: -20px;
+      border-radius: 50%;
+      border: none;
+      box-shadow: 0 0 5px 1px #efefef;
+      transition: all ease 1s;
+
+      &:hover {
+        box-shadow: 0 0 5px 5px #efefef;
+      }
+    }
+  }
+}

@@ -17,12 +17,10 @@
                 </a>
             </li>
             <li *jhiHasAnyAuthority="'ROLE_USER'" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
+                <a class="nav-link" routerLink="face" (click)="collapseNavbar()">
                     <span>
                         <fa-icon icon="th-list"></fa-icon>
-                        <span>
-                            Face Recognition
-                        </span>
+                        <span>Face Recognition</span>
                     </span>
                 </a>
             </li>
