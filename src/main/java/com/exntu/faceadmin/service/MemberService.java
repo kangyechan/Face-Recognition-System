@@ -25,22 +25,44 @@ public class MemberService {
     @Value("${flask.root.path}")
     private String rootFolderPath;
 
+    @Value("${flask.collect.path}")
+    private String collectFolderPath;
+
     public MemberService() { }
 
     public Object readRootFolder() {
         int folderId = 0;
         ArrayList<Members> initMembers = new ArrayList<>();
         ArrayList<String> rootMemberNameList = new ArrayList<>();
+
+        File collectFolder = new File(collectFolderPath);
+        if(!collectFolder.exists()) {
+            log.debug("collect_images Folder is not found so folder mkdir...");
+            collectFolder.mkdir();
+        }
+        Members unknownMember = new Members();
+        File collectUnknownFolder = new File(collectFolderPath + "unknown/");
+        if(!collectUnknownFolder.exists()) {
+            collectUnknownFolder.mkdir();
+            log.debug("unknown folder in collect_images make success.");
+        }
+        unknownMember.setId(String.valueOf(folderId));
+        unknownMember.setName("unknown");
+        unknownMember.setPath("root/unknown");
+        File[] collectFolderList = collectUnknownFolder.listFiles();
+        if(collectFolderList != null) {
+            setFolderHasChildren(collectFolderList, unknownMember, collectUnknownFolder);
+        } else {
+            log.error("collectFolderList is Null point exception.");
+        }
+        folderId++;
+        initMembers.add(unknownMember);
+        rootMemberNameList.add("unknown");
+
         File rootFolder = new File(rootFolderPath);
         if(!rootFolder.exists()) {
-            log.error("Root Folder is not found");
+            log.error("Dataset Folder is not found");
         } else {
-            File rootUnknownFolder = new File(rootFolderPath + "Unknown/");
-            if(!rootUnknownFolder.exists()) {
-                rootUnknownFolder.mkdir();
-                log.debug("Unknown folder make success.");
-            }
-            rootMemberNameList.add("Unknown");
             File[] arrRootFolder = rootFolder.listFiles();
             if(arrRootFolder != null) {
                 for(File rootFolderName: arrRootFolder) {
@@ -48,7 +70,7 @@ public class MemberService {
                         log.debug(rootFolderName.getName() + "is NOT Directory.");
                     } else {
                         Members member = new Members();
-                        if(!rootFolderName.getName().equals("Unknown")) {
+                        if(!rootFolderName.getName().equalsIgnoreCase("unknown")) {
                             String[] arrRootFolderName = rootFolderName.getName().split(" ");
                             if(!rootMemberNameList.contains(arrRootFolderName[0])) {
                                 rootMemberNameList.add(arrRootFolderName[0]);
@@ -60,25 +82,7 @@ public class MemberService {
                                 continue;
                             }
                         } else {
-                            member.setId(String.valueOf(folderId));
-                            member.setName(rootFolderName.getName());
-                            member.setPath("root/" + rootFolderName.getName());
-                            File memList = new File(rootFolderPath + rootFolderName.getName() + "/");
-                            File[] memListFolder = memList.listFiles();
-                            if(memListFolder != null) {
-                                if(memListFolder.length < 1) {
-                                    member.setHasChildren(false);
-                                    log.debug(rootFolderName.getName() + " This folder has not children.");
-                                } else if(memListFolder.length == 1 && memListFolder[0].getName().startsWith(".")) {
-                                    member.setHasChildren(false);
-                                    log.debug(rootFolderName.getName() + " This folder has not children. only one file : .DS_Storeis.");
-                                } else {
-                                    member.setHasChildren(true);
-                                    log.debug(rootFolderName.getName() + " This folder has children.");
-                                }
-                            } else {
-                                log.error("MembersListFolder NULL Point Exception.");
-                            }
+                            continue;
                         }
                         folderId++;
                         initMembers.add(member);
@@ -92,6 +96,7 @@ public class MemberService {
     }
 
     public boolean makeNewFolder(String folderPath, String folderName) {
+        // folder Path 가 unknown 일 경우 따로,
         File newFolder = new File(rootFolderPath + folderPath + folderName + "/");
         if(!newFolder.exists()) {
             try {
@@ -108,6 +113,7 @@ public class MemberService {
     }
 
     public Object readMemberList(String folderId, String folderName, String folderPath) {
+        // folder name 이 언노운일 경우는 경로 따로;
         int memFolderId = 0;
         ArrayList<Members> readMembers = new ArrayList<>();
 
@@ -154,16 +160,7 @@ public class MemberService {
                                 File childFolder = new File(rootFolderPath + rootFolderChild.getName() + "/");
                                 File[] arrChildFolder = childFolder.listFiles();
                                 if (arrChildFolder != null) {
-                                    if(arrChildFolder.length < 1) {
-                                        member.setHasChildren(false);
-                                        log.debug(rootFolderChild.getName() + " This folder has not children.");
-                                    } else if(arrChildFolder.length == 1 && arrChildFolder[0].getName().startsWith(".")) {
-                                        member.setHasChildren(false);
-                                        log.debug(rootFolderChild.getName() + " This folder has not children. only one file : .DS_Storeis.");
-                                    } else {
-                                        member.setHasChildren(true);
-                                        log.debug(rootFolderChild.getName() + " This folder has children.");
-                                    }
+                                    setFolderHasChildren(arrChildFolder, member, rootFolderChild);
                                 } else {
                                     log.error("arrChildFolder is Null point Exception.");
                                 }
@@ -171,7 +168,7 @@ public class MemberService {
                                 readMembers.add(member);
                             }
                         } else {
-                            log.error(rootFolderChild.getName() + " is not directory or Unknown Folder.");
+                            log.debug(rootFolderChild.getName() + " is not directory or Unknown Folder.");
                         }
                     }
                 } else {
@@ -202,16 +199,7 @@ public class MemberService {
                             File memListFolder = new File(readMembersFolderPath + memFolderName.getName() + "/");
                             File[] memListFolderChildren = memListFolder.listFiles();
                             if(memListFolderChildren != null) {
-                                if(memListFolderChildren.length < 1) {
-                                    memList.setHasChildren(false);
-                                    log.debug(memFolderName.getName() + " This folder has not children.");
-                                } else if(memListFolderChildren.length < 2 && memListFolderChildren[0].getName().startsWith(".")) {
-                                    memList.setHasChildren(false);
-                                    log.debug(memFolderName.getName() + " This folder has not children. only one file : .DS_Storeis.");
-                                } else {
-                                    memList.setHasChildren(true);
-                                    log.debug(memFolderName.getName() + " This folder has children.");
-                                }
+                                setFolderHasChildren(memListFolderChildren, memList, memFolderName);
                             } else {
                                 log.error("memListFolderChildren is NULL Point Exception.");
                             }
@@ -228,6 +216,7 @@ public class MemberService {
     }
 
     public boolean deleteFolder(ArrayList<String> selectedList) {
+        // 언노운 폴더 삭제 따로 ;;
         for(String delFolderPath: selectedList) {
             String[] delFolderPathSplit = delFolderPath.split("/");
             if(delFolderPathSplit[0].equals("root")) {
@@ -286,6 +275,8 @@ public class MemberService {
     }
 
     public HashMap<String, Object> getImagePath(String selectPath) {
+        // 언노운일 경우 해결
+
         HashMap<String, Object> hashMap = new HashMap<>();
         String folderPath = rootFolderPath + selectPath;
         File selectFile = new File(folderPath);
@@ -301,6 +292,8 @@ public class MemberService {
     }
 
     public ArrayList<HashMap<String, Object>> getImagePathList(String selectPath) {
+        // 언노운일 경우 해결 필요
+
         ArrayList<HashMap<String, Object>> pathList = new ArrayList<>();
         String folderPath = rootFolderPath + selectPath;
         File selectFolder = new File(folderPath);
@@ -337,11 +330,13 @@ public class MemberService {
     }
 
     public byte[] getImgSrc(String imagePath) throws IOException {
+        // 언노운일 경우??
         FileInputStream fin = new FileInputStream(this.rootFolderPath + imagePath);
         return IOUtils.toByteArray(fin);
     }
 
     public boolean copyMember(ArrayList<String> copyList, ArrayList<String> copyNameList, String destPath) {
+        // 언노운일 경우 카피 패스 변경
         FileInputStream sourceF = null;
         FileOutputStream destF = null;
         File copyFolder = new File(rootFolderPath + destPath);
@@ -376,5 +371,18 @@ public class MemberService {
             }
         }
         return true;
+    }
+
+    private void setFolderHasChildren (File[] folderList, Members members, File folder) {
+        if(folderList.length < 1) {
+            members.setHasChildren(false);
+            log.debug(folder.getName() + " This folder has not children.");
+        } else if(folderList.length == 1 && folderList[0].getName().startsWith(".")) {
+            members.setHasChildren(false);
+            log.debug(folder.getName() + " This folder has not children. only one file : .DS_Storeis.");
+        } else {
+            members.setHasChildren(true);
+            log.debug(folder.getName() + " This folder has children.");
+        }
     }
 }
