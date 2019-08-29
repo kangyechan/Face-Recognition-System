@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 
 /**
  * Service for member
+ * We use the {@link Async} annotation to get image srcs asynchronously.
  */
 @Service
 public class MemberService {
@@ -96,15 +98,15 @@ public class MemberService {
     }
 
     public boolean makeNewFolder(String folderPath, String folderName) {
-        // folder Path 가 unknown 일 경우 따로,
-        File newFolder = new File(rootFolderPath + folderPath + folderName + "/");
+        File newFolder;
+        if(folderPath.equalsIgnoreCase("unknown")) {
+            newFolder = new File(collectFolderPath + folderPath + "/" + folderName);
+        } else {
+            newFolder = new File(rootFolderPath + folderPath + folderName + "/");
+        }
         if(!newFolder.exists()) {
-            try {
-                newFolder.mkdir();
-                log.debug("new folder make success.");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            newFolder.mkdir();
+            log.debug("new unknown child folder make success.");
         } else {
             log.debug("Already folder exists..");
             return false;
@@ -113,13 +115,11 @@ public class MemberService {
     }
 
     public Object readMemberList(String folderId, String folderName, String folderPath) {
-        // folder name 이 언노운일 경우는 경로 따로;
         int memFolderId = 0;
         ArrayList<Members> readMembers = new ArrayList<>();
-
         if(folderPath.startsWith("root/")) {
-            if(folderPath.equals("root/Unknown")) {
-                String unknownFolderPath = rootFolderPath + "Unknown/";
+            if(folderPath.equals("root/unknown")) {
+                String unknownFolderPath = collectFolderPath + "unknown/";
                 File unknownFolder = new File(unknownFolderPath);
                 File[] arrUnknownFolder = unknownFolder.listFiles();
                 if(arrUnknownFolder != null) {
@@ -127,7 +127,7 @@ public class MemberService {
                         if(!unknownFolderChild.isDirectory()) {
                             Members member = new Members(
                                 folderId + "-" + String.valueOf(memFolderId), unknownFolderChild.getName(),
-                                "Unknown/" + unknownFolderChild.getName());
+                                "unknown/" + unknownFolderChild.getName());
                             memFolderId++;
                             readMembers.add(member);
                         } else {
@@ -275,28 +275,22 @@ public class MemberService {
     }
 
     public HashMap<String, Object> getImagePath(String selectPath) {
-        // 언노운일 경우 해결
-
         HashMap<String, Object> hashMap = new HashMap<>();
-        String folderPath = rootFolderPath + selectPath;
-        File selectFile = new File(folderPath);
+        File selectFile = new File(checkUnknownPath(selectPath));
         if(!selectFile.exists()) {
-            log.error(selectFile + " is not exists.");
+            log.error(selectPath + " is not exists.");
         } else {
             hashMap.put("name", selectFile.getName());
-            hashMap.put("realPath", selectPath);
-            hashMap.put("getPath", "api/member/image-list?imagePath="+ selectPath);
-            hashMap.put("isActive", false);
         }
+        hashMap.put("realPath", selectPath);
+        hashMap.put("getPath", "api/member/image-list?imagePath="+ selectPath);
+        hashMap.put("isActive", false);
         return hashMap;
     }
 
     public ArrayList<HashMap<String, Object>> getImagePathList(String selectPath) {
-        // 언노운일 경우 해결 필요
-
         ArrayList<HashMap<String, Object>> pathList = new ArrayList<>();
-        String folderPath = rootFolderPath + selectPath;
-        File selectFolder = new File(folderPath);
+        File selectFolder = new File(checkUnknownPath(selectPath));
         if(!selectFolder.exists()) {
             log.error(selectPath + " is not exists.");
         } else {
@@ -330,8 +324,12 @@ public class MemberService {
     }
 
     public byte[] getImgSrc(String imagePath) throws IOException {
-        // 언노운일 경우??
-        FileInputStream fin = new FileInputStream(this.rootFolderPath + imagePath);
+        FileInputStream fin;
+        if(imagePath.toLowerCase().startsWith("unknown/")) {
+            fin = new FileInputStream(this.collectFolderPath + imagePath);
+        } else {
+            fin = new FileInputStream(this.rootFolderPath + imagePath);
+        }
         return IOUtils.toByteArray(fin);
     }
 
@@ -353,6 +351,8 @@ public class MemberService {
         log.debug("Your selectCard List alive destPath.");
         System.out.println(copyList);
         for(int i = 0; i < copyList.size(); i++) {
+            // 이름이 unknown으로 시작하면 다른 방식 필요.
+
             File sourceFile = new File(rootFolderPath + copyList.get(i));
             try {
                 sourceF = new FileInputStream(sourceFile);
@@ -371,6 +371,16 @@ public class MemberService {
             }
         }
         return true;
+    }
+
+    private String checkUnknownPath(String selectPath) {
+        String filePath;
+        if(selectPath.toLowerCase().startsWith("unknown/")) {
+            filePath = collectFolderPath + selectPath;
+        } else {
+            filePath = rootFolderPath + selectPath;
+        }
+        return filePath;
     }
 
     private void setFolderHasChildren (File[] folderList, Members members, File folder) {
