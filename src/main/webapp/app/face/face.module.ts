@@ -13,12 +13,14 @@ import { MemberLiveComponent } from './member/member-live/member-live.component'
 import { MemberCaptureComponent } from './member/member-capture/member-capture.component';
 import { TreeModule } from 'angular-tree-component';
 import { DragToSelectModule } from 'ngx-drag-to-select';
+import { ModalModule } from 'angular-custom-modal';
 
 @NgModule({
   imports: [
     RouterModule.forChild([FACE_ROUTE]),
     FaceadminSharedModule,
     BrowserAnimationsModule,
+    ModalModule,
     TreeModule.forRoot(),
     DragToSelectModule.forRoot()
   ],

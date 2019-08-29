@@ -13,66 +13,66 @@
     </div>
 </div>
 
-<!--<modal #componentInsideModal>-->
-<!--    <ng-template class="member-modal-header" #modalHeader>-->
-<!--        <div class="title-section">-->
-<!--            <h2>Add member</h2>-->
-<!--        </div>-->
-<!--    </ng-template>-->
-<!--    <ng-template #modalBody>-->
-<!--        <div class="member-menu-section">-->
-<!--            <div class="member-menu">-->
-<!--                <div class="member-button" [ngStyle]="{'background-color': folder_state ? '#d4edda':'white', 'border': folder_state ? '#e2f3f9':'white'}"-->
-<!--                     (click)="toggle_state('folder')">Folder</div>-->
-<!--            </div>-->
-<!--            <div class="member-menu">-->
-<!--                <div class="member-button" [ngStyle]="{'background-color': member_state ? '#d4edda':'white', 'border': member_state ? '#e2f3f9':'white'}"-->
-<!--                     (click)="toggle_state('member')">Member</div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="form-section" id="folder-form" *ngIf="folder_state">-->
-<!--            <div class="form-text">-->
-<!--                <label class="example"><span>Folder Name Example :</span>exntu Young Yoo</label>-->
-<!--                <label class="example"><span>New Folder Name :</span><p> {{ inputCompanyName }} {{ inputMemberName }} </p></label>-->
-<!--            </div>-->
-<!--            <div class="form-input">-->
-<!--                <label class="input-label">Company : </label>-->
-<!--                <input type="text" name="fName" class="form-control" placeholder="Input Company Name" [(ngModel)]="inputCompanyName">-->
-<!--            </div>-->
-<!--            <div class="form-input">-->
-<!--                <label class="input-label">Name : </label>-->
-<!--                <input type="text" name="fName" class="form-control" placeholder="Input Member Name" [(ngModel)]="inputMemberName">-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="form-section" id="member-form" *ngIf="member_state">-->
-<!--            <div class="form-text">-->
-<!--                <label class="example"><span>Save Path Example :</span>exntu Young Yoo</label>-->
-<!--                <label class="example"><span>Save Path :</span><p> {{ inputCompanyName }} {{ inputMemberName }} </p></label>-->
-<!--            </div>-->
-<!--            <div class="member-select-image" *ngIf="selectedCardState">-->
-<!--                <div class="select-card">-->
-<!--                    <div class="select-card-image" *ngFor="let face of selectedCard" >-->
-<!--                        <fa-icon icon="window-close" (click)="deleteCard(face)"></fa-icon>-->
-<!--                        <img [src]='face.getPath' alt="testing"/>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <p>총 {{ selectedCard.length }}개</p>-->
-<!--            <div class="form-input">-->
-<!--                <label class="input-label">Company : </label>-->
-<!--                <input type="text" name="mName" class="form-control" placeholder="Input Company Name" [(ngModel)]="inputCompanyName">-->
-<!--            </div>-->
-<!--            <div class="form-input">-->
-<!--                <label class="input-label">Name : </label>-->
-<!--                <input type="text" name="mName" class="form-control" placeholder="Input Member Name" [(ngModel)]="inputMemberName">-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </ng-template>-->
-<!--    <ng-template #modalFooter>-->
-<!--        <button *ngIf="folder_state" type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>-->
-<!--        <button *ngIf="member_state" type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>-->
-<!--    </ng-template>-->
-<!--</modal>-->
+<modal #componentInsideModal>
+    <ng-template class="member-modal-header" #modalHeader>
+        <div class="title-section">
+            <h2>Add member</h2>
+        </div>
+    </ng-template>
+    <ng-template #modalBody>
+        <div class="member-menu-section">
+            <div class="member-menu">
+                <div class="member-button" [ngStyle]="{'background-color': folder_state ? '#d4edda':'white', 'border': folder_state ? '#e2f3f9':'white'}"
+                     (click)="toggle_state('folder')">Folder</div>
+            </div>
+            <div class="member-menu">
+                <div class="member-button" [ngStyle]="{'background-color': member_state ? '#d4edda':'white', 'border': member_state ? '#e2f3f9':'white'}"
+                     (click)="toggle_state('member')">Member</div>
+            </div>
+        </div>
+        <div class="form-section" id="folder-form" *ngIf="folder_state">
+            <div class="form-text">
+                <label class="example"><span>Folder Name Example :</span>exntu Young Yoo</label>
+                <label class="example"><span>New Folder Name :</span><p> {{ inputCompanyName }} {{ inputMemberName }} </p></label>
+            </div>
+            <div class="form-input">
+                <label class="input-label">Company : </label>
+                <input type="text" name="fName" class="form-control" placeholder="Input Company Name" [(ngModel)]="inputCompanyName">
+            </div>
+            <div class="form-input">
+                <label class="input-label">Name : </label>
+                <input type="text" name="fName" class="form-control" placeholder="Input Member Name" [(ngModel)]="inputMemberName">
+            </div>
+        </div>
+        <div class="form-section" id="member-form" *ngIf="member_state">
+            <div class="form-text">
+                <label class="example"><span>Save Path Example :</span>exntu Young Yoo</label>
+                <label class="example"><span>Save Path :</span><p> {{ inputCompanyName }} {{ inputMemberName }} </p></label>
+            </div>
+            <div class="member-select-image" *ngIf="selectedCardState">
+                <div class="select-card">
+                    <div class="select-card-image" *ngFor="let face of selectedCard" >
+                        <fa-icon icon="window-close" (click)="deleteCard(face)"></fa-icon>
+                        <img [src]='face.getPath' alt="testing"/>
+                    </div>
+                </div>
+            </div>
+            <p>총 {{ selectedCard.length }}개</p>
+            <div class="form-input">
+                <label class="input-label">Company : </label>
+                <input type="text" name="mName" class="form-control" placeholder="Input Company Name" [(ngModel)]="inputCompanyName">
+            </div>
+            <div class="form-input">
+                <label class="input-label">Name : </label>
+                <input type="text" name="mName" class="form-control" placeholder="Input Member Name" [(ngModel)]="inputMemberName">
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #modalFooter>
+        <button *ngIf="folder_state" type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>
+        <button *ngIf="member_state" type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>
+    </ng-template>
+</modal>
 
 <jhi-member-live></jhi-member-live>
 

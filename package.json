@@ -22,6 +22,7 @@
     "@ng-bootstrap/ng-bootstrap": "4.2.1",
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
+    "angular-custom-modal": "^1.2.0",
     "angular-tree-component": "^8.4.0",
     "bootstrap": "4.3.1",
     "bootswatch": "4.3.1",
