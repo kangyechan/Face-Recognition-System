@@ -16,4 +16,8 @@ export class LnbService {
   learning(): Observable<any> {
     return this.http.get(FLASK_SERVER_API_URL + 'lnb/learning', { responseType: 'json' });
   }
+
+  reStart(): Observable<any> {
+    return this.http.get(FLASK_SERVER_API_URL + 'recognition/restart');
+  }
 }
