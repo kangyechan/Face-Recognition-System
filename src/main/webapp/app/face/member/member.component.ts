@@ -3,6 +3,7 @@ import { MemberService } from './member.service';
 import { MemberLiveComponent } from './member-live/member-live.component';
 import { ITreeOptions, TreeComponent, TreeNode } from 'angular-tree-component';
 import { MatDialog } from '@angular/material/dialog';
+import { CustomModalComponent } from 'app/custom-modal/custom-modal.component';
 
 @Component({
   selector: 'jhi-member',
@@ -11,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class MemberComponent implements OnInit {
   folder_state = true;
-  member_state = true;
+  member_state = false;
   inputName: string;
   inputCompanyName: string;
   inputMemberName: string;
@@ -110,10 +111,12 @@ export class MemberComponent implements OnInit {
           this.tree.treeModel.update();
         });
       });
+      this.alertSet('Complete', '삭제되었습니다.');
       this.selectedTreeList = [];
       this.selectedTreePathList = [];
     } else {
       console.log('SelectedTreeList is null');
+      this.alertSet('Warning', '삭제할 폴더를 선택해주세요.');
     }
     this.del_checkbox = false;
     this.options.useCheckbox = false;
@@ -247,16 +250,12 @@ export class MemberComponent implements OnInit {
       this.inputMemberName === '' ||
       this.inputCompanyName === ''
     ) {
+      this.alertSet('Warning', '저장 경로를 입력해주세요.');
       this.inputMemberName = undefined;
       this.inputCompanyName = undefined;
     } else {
       if (this.inputCompanyName.toLowerCase() === 'unknown') {
-        console.log('unknown 폴더로 복사할 수 없음');
-        // this.dialog.open(MemberDialogComponent, {
-        //   data: {
-        //     animal: 'panda'
-        //   }
-        // });
+        this.alertSet('Warning', 'unknown 폴더로 복사할 수 없습니다.');
         this.inputMemberName = undefined;
         this.inputCompanyName = undefined;
       } else {
@@ -296,6 +295,7 @@ export class MemberComponent implements OnInit {
           target.isActive = false;
         });
         this.memberLiveComponent.targetCardList = [];
+        this.alertSet('Complete', '저장되었습니다.');
         this.componentInsideModals.close();
       }
     }
@@ -303,5 +303,14 @@ export class MemberComponent implements OnInit {
 
   deleteCard(face: any) {
     this.selectedCard.splice(this.selectedCard.indexOf(face), 1);
+  }
+
+  alertSet(alertTitle: string, alertContents: string) {
+    this.dialog.open(CustomModalComponent, {
+      data: {
+        title: alertTitle,
+        contents: alertContents
+      }
+    });
   }
 }

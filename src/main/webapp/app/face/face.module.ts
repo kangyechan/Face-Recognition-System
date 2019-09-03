@@ -14,7 +14,6 @@ import { MemberCaptureComponent } from './member/member-capture/member-capture.c
 import { TreeModule } from 'angular-tree-component';
 import { DragToSelectModule } from 'ngx-drag-to-select';
 import { ModalModule } from 'angular-custom-modal';
-import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -22,7 +21,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     FaceadminSharedModule,
     BrowserAnimationsModule,
     ModalModule,
-    MatDialogModule,
     TreeModule.forRoot(),
     DragToSelectModule.forRoot()
   ],
