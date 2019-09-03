@@ -1,46 +1,37 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MemberLiveService } from './member-live.service';
 import { FLASK_SERVER_API_URL } from 'app/app.constants';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
+import { CustomModalComponent } from 'app/custom-modal/custom-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'jhi-member-live',
   templateUrl: './member-live.component.html',
   styleUrls: ['./member-live.scss']
 })
-export class MemberLiveComponent implements OnInit {
+export class MemberLiveComponent {
   @ViewChild(SelectContainerComponent, { static: false }) private selectContainer: SelectContainerComponent;
 
-  imgURL: string;
-  cameraText: string;
-  doorText: string;
-  sectionState: string;
-  sectionTitle: string;
-  cameraState: boolean;
-  imageSection: boolean;
-  liveSection: boolean;
-  faceList: Array<any> = [];
-  emptyImage: boolean;
-  isSelectImage: boolean;
-  selectImage: any;
-  targetCardList: Array<any> = [];
+  imgURL = FLASK_SERVER_API_URL + 'streaming/live';
+  cameraText = 'OFF';
+  doorText = 'OPEN';
+  sectionState = 'IMAGE';
+  sectionTitle = 'Live On';
+  cameraState = true;
+  imageSection = false;
+  liveSection = true;
+  faceList = [];
+  emptyImage = false;
+  emptyMessage = '폴더를 선택해주세요.';
+  isSelectImage = false;
+  selectImage = { name: '', getPath: '', realPath: '', isActive: false };
+  targetCardList = [];
+  targetCardPathList = [];
+  selectText = '전체 선택';
+  deleteText = '선택 삭제';
 
-  constructor(private memberLiveService: MemberLiveService) {}
-
-  ngOnInit() {
-    this.cameraText = 'OFF';
-    this.doorText = 'OPEN';
-    this.sectionState = 'IMAGE';
-    this.sectionTitle = 'Live On';
-    this.cameraState = true;
-    this.imageSection = false;
-    this.liveSection = true;
-    this.faceList = [];
-    this.emptyImage = false;
-    this.selectImage = {};
-    this.isSelectImage = false;
-    this.imgURL = FLASK_SERVER_API_URL + 'streaming/live';
-  }
+  constructor(private memberLiveService: MemberLiveService, public dialog: MatDialog) {}
 
   toggleSection() {
     if (this.liveSection) {
@@ -57,12 +48,19 @@ export class MemberLiveComponent implements OnInit {
   }
 
   dtsSelected(selectedCard) {
-    selectedCard.isActive = !selectedCard.isActive;
+    selectedCard.isActive = undefined;
     if (this.targetCardList.indexOf(selectedCard) === -1) {
       this.targetCardList.push(selectedCard);
-    } else {
-      this.targetCardList.splice(this.targetCardList.indexOf(selectedCard), 1);
     }
+    selectedCard.isActive = true;
+  }
+
+  dtsDeSelected(deSelectedCard) {
+    deSelectedCard.isActive = undefined;
+    if (this.targetCardList.indexOf(deSelectedCard) !== -1) {
+      this.targetCardList.splice(this.targetCardList.indexOf(deSelectedCard), 1);
+    }
+    deSelectedCard.isActive = false;
   }
 
   toggleState() {
@@ -107,5 +105,54 @@ export class MemberLiveComponent implements OnInit {
       });
     this.targetCardList = [];
     this.selectContainer.clearSelection();
+  }
+
+  cardSelectAll() {
+    if (this.emptyImage) {
+      this.alertSet('Warning', '이미지가 없습니다.\n폴더를 선택하세요.');
+    } else if (this.isSelectImage) {
+      if (this.selectText === '전체 선택') {
+        this.targetCardList.push(this.selectImage);
+        this.selectImage.isActive = true;
+        this.selectText = '선택 해제';
+      } else {
+        this.targetCardList.splice(0, 1);
+        this.selectImage.isActive = false;
+        this.selectText = '전체 선택';
+      }
+    } else {
+      if (this.selectText === '전체 선택') {
+        this.selectContainer.selectAll();
+        this.selectText = '선택 해제';
+      } else {
+        this.selectContainer.clearSelection();
+        this.selectText = '전체 선택';
+      }
+    }
+  }
+
+  selectDelete() {
+    if (this.targetCardList.length === 0) {
+      this.alertSet('Warning', '선택된 이미지가 없습니다.');
+    } else {
+      this.targetCardList.forEach(target => {
+        this.targetCardPathList.push(target.realPath);
+      });
+      this.memberLiveService.delMember(this.targetCardPathList).subscribe(data => {
+        console.log('delete ' + data);
+      });
+      this.alertSet('Complete', '삭제되었습니다.');
+      this.selectContainer.clearSelection();
+      // member에다가 신호 보내주면 나머지 트리랑, live 화면 새로고침
+    }
+  }
+
+  alertSet(alertTitle: string, alertContents: string) {
+    this.dialog.open(CustomModalComponent, {
+      data: {
+        title: alertTitle,
+        contents: alertContents
+      }
+    });
   }
 }

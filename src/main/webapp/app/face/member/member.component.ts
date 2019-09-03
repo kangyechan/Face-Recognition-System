@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MemberService } from './member.service';
 import { MemberLiveComponent } from './member-live/member-live.component';
 import { ITreeOptions, TreeComponent, TreeNode } from 'angular-tree-component';
+import { MatDialog } from '@angular/material/dialog';
+import { CustomModalComponent } from 'app/custom-modal/custom-modal.component';
 
 @Component({
   selector: 'jhi-member',
@@ -9,8 +11,8 @@ import { ITreeOptions, TreeComponent, TreeNode } from 'angular-tree-component';
   styleUrls: ['./member.scss']
 })
 export class MemberComponent implements OnInit {
-  folder_state;
-  member_state;
+  folder_state = true;
+  member_state = false;
   inputName: string;
   inputCompanyName: string;
   inputMemberName: string;
@@ -24,7 +26,7 @@ export class MemberComponent implements OnInit {
   selectedCard: Array<any> = [];
   selectedCardName = [];
   selectedCardPath = [];
-  selectedCardState: boolean;
+  selectedCardState = true;
 
   @ViewChild('componentInsideModal', { static: false }) componentInsideModals: any;
   @ViewChild(TreeComponent, { static: false }) private tree: TreeComponent;
@@ -40,7 +42,7 @@ export class MemberComponent implements OnInit {
     }
   };
 
-  constructor(private memberService: MemberService) {}
+  constructor(private memberService: MemberService, public dialog: MatDialog) {}
 
   readMemberFolderRecursive(hasChildFolder: any[], nodePath: string, data: any) {
     if (nodePath.startsWith('root/')) {
@@ -66,12 +68,9 @@ export class MemberComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.folder_state = true;
-    this.member_state = false;
     this.memberService.initMembersFolder().subscribe(data => {
       this.member_folder = data;
     });
-    this.selectedCardState = false;
   }
 
   deleteCheckboxToggle(use: boolean) {
@@ -112,10 +111,14 @@ export class MemberComponent implements OnInit {
           this.tree.treeModel.update();
         });
       });
+      this.alertSet('Complete', '삭제되었습니다.');
       this.selectedTreeList = [];
       this.selectedTreePathList = [];
+      this.del_checkbox = false;
+      this.options.useCheckbox = false;
     } else {
       console.log('SelectedTreeList is null');
+      this.alertSet('Warning', '삭제할 폴더를 선택해주세요.');
     }
   }
 
@@ -185,6 +188,7 @@ export class MemberComponent implements OnInit {
           this.memberLiveComponent.faceList = imagePathList;
         } else {
           this.memberLiveComponent.emptyImage = true;
+          this.memberLiveComponent.emptyMessage = this.activatePath + ' 폴더에 이미지가 존재하지 않습니다.';
         }
       });
     }
@@ -198,6 +202,7 @@ export class MemberComponent implements OnInit {
     this.memberLiveComponent.targetCardList.forEach(target => {
       target.isActive = false;
     });
+    this.memberLiveComponent.emptyMessage = '폴더를 선택해주세요.';
     this.memberLiveComponent.targetCardList = [];
     this.selectedCard = [];
   }
@@ -240,28 +245,6 @@ export class MemberComponent implements OnInit {
     }
   }
 
-  recursiveAddFolder(memberFolder: any, destPath: string, newFolder: string) {
-    memberFolder.forEach(folder => {
-      if (destPath === folder.path) {
-        if (!folder.hasChildren) {
-          folder.hasChildren = true;
-          folder.children = [{ id: folder.id + '-0', name: newFolder, path: destPath + newFolder + '/', hasChildren: false }];
-        } else {
-          folder.children.push({
-            id: folder.id + '-' + folder.children.length.toString(),
-            name: newFolder,
-            path: destPath + newFolder + '/',
-            hasChildren: false
-          });
-        }
-      } else {
-        if (destPath.startsWith(folder.path) && folder.hasChildren) {
-          this.recursiveAddFolder(folder.children, destPath, newFolder);
-        }
-      }
-    });
-  }
-
   onSubmit() {
     if (
       this.inputMemberName === undefined ||
@@ -269,50 +252,67 @@ export class MemberComponent implements OnInit {
       this.inputMemberName === '' ||
       this.inputCompanyName === ''
     ) {
+      this.alertSet('Warning', '저장 경로를 입력해주세요.');
       this.inputMemberName = undefined;
       this.inputCompanyName = undefined;
     } else {
-      this.inputName = this.inputCompanyName + ' ' + this.inputMemberName;
-      if (this.folder_state) {
-        this.memberService.makeMembersFolder('', this.inputName).subscribe(newFolderName => {
-          if (newFolderName !== 'fail') {
-            console.log(newFolderName + ' mkdir success.');
-            this.memberService.initMembersFolder().subscribe(refresh => {
-              this.member_folder = refresh;
-              this.tree.treeModel.update();
-            });
-          } else {
-            console.log(newFolderName + ' mkdir failed.');
-          }
-        });
+      if (this.inputCompanyName.toLowerCase() === 'unknown') {
+        this.alertSet('Warning', 'unknown 폴더로 복사할 수 없습니다.');
+        this.inputMemberName = undefined;
+        this.inputCompanyName = undefined;
       } else {
-        this.selectedCard.forEach(card => {
-          this.selectedCardName.push(card.name);
-          this.selectedCardPath.push(card.realPath);
+        this.inputName = this.inputCompanyName + ' ' + this.inputMemberName;
+        if (this.folder_state) {
+          this.memberService.makeMembersFolder('', this.inputName).subscribe(newFolderName => {
+            if (newFolderName !== 'fail') {
+              console.log(newFolderName + ' mkdir success.');
+              this.memberService.initMembersFolder().subscribe(refresh => {
+                this.member_folder = refresh;
+                this.tree.treeModel.update();
+              });
+            } else {
+              console.log(newFolderName + ' mkdir failed.');
+            }
+          });
+        } else {
+          this.selectedCard.forEach(card => {
+            this.selectedCardName.push(card.name);
+            this.selectedCardPath.push(card.realPath);
+          });
+          this.memberService.copySelectMember(this.inputName + '/', this.selectedCardPath, this.selectedCardName).subscribe(result => {
+            if (result === 'true') {
+              this.memberService.initMembersFolder().subscribe(refresh => {
+                this.member_folder = refresh;
+                this.tree.treeModel.update();
+              });
+            } else {
+              console.log('copy error');
+            }
+          });
+        }
+        this.selectedCardName = [];
+        this.selectedCardPath = [];
+        this.selectedCard = [];
+        this.memberLiveComponent.targetCardList.forEach(target => {
+          target.isActive = false;
         });
-        this.memberService.copySelectMember(this.inputName + '/', this.selectedCardPath, this.selectedCardName).subscribe(result => {
-          if (result === 'true') {
-            this.memberService.initMembersFolder().subscribe(refresh => {
-              this.member_folder = refresh;
-              this.tree.treeModel.update();
-            });
-          } else {
-            console.log('copy error');
-          }
-        });
+        this.memberLiveComponent.targetCardList = [];
+        this.alertSet('Complete', '저장되었습니다.');
+        this.componentInsideModals.close();
       }
-      this.selectedCardName = [];
-      this.selectedCardPath = [];
-      this.selectedCard = [];
-      this.memberLiveComponent.targetCardList.forEach(target => {
-        target.isActive = false;
-      });
-      this.memberLiveComponent.targetCardList = [];
-      this.componentInsideModals.close();
     }
   }
 
   deleteCard(face: any) {
     this.selectedCard.splice(this.selectedCard.indexOf(face), 1);
+  }
+
+  alertSet(alertTitle: string, alertContents: string) {
+    this.dialog.open(CustomModalComponent, {
+      data: {
+        title: alertTitle,
+        contents: alertContents
+      }
+    });
   }
 }

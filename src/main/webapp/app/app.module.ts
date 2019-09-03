@@ -17,6 +17,7 @@ import { FaceadminAppRoutingModule } from './app-routing.module';
 import { FaceadminHomeModule } from './home/home.module';
 import { FaceadminAccountModule } from './account/account.module';
 import { FaceadminFaceModule } from './face/face.module';
+import { FaceadminModalModule } from './custom-modal/custom-modal.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent, ErrorComponent } from './layouts';
@@ -35,6 +36,7 @@ import { JhiMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent
     FaceadminHomeModule,
     FaceadminAccountModule,
     FaceadminFaceModule,
+    FaceadminModalModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     FaceadminAppRoutingModule
   ],

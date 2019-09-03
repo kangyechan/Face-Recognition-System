@@ -1,4 +1,4 @@
-<div class="live-section">
+<div class="member-live-section">
     <div class="name-section">
 
         <div class="name-text">
@@ -7,10 +7,12 @@
 
         <div class="button-section">
             <div class="camera-button">
-                <button (click)="toggleSection()">{{ cameraText }}</button>
+                <button *ngIf="cameraState" (click)="toggleSection()">{{ cameraText }}</button>
+                <button *ngIf="!cameraState" (click)="selectDelete()">{{ deleteText }}</button>
             </div>
             <div class="door-button">
-                <button (click)="toggleDoor()">{{ doorText }}</button>
+                <button *ngIf="cameraState" (click)="toggleDoor()">{{ doorText }}</button>
+                <button *ngIf="!cameraState" (click)="cardSelectAll()">{{ selectText }}</button>
             </div>
             <div class="change-button">
                 <button (click)="toggleState()">{{ sectionState }}</button>
@@ -20,11 +22,13 @@
 
     <div class="camera-section">
         <div class="live-section" *ngIf="liveSection && cameraState">
-            <img class="NO-CACHE" border="1" [src]="imgURL"/>
+            <img class="NO-CACHE" [src]="imgURL" alt="live camera no signal"/>
         </div>
 
-        <dts-select-container #container="dts-select-container" (itemSelected)="dtsSelected($event)"
-                              class="image-section" *ngIf="liveSection && imageSection && !emptyImage">
+        <dts-select-container
+            #container="dts-select-container" (itemSelected)="dtsSelected($event)" (itemDeselected)="dtsDeSelected($event)"
+            class="image-section" *ngIf="liveSection && imageSection && !emptyImage">
+
             <div class="one-face-card" *ngIf="isSelectImage" (click)="cardClick(selectImage)">
                 <fa-icon *ngIf="selectImage.isActive" icon="check-circle"></fa-icon>
                 <img [src]="selectImage.getPath" alt="select-image" [ngClass]="{'active': selectImage.isActive}"/>
@@ -33,10 +37,13 @@
                 <fa-icon *ngIf="face.isActive" icon="check-circle"></fa-icon>
                 <img [src]='face.getPath' alt="face-image" [ngClass]="{'active': face.isActive}"/>
             </div>
+
         </dts-select-container>
 
         <div class="empty-section" *ngIf="liveSection && imageSection && emptyImage">
-            <p>해당 폴더에 이미지가 존재하지 않습니다.</p>
+            <div class="empty-section-desc">
+                <p>{{ emptyMessage }}</p>
+            </div>
         </div>
     </div>
 </div>

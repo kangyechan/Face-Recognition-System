@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'jhi-face',
   templateUrl: './face.component.html',
   styleUrls: ['./face.scss']
 })
-export class FaceComponent implements OnInit {
+export class FaceComponent {
   constructor() {}
-
-  ngOnInit() {}
 }
