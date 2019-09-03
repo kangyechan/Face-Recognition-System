@@ -109,7 +109,7 @@ export class MemberLiveComponent {
 
   cardSelectAll() {
     if (this.emptyImage) {
-      this.alertSet('Warning', '이미지가 없습니다.\n폴더를 선택하세요.');
+      this.alertSet('Warning', '이미지가 없습니다.\n 폴더를 선택하세요.');
     } else if (this.isSelectImage) {
       if (this.selectText === '전체 선택') {
         this.targetCardList.push(this.selectImage);
