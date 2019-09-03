@@ -46,7 +46,7 @@ public class MemberService {
         File collectUnknownFolder = new File(collectFolderPath + "unknown/");
         if(!collectUnknownFolder.exists()) {
             collectUnknownFolder.mkdir();
-            log.debug("unknown folder in collect_images make success.");
+            log.error("unknown folder is not exists so I make.");
         }
         unknownMember.setId(String.valueOf(folderId));
         unknownMember.setName("unknown");
@@ -118,7 +118,7 @@ public class MemberService {
         int memFolderId = 0;
         ArrayList<Members> readMembers = new ArrayList<>();
         if(folderPath.startsWith("root/")) {
-            if(folderPath.equals("root/unknown")) {
+            if(folderPath.equalsIgnoreCase("root/unknown")) {
                 String unknownFolderPath = collectFolderPath + "unknown/";
                 File unknownFolder = new File(unknownFolderPath);
                 File[] arrUnknownFolder = unknownFolder.listFiles();
@@ -142,7 +142,7 @@ public class MemberService {
                 File[] arrRootFolder = rootFolder.listFiles();
                 if(arrRootFolder != null) {
                     for(File rootFolderChild: arrRootFolder) {
-                        if(rootFolderChild.isDirectory() && !rootFolderChild.getName().equals("Unknown")) {
+                        if(rootFolderChild.isDirectory() && !rootFolderChild.getName().equalsIgnoreCase("unknown")) {
                             String[] arrRootFolderChildName = rootFolderChild.getName().split(" ");
                             StringBuilder folderChildName = new StringBuilder();
                             for(int i = 1; i < arrRootFolderChildName.length; i++) {
@@ -153,7 +153,7 @@ public class MemberService {
                                     folderChildName.append(arrRootFolderChildName[i]);
                                 }
                             }
-                            if(arrRootFolderChildName[0].equals(folderName)) {
+                            if(arrRootFolderChildName[0].equalsIgnoreCase(folderName)) {
                                 Members member = new Members(
                                     folderId + "-" + String.valueOf(memFolderId), folderChildName.toString(),
                                     rootFolderChild.getName() + "/");
@@ -216,22 +216,27 @@ public class MemberService {
     }
 
     public boolean deleteFolder(ArrayList<String> selectedList) {
-        // 언노운 폴더 삭제 따로 ;;
         for(String delFolderPath: selectedList) {
             String[] delFolderPathSplit = delFolderPath.split("/");
-            if(delFolderPathSplit[0].equals("root")) {
-                File rootFolder = new File(rootFolderPath);
-                File[] rootFolderList = rootFolder.listFiles();
-                if(rootFolderList != null) {
-                    for(File rootFolderAllList: rootFolderList) {
-                        if(rootFolderAllList.getName().split(" ")[0].equals(delFolderPathSplit[1])) {
-                            if(recursiveDeleteFolder(rootFolderPath + rootFolderAllList.getName())) {
-                                log.debug(delFolderPath + " is delete success.");
-                            } else return false;
-                        }
-                    }
+            if(delFolderPathSplit[0].equalsIgnoreCase("root")) {
+                if(delFolderPathSplit[1].equalsIgnoreCase("unknown")) {
+                    if (recursiveDeleteFolder(collectFolderPath + "unknown")) {
+                        log.debug(delFolderPath + " is Unknown folder. delete success.");
+                    } else return false;
                 } else {
-                    log.error("Delete RootFolderList Null Point Exception.");
+                    File rootFolder = new File(rootFolderPath);
+                    File[] rootFolderList = rootFolder.listFiles();
+                    if (rootFolderList != null) {
+                        for (File rootFolderAllList : rootFolderList) {
+                            if (rootFolderAllList.getName().split(" ")[0].equalsIgnoreCase(delFolderPathSplit[1])) {
+                                if (recursiveDeleteFolder(rootFolderPath + rootFolderAllList.getName())) {
+                                    log.debug(delFolderPath + " is delete success.");
+                                } else return false;
+                            }
+                        }
+                    } else {
+                        log.error("Delete RootFolderList Null Point Exception.");
+                    }
                 }
             } else {
                 if(recursiveDeleteFolder(rootFolderPath + delFolderPath)) {
@@ -334,29 +339,29 @@ public class MemberService {
     }
 
     public boolean copyMember(ArrayList<String> copyList, ArrayList<String> copyNameList, String destPath) {
-        // 언노운일 경우 카피 패스 변경
         FileInputStream sourceF = null;
         FileOutputStream destF = null;
-        File copyFolder = new File(rootFolderPath + destPath);
-        if(!copyFolder.exists()) {
-            try {
-                copyFolder.mkdir();
-                log.debug(destPath + " folder make success.");
-            } catch (Exception e) {
-                e.printStackTrace();
-                log.error("copyMember Mkdir Exception.");
-                return false;
-            }
+        String destFolder;
+        if(destPath.split(" ")[0].equalsIgnoreCase("unknown")) {
+            destFolder = collectFolderPath + destPath;
+        } else {
+            destFolder = rootFolderPath + destPath;
         }
-        log.debug("Your selectCard List alive destPath.");
-        System.out.println(copyList);
+        File copyFolder = new File(destFolder);
+        if(!copyFolder.exists()) {
+            copyFolder.mkdir();
+            log.debug(destPath + " mkdir success.");
+        }
         for(int i = 0; i < copyList.size(); i++) {
-            // 이름이 unknown으로 시작하면 다른 방식 필요.
-
-            File sourceFile = new File(rootFolderPath + copyList.get(i));
+            File sourceFile;
+            if(copyList.get(i).split("/")[0].equalsIgnoreCase("unknown")) {
+                sourceFile = new File(collectFolderPath + copyList.get(i));
+            } else {
+                sourceFile = new File(rootFolderPath + copyList.get(i));
+            }
             try {
                 sourceF = new FileInputStream(sourceFile);
-                destF = new FileOutputStream(new File(rootFolderPath + destPath + copyNameList.get(i)));
+                destF = new FileOutputStream(new File(destFolder + copyNameList.get(i)));
                 int readBuffer = 0;
                 while ((readBuffer = sourceF.read()) != -1) {
                     destF.write(readBuffer);

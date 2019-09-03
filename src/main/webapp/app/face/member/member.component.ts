@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MemberService } from './member.service';
 import { MemberLiveComponent } from './member-live/member-live.component';
 import { ITreeOptions, TreeComponent, TreeNode } from 'angular-tree-component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'jhi-member',
@@ -9,8 +10,8 @@ import { ITreeOptions, TreeComponent, TreeNode } from 'angular-tree-component';
   styleUrls: ['./member.scss']
 })
 export class MemberComponent implements OnInit {
-  folder_state;
-  member_state;
+  folder_state = true;
+  member_state = true;
   inputName: string;
   inputCompanyName: string;
   inputMemberName: string;
@@ -24,7 +25,7 @@ export class MemberComponent implements OnInit {
   selectedCard: Array<any> = [];
   selectedCardName = [];
   selectedCardPath = [];
-  selectedCardState: boolean;
+  selectedCardState = true;
 
   @ViewChild('componentInsideModal', { static: false }) componentInsideModals: any;
   @ViewChild(TreeComponent, { static: false }) private tree: TreeComponent;
@@ -40,7 +41,7 @@ export class MemberComponent implements OnInit {
     }
   };
 
-  constructor(private memberService: MemberService) {}
+  constructor(private memberService: MemberService, public dialog: MatDialog) {}
 
   readMemberFolderRecursive(hasChildFolder: any[], nodePath: string, data: any) {
     if (nodePath.startsWith('root/')) {
@@ -66,12 +67,9 @@ export class MemberComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.folder_state = true;
-    this.member_state = false;
     this.memberService.initMembersFolder().subscribe(data => {
       this.member_folder = data;
     });
-    this.selectedCardState = false;
   }
 
   deleteCheckboxToggle(use: boolean) {
@@ -117,6 +115,8 @@ export class MemberComponent implements OnInit {
     } else {
       console.log('SelectedTreeList is null');
     }
+    this.del_checkbox = false;
+    this.options.useCheckbox = false;
   }
 
   activateRecursive(checkFolder: any, id: string) {
@@ -240,28 +240,6 @@ export class MemberComponent implements OnInit {
     }
   }
 
-  recursiveAddFolder(memberFolder: any, destPath: string, newFolder: string) {
-    memberFolder.forEach(folder => {
-      if (destPath === folder.path) {
-        if (!folder.hasChildren) {
-          folder.hasChildren = true;
-          folder.children = [{ id: folder.id + '-0', name: newFolder, path: destPath + newFolder + '/', hasChildren: false }];
-        } else {
-          folder.children.push({
-            id: folder.id + '-' + folder.children.length.toString(),
-            name: newFolder,
-            path: destPath + newFolder + '/',
-            hasChildren: false
-          });
-        }
-      } else {
-        if (destPath.startsWith(folder.path) && folder.hasChildren) {
-          this.recursiveAddFolder(folder.children, destPath, newFolder);
-        }
-      }
-    });
-  }
-
   onSubmit() {
     if (
       this.inputMemberName === undefined ||
@@ -272,43 +250,54 @@ export class MemberComponent implements OnInit {
       this.inputMemberName = undefined;
       this.inputCompanyName = undefined;
     } else {
-      this.inputName = this.inputCompanyName + ' ' + this.inputMemberName;
-      if (this.folder_state) {
-        this.memberService.makeMembersFolder('', this.inputName).subscribe(newFolderName => {
-          if (newFolderName !== 'fail') {
-            console.log(newFolderName + ' mkdir success.');
-            this.memberService.initMembersFolder().subscribe(refresh => {
-              this.member_folder = refresh;
-              this.tree.treeModel.update();
-            });
-          } else {
-            console.log(newFolderName + ' mkdir failed.');
-          }
-        });
+      if (this.inputCompanyName.toLowerCase() === 'unknown') {
+        console.log('unknown 폴더로 복사할 수 없음');
+        // this.dialog.open(MemberDialogComponent, {
+        //   data: {
+        //     animal: 'panda'
+        //   }
+        // });
+        this.inputMemberName = undefined;
+        this.inputCompanyName = undefined;
       } else {
-        this.selectedCard.forEach(card => {
-          this.selectedCardName.push(card.name);
-          this.selectedCardPath.push(card.realPath);
+        this.inputName = this.inputCompanyName + ' ' + this.inputMemberName;
+        if (this.folder_state) {
+          this.memberService.makeMembersFolder('', this.inputName).subscribe(newFolderName => {
+            if (newFolderName !== 'fail') {
+              console.log(newFolderName + ' mkdir success.');
+              this.memberService.initMembersFolder().subscribe(refresh => {
+                this.member_folder = refresh;
+                this.tree.treeModel.update();
+              });
+            } else {
+              console.log(newFolderName + ' mkdir failed.');
+            }
+          });
+        } else {
+          this.selectedCard.forEach(card => {
+            this.selectedCardName.push(card.name);
+            this.selectedCardPath.push(card.realPath);
+          });
+          this.memberService.copySelectMember(this.inputName + '/', this.selectedCardPath, this.selectedCardName).subscribe(result => {
+            if (result === 'true') {
+              this.memberService.initMembersFolder().subscribe(refresh => {
+                this.member_folder = refresh;
+                this.tree.treeModel.update();
+              });
+            } else {
+              console.log('copy error');
+            }
+          });
+        }
+        this.selectedCardName = [];
+        this.selectedCardPath = [];
+        this.selectedCard = [];
+        this.memberLiveComponent.targetCardList.forEach(target => {
+          target.isActive = false;
         });
-        this.memberService.copySelectMember(this.inputName + '/', this.selectedCardPath, this.selectedCardName).subscribe(result => {
-          if (result === 'true') {
-            this.memberService.initMembersFolder().subscribe(refresh => {
-              this.member_folder = refresh;
-              this.tree.treeModel.update();
-            });
-          } else {
-            console.log('copy error');
-          }
-        });
+        this.memberLiveComponent.targetCardList = [];
+        this.componentInsideModals.close();
       }
-      this.selectedCardName = [];
-      this.selectedCardPath = [];
-      this.selectedCard = [];
-      this.memberLiveComponent.targetCardList.forEach(target => {
-        target.isActive = false;
-      });
-      this.memberLiveComponent.targetCardList = [];
-      this.componentInsideModals.close();
     }
   }
 

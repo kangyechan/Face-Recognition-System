@@ -1,4 +1,4 @@
-.live-section {
+.member-live-section {
   float: left;
   width: 60%;
   border-top: solid 1px #efefef;
@@ -22,21 +22,21 @@
       float: left;
 
       button {
-        width: 70px;
-        font-size: 15px;
-        color: #155724;
-        background: #d4edda;
-        border-radius: 20%;
-        border-color: #c3e6cb;
+        width: 75px;
+        font-size: 0.8em;
+        color: #3b4046;
+        background: white;
+        border-radius: 10%;
+        border-color: #3b4046;
       }
 
       button:hover {
-        box-shadow: 0 0 5px 1px #efefef;
+        box-shadow: 0 0 5px 5px #efefef;
       }
 
       button {
         float: right;
-        margin-right: 20px;
+        margin-right: 15px;
       }
 
       .camera-button {
@@ -54,6 +54,7 @@
       background: #efefef;
       width: 100%;
       height: 100%;
+      display: inline-block;
 
       img {
         width: 100%;
@@ -89,7 +90,7 @@
 
       .one-face-card:hover {
         cursor: pointer;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       }
 
       .face-card {
@@ -103,7 +104,7 @@
 
       .face-card:hover {
         cursor: pointer;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       }
 
       fa-icon {
@@ -117,8 +118,16 @@
     }
 
     .empty-section {
+      float: left;
+      display: table;
       width: 100%;
       height: 100%;
+      border: 1px solid #efefef;
+
+      .empty-section-desc {
+        display: table-cell;
+        vertical-align: middle;
+      }
     }
   }
 }

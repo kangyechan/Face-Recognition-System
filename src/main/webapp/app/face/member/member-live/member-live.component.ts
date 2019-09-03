@@ -25,9 +25,7 @@ export class MemberLiveComponent implements OnInit {
   selectImage: any;
   targetCardList: Array<any> = [];
 
-  constructor(private memberLiveService: MemberLiveService) {}
-
-  ngOnInit() {
+  constructor(private memberLiveService: MemberLiveService) {
     this.cameraText = 'OFF';
     this.doorText = 'OPEN';
     this.sectionState = 'IMAGE';
@@ -41,6 +39,8 @@ export class MemberLiveComponent implements OnInit {
     this.isSelectImage = false;
     this.imgURL = FLASK_SERVER_API_URL + 'streaming/live';
   }
+
+  ngOnInit() {}
 
   toggleSection() {
     if (this.liveSection) {
@@ -57,12 +57,14 @@ export class MemberLiveComponent implements OnInit {
   }
 
   dtsSelected(selectedCard) {
+    // console.log('teststs');
     selectedCard.isActive = !selectedCard.isActive;
     if (this.targetCardList.indexOf(selectedCard) === -1) {
       this.targetCardList.push(selectedCard);
     } else {
       this.targetCardList.splice(this.targetCardList.indexOf(selectedCard), 1);
     }
+    this.selectContainer.clearSelection();
   }
 
   toggleState() {
@@ -107,5 +109,13 @@ export class MemberLiveComponent implements OnInit {
       });
     this.targetCardList = [];
     this.selectContainer.clearSelection();
+  }
+
+  selectAll() {
+    console.log('all');
+  }
+
+  selectDelete() {
+    console.log('delete');
   }
 }
