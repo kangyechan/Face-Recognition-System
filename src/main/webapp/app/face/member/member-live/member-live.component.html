@@ -8,11 +8,11 @@
         <div class="button-section">
             <div class="camera-button">
                 <button *ngIf="cameraState" (click)="toggleSection()">{{ cameraText }}</button>
-                <button *ngIf="!cameraState" (click)="selectContainer.clearSelection()">선택 삭제</button>
+                <button *ngIf="!cameraState" (click)="selectDelete()">{{ deleteText }}</button>
             </div>
             <div class="door-button">
                 <button *ngIf="cameraState" (click)="toggleDoor()">{{ doorText }}</button>
-                <button *ngIf="!cameraState" (click)="selectContainer.selectAll()">전체 선택</button>
+                <button *ngIf="!cameraState" (click)="cardSelectAll()">{{ selectText }}</button>
             </div>
             <div class="change-button">
                 <button (click)="toggleState()">{{ sectionState }}</button>
@@ -25,8 +25,9 @@
             <img class="NO-CACHE" [src]="imgURL" alt="live camera no signal"/>
         </div>
 
-        <dts-select-container #container="dts-select-container" (itemSelected)="dtsSelected($event)"
-                              class="image-section" *ngIf="liveSection && imageSection && !emptyImage">
+        <dts-select-container
+            #container="dts-select-container" (itemSelected)="dtsSelected($event)" (itemDeselected)="dtsDeSelected($event)"
+            class="image-section" *ngIf="liveSection && imageSection && !emptyImage">
 
             <div class="one-face-card" *ngIf="isSelectImage" (click)="cardClick(selectImage)">
                 <fa-icon *ngIf="selectImage.isActive" icon="check-circle"></fa-icon>
@@ -41,7 +42,7 @@
 
         <div class="empty-section" *ngIf="liveSection && imageSection && emptyImage">
             <div class="empty-section-desc">
-                <p>해당 폴더에 이미지가 존재하지 않습니다.</p>
+                <p>{{ emptyMessage }}</p>
             </div>
         </div>
     </div>

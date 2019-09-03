@@ -114,12 +114,12 @@ export class MemberComponent implements OnInit {
       this.alertSet('Complete', '삭제되었습니다.');
       this.selectedTreeList = [];
       this.selectedTreePathList = [];
+      this.del_checkbox = false;
+      this.options.useCheckbox = false;
     } else {
       console.log('SelectedTreeList is null');
       this.alertSet('Warning', '삭제할 폴더를 선택해주세요.');
     }
-    this.del_checkbox = false;
-    this.options.useCheckbox = false;
   }
 
   activateRecursive(checkFolder: any, id: string) {
@@ -188,6 +188,7 @@ export class MemberComponent implements OnInit {
           this.memberLiveComponent.faceList = imagePathList;
         } else {
           this.memberLiveComponent.emptyImage = true;
+          this.memberLiveComponent.emptyMessage = this.activatePath + ' 폴더에 이미지가 존재하지 않습니다.';
         }
       });
     }
@@ -201,6 +202,7 @@ export class MemberComponent implements OnInit {
     this.memberLiveComponent.targetCardList.forEach(target => {
       target.isActive = false;
     });
+    this.memberLiveComponent.emptyMessage = '폴더를 선택해주세요.';
     this.memberLiveComponent.targetCardList = [];
     this.selectedCard = [];
   }
