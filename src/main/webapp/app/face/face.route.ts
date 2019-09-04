@@ -8,7 +8,7 @@ export const FACE_ROUTE: Route = {
   component: FaceComponent,
   data: {
     authorities: ['ROLE_USER'],
-    pageTitle: 'face recognition'
+    pageTitle: 'Face Recognition'
   },
   canActivate: [UserRouteAccessService]
 };
