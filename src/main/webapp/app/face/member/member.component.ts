@@ -4,6 +4,7 @@ import { MemberLiveComponent } from './member-live/member-live.component';
 import { ITreeOptions, TreeComponent, TreeNode } from 'angular-tree-component';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomModalComponent } from 'app/custom-modal/custom-modal.component';
+import { CustomComfirmModalComponent } from 'app/custom-modal/custom-comfirm-modal.component';
 
 @Component({
   selector: 'jhi-member',
@@ -95,28 +96,7 @@ export class MemberComponent implements OnInit {
 
   deleteConfirm() {
     if (this.selectedTreeList.length !== 0) {
-      this.selectedTreeList.forEach(selectedId => {
-        this.selectedIdToPath(selectedId, this.member_folder);
-      });
-      this.memberService.delMemberFolder(this.selectedTreePathList).subscribe(data => {
-        console.log('delete ' + data);
-        this.memberService.initMembersFolder().subscribe(refresh => {
-          this.member_folder = refresh;
-          this.tree.treeModel.selectedLeafNodes.forEach(node => {
-            this.tree.treeModel.setSelectedNode(node, false);
-          });
-          this.tree.treeModel.expandedNodes.forEach(expandNode => {
-            this.tree.treeModel.setExpandedNode(expandNode, false);
-          });
-          this.tree.treeModel.setActiveNode(this.tree.treeModel.getActiveNode(), false);
-          this.tree.treeModel.update();
-        });
-      });
-      this.alertSet('Complete', '삭제되었습니다.');
-      this.selectedTreeList = [];
-      this.selectedTreePathList = [];
-      this.del_checkbox = false;
-      this.options.useCheckbox = false;
+      this.confirmAlertSet('Confirm', '정말 삭제하시겠습니까?');
     } else {
       console.log('SelectedTreeList is null');
       this.alertSet('Warning', '삭제할 폴더를 선택해주세요.');
@@ -314,6 +294,41 @@ export class MemberComponent implements OnInit {
       data: {
         title: alertTitle,
         contents: alertContents
+      }
+    });
+  }
+
+  confirmAlertSet(alertTitle: string, alertContents: string) {
+    const dialogRef = this.dialog.open(CustomComfirmModalComponent, {
+      data: {
+        title: alertTitle,
+        contents: alertContents
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.selectedTreeList.forEach(selectedId => {
+          this.selectedIdToPath(selectedId, this.member_folder);
+        });
+        this.memberService.delMemberFolder(this.selectedTreePathList).subscribe(data => {
+          console.log('delete ' + data);
+          this.memberService.initMembersFolder().subscribe(refresh => {
+            this.member_folder = refresh;
+            this.tree.treeModel.selectedLeafNodes.forEach(node => {
+              this.tree.treeModel.setSelectedNode(node, false);
+            });
+            this.tree.treeModel.expandedNodes.forEach(expandNode => {
+              this.tree.treeModel.setExpandedNode(expandNode, false);
+            });
+            this.tree.treeModel.setActiveNode(this.tree.treeModel.getActiveNode(), false);
+            this.tree.treeModel.update();
+          });
+        });
+        this.alertSet('Complete', '삭제되었습니다.');
+        this.selectedTreeList = [];
+        this.selectedTreePathList = [];
+        this.del_checkbox = false;
+        this.options.useCheckbox = false;
       }
     });
   }
