@@ -4,6 +4,7 @@ import { FLASK_SERVER_API_URL } from 'app/app.constants';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
 import { CustomModalComponent } from 'app/custom-modal/custom-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { CustomComfirmModalComponent } from 'app/custom-modal/custom-comfirm-modal.component';
 
 @Component({
   selector: 'jhi-member-live',
@@ -138,15 +139,7 @@ export class MemberLiveComponent {
     if (this.targetCardList.length === 0) {
       this.alertSet('Warning', '선택된 이미지가 없습니다.');
     } else {
-      this.targetCardList.forEach(target => {
-        this.targetCardPathList.push(target.realPath);
-      });
-      this.memberLiveService.delMember(this.targetCardPathList).subscribe(data => {
-        console.log('delete ' + data);
-      });
-      this.selectContainer.clearSelection();
-      this.alertSet('Complete', '삭제되었습니다.');
-      this.sendChangeState.emit(true);
+      this.confirmAlertSet('Confirm', '정말 삭제하시겠습니까?');
     }
   }
 
@@ -155,6 +148,28 @@ export class MemberLiveComponent {
       data: {
         title: alertTitle,
         contents: alertContents
+      }
+    });
+  }
+
+  confirmAlertSet(alertTitle: string, alertContents: string) {
+    const dialogRef = this.dialog.open(CustomComfirmModalComponent, {
+      data: {
+        title: alertTitle,
+        contents: alertContents
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.targetCardList.forEach(target => {
+          this.targetCardPathList.push(target.realPath);
+        });
+        this.memberLiveService.delMember(this.targetCardPathList).subscribe(data => {
+          console.log('delete ' + data);
+        });
+        this.selectContainer.clearSelection();
+        this.alertSet('Complete', '삭제되었습니다.');
+        this.sendChangeState.emit(true);
       }
     });
   }
