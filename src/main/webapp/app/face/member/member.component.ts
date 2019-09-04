@@ -151,6 +151,7 @@ export class MemberComponent implements OnInit {
   }
 
   onActivate(event) {
+    this.memberLiveComponent.cardCount = 50;
     this.activateId = Object.entries(event.treeModel.activeNodeIds)
       .filter(([key, value]) => {
         return value === true;

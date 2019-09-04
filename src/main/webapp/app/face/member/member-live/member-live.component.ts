@@ -30,6 +30,8 @@ export class MemberLiveComponent {
   targetCardPathList = [];
   selectText = '전체 선택';
   deleteText = '선택 삭제';
+  cardMore = '더 보기';
+  cardCount = 50;
 
   constructor(private memberLiveService: MemberLiveService, public dialog: MatDialog) {}
 
@@ -154,5 +156,9 @@ export class MemberLiveComponent {
         contents: alertContents
       }
     });
+  }
+
+  cardMoreCall() {
+    this.cardCount = this.cardCount + 50;
   }
 }

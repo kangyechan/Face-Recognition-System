@@ -2,15 +2,18 @@
     <div class="picture-section-overflow">
         <div class="picture" id="memPicture" *ngFor="let card of detectSourceList">
             <div class="picture-card" *ngIf="allType">
-                <img [src]='card.src' alt="image"/>
+                <jhi-ngui-in-view>
+                    <img *ngIf [src]='card.src' alt="image"/>
+                </jhi-ngui-in-view>
                 {{ card.name }}
             </div>
 
             <div class="picture-card" *ngIf="!allType && card.show">
-                <img [src]='card.src' alt="image"/>
+                <jhi-ngui-in-view>
+                    <img *ngIf [src]='card.src' alt="image"/>
+                </jhi-ngui-in-view>
                 {{ card.name }}
             </div>
         </div>
     </div>
-
 </div>

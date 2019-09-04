@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,13 +105,10 @@ public class FaceResource {
     /**
      * {@code GET   /member/image-list/ imagePath} : get imageSrc.
      */
-    @GetMapping(
-        path = "/member/image-list",
-        produces = MediaType.IMAGE_JPEG_VALUE
-    )
-    public @ResponseBody
-    byte[] getImageSrc(@RequestParam String imagePath) throws IOException {
-        return memberService.getImgSrc(imagePath);
+    @GetMapping(path = "/member/image-list")
+    public void getImageSrc(@RequestParam String imagePath, HttpServletResponse response) throws IOException {
+        log.debug("member image src bufferwriter...");
+        memberService.getImgSrc(imagePath, response);
     }
 
     /**
@@ -139,23 +137,19 @@ public class FaceResource {
     /**
      * {@code GET   /match/image-origin/ imagePath} : get imageSrc.
      */
-    @GetMapping(
-        path = "/match/image-origin",
-        produces = MediaType.IMAGE_JPEG_VALUE
-    )
-    public @ResponseBody byte[] getOriginImageSrc(@RequestParam String imagePath) throws IOException {
-        return memberCaptureService.getImgSrc(imagePath);
+    @GetMapping(path = "/match/image-origin")
+    public void getOriginImageSrc(@RequestParam String imagePath, HttpServletResponse response) throws IOException {
+        log.debug("match origin image src bufferwriter...");
+        memberCaptureService.getImgSrc(imagePath, response);
     }
 
     /**
      * {@code GET   /match/image-origin/ imagePath} : get imageSrc.
      */
-    @GetMapping(
-        path = "/match/image-match",
-        produces = MediaType.IMAGE_JPEG_VALUE
-    )
-    public @ResponseBody byte[] getMatchImageSrc(@RequestParam String imagePath) throws IOException {
-        return memberCaptureService.getMatchImgSrc(imagePath);
+    @GetMapping(path = "/match/image-match")
+    public void getMatchImageSrc(@RequestParam String imagePath, HttpServletResponse response) throws IOException {
+        log.debug("match image src bufferwriter...");
+        memberCaptureService.getMatchImgSrc(imagePath, response);
     }
 
 
@@ -174,13 +168,11 @@ public class FaceResource {
     }
 
     /**
-     * {@code GET   /match/image-origin/ imagePath} : get imageSrc.
+     * {@code GET   /detect/image-detect/ imagePath} : get imageSrc.
      */
-    @GetMapping(
-        path = "/detect/image-detect",
-        produces = MediaType.IMAGE_JPEG_VALUE
-    )
-    public @ResponseBody byte[] getDetectImageSrc(@RequestParam String imagePath) throws IOException {
-        return detectCaptureService.getDetectImgSrc(imagePath);
+    @GetMapping(path = "/detect/image-detect")
+    public void getDetectImageSrc(@RequestParam String imagePath, HttpServletResponse response) throws IOException {
+        log.debug("detect image src bufferwriter...");
+        detectCaptureService.getDetectImgSrc(imagePath, response);
     }
 }

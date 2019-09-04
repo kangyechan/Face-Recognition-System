@@ -31,13 +31,19 @@
 
             <div class="one-face-card" *ngIf="isSelectImage" (click)="cardClick(selectImage)">
                 <fa-icon *ngIf="selectImage.isActive" icon="check-circle"></fa-icon>
-                <img [src]="selectImage.getPath" alt="select-image" [ngClass]="{'active': selectImage.isActive}"/>
+                <jhi-ngui-in-view>
+                    <img *ngIf [src]="selectImage.getPath" alt="select-image" [ngClass]="{'active': selectImage.isActive}"/>
+                </jhi-ngui-in-view>
             </div>
-            <div [dtsSelectItem]="face" class="face-card" *ngFor="let face of faceList">
-                <fa-icon *ngIf="face.isActive" icon="check-circle"></fa-icon>
-                <img [src]='face.getPath' alt="face-image" [ngClass]="{'active': face.isActive}"/>
+            <div *ngFor="let face of faceList; index as i">
+                <div [dtsSelectItem]="face" *ngIf="i < cardCount" class="face-card">
+                    <fa-icon *ngIf="face.isActive" icon="check-circle"></fa-icon>
+                    <jhi-ngui-in-view>
+                        <img *ngIf [src]='face.getPath' alt="face-image" [ngClass]="{'active': face.isActive}"/>
+                    </jhi-ngui-in-view>
+                </div>
             </div>
-
+            <div class="more-section" *ngIf="!isSelectImage && faceList.length > cardCount"><button class="card-more-button" (click)="cardMoreCall()">{{ cardMore }}</button></div>
         </dts-select-container>
 
         <div class="empty-section" *ngIf="liveSection && imageSection && emptyImage">
