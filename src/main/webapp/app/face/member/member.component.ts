@@ -11,11 +11,12 @@ import { CustomModalComponent } from 'app/custom-modal/custom-modal.component';
   styleUrls: ['./member.scss']
 })
 export class MemberComponent implements OnInit {
-  folder_state = true;
-  member_state = false;
   inputName: string;
   inputCompanyName: string;
   inputMemberName: string;
+
+  folder_state = true;
+  member_state = false;
 
   member_folder = [{}];
   del_checkbox = false;
@@ -151,6 +152,7 @@ export class MemberComponent implements OnInit {
   }
 
   onActivate(event) {
+    this.memberLiveComponent.cardCount = 50;
     this.activateId = Object.entries(event.treeModel.activeNodeIds)
       .filter(([key, value]) => {
         return value === true;
@@ -314,5 +316,27 @@ export class MemberComponent implements OnInit {
         contents: alertContents
       }
     });
+  }
+
+  getChangeState(isChange) {
+    if (isChange) {
+      this.memberService.initMembersFolder().subscribe(refresh => {
+        this.member_folder = refresh;
+        this.tree.treeModel.expandedNodes.forEach(expandNode => {
+          this.tree.treeModel.setExpandedNode(expandNode, true);
+        });
+        this.tree.treeModel.setActiveNode(this.tree.treeModel.getActiveNode(), true);
+        this.tree.treeModel.update();
+      });
+      this.memberService.getImagePath(this.activatePath).subscribe(imagePathList => {
+        if (imagePathList.toString() !== '') {
+          this.memberLiveComponent.emptyImage = false;
+          this.memberLiveComponent.faceList = imagePathList;
+        } else {
+          this.memberLiveComponent.emptyImage = true;
+          this.memberLiveComponent.emptyMessage = this.activatePath + ' 폴더에 이미지가 존재하지 않습니다.';
+        }
+      });
+    }
   }
 }

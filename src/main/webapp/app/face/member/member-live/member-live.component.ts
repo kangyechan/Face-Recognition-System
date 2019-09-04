@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MemberLiveService } from './member-live.service';
 import { FLASK_SERVER_API_URL } from 'app/app.constants';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class MemberLiveComponent {
   @ViewChild(SelectContainerComponent, { static: false }) private selectContainer: SelectContainerComponent;
+  @Output() sendChangeState = new EventEmitter<boolean>();
 
   imgURL = FLASK_SERVER_API_URL + 'streaming/live';
   cameraText = 'OFF';
@@ -30,6 +31,8 @@ export class MemberLiveComponent {
   targetCardPathList = [];
   selectText = '전체 선택';
   deleteText = '선택 삭제';
+  cardMore = '더 보기';
+  cardCount = 50;
 
   constructor(private memberLiveService: MemberLiveService, public dialog: MatDialog) {}
 
@@ -141,9 +144,9 @@ export class MemberLiveComponent {
       this.memberLiveService.delMember(this.targetCardPathList).subscribe(data => {
         console.log('delete ' + data);
       });
-      this.alertSet('Complete', '삭제되었습니다.');
       this.selectContainer.clearSelection();
-      // member에다가 신호 보내주면 나머지 트리랑, live 화면 새로고침
+      this.alertSet('Complete', '삭제되었습니다.');
+      this.sendChangeState.emit(true);
     }
   }
 
@@ -154,5 +157,9 @@ export class MemberLiveComponent {
         contents: alertContents
       }
     });
+  }
+
+  cardMoreCall() {
+    this.cardCount = this.cardCount + 50;
   }
 }

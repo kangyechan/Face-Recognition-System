@@ -1,17 +1,15 @@
 package com.exntu.faceadmin.service;
 
 import com.exntu.faceadmin.domain.Members;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -51,12 +49,7 @@ public class MemberService {
         unknownMember.setId(String.valueOf(folderId));
         unknownMember.setName("unknown");
         unknownMember.setPath("root/unknown");
-        File[] collectFolderList = collectUnknownFolder.listFiles();
-        if(collectFolderList != null) {
-            setFolderHasChildren(collectFolderList, unknownMember, collectUnknownFolder);
-        } else {
-            log.error("collectFolderList is Null point exception.");
-        }
+        unknownMember.setHasChildren(false);
         folderId++;
         initMembers.add(unknownMember);
         rootMemberNameList.add("unknown");
@@ -328,14 +321,31 @@ public class MemberService {
             fileName.toLowerCase().endsWith(".tiff"));
     }
 
-    public byte[] getImgSrc(String imagePath) throws IOException {
+    public void getImgSrc(String imagePath, HttpServletResponse response) throws IOException {
+        BufferedInputStream bis = null;
+        ServletOutputStream sos = null;
+        response.setContentType("image/jpeg");
         FileInputStream fin;
         if(imagePath.toLowerCase().startsWith("unknown/")) {
             fin = new FileInputStream(this.collectFolderPath + imagePath);
         } else {
             fin = new FileInputStream(this.rootFolderPath + imagePath);
         }
-        return IOUtils.toByteArray(fin);
+        try {
+            bis = new BufferedInputStream(fin);
+            sos = response.getOutputStream();
+
+            byte[] buf = new byte[1024];
+            int readByte = 0;
+            while((readByte = bis.read(buf)) != -1) {
+                sos.write(buf, 0, readByte);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(bis != null) bis.close();
+            if(sos != null) sos.close();
+        }
     }
 
     public boolean copyMember(ArrayList<String> copyList, ArrayList<String> copyNameList, String destPath) {

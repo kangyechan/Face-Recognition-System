@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { interval } from 'rxjs';
-import { startWith, switchMap } from 'rxjs/operators';
+import { interval, Observable } from 'rxjs';
+import { map, startWith, switchMap, take } from 'rxjs/operators';
 import { DetectCaptureService } from 'app/face/detect/detect-capture/detect-capture.service';
 
 @Component({
@@ -9,24 +9,17 @@ import { DetectCaptureService } from 'app/face/detect/detect-capture/detect-capt
   styleUrls: ['./detect-capture.scss']
 })
 export class DetectCaptureComponent implements OnInit {
-  allType: boolean;
-
-  detectList: Array<any> = [];
-  detectSourceList: Array<any> = [];
-  initSecond: number;
-  sameTime: number;
-  nameList: Array<any>;
-  checkList: Array<any>;
+  allType = true;
+  detectList = [];
+  detectSourceList = [];
+  initSecond = 1000;
+  sameTime = 0;
+  nameList = ['exntu', 'magenta', 'whitelist', 'blacklist', 'unknown'];
+  checkList = [true, true, true, true, true];
 
   constructor(private detectCaptureService: DetectCaptureService) {}
 
   ngOnInit() {
-    this.nameList = ['exntu', 'magenta', 'whitelist', 'blacklist', 'unknown'];
-    this.checkList = [true, true, true, true, true];
-    this.initSecond = 1000;
-    this.sameTime = 0;
-    this.detectList = [];
-    this.detectSourceList = [];
     interval(this.initSecond)
       .pipe(
         startWith(0),
@@ -47,7 +40,7 @@ export class DetectCaptureComponent implements OnInit {
           } else {
             this.sameTime++;
             if (this.sameTime > 1800) {
-              this.initSecond = 100000;
+              this.initSecond = 10000;
             }
           }
         }

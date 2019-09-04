@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,6 +27,9 @@ public class MemberCaptureService {
 
     @Value("${flask.match.path}")
     private String matchPath;
+
+    @Value("${flask.collect.path}")
+    private String collectFolderPath;
 
     public MemberCaptureService() { }
 
@@ -61,13 +67,51 @@ public class MemberCaptureService {
             fileName.toLowerCase().endsWith(".tiff"));
     }
 
-    public byte[] getImgSrc(String imagePath) throws IOException {
-        FileInputStream fin = new FileInputStream(this.rootFolderPath + imagePath);
-        return IOUtils.toByteArray(fin);
+    public void getImgSrc(String imagePath, HttpServletResponse response) throws IOException {
+        BufferedInputStream bis = null;
+        ServletOutputStream sos = null;
+        response.setContentType("image/jpeg");
+        FileInputStream fin;
+        if(imagePath.toLowerCase().startsWith("unknown/")) {
+            fin = new FileInputStream(this.collectFolderPath + imagePath);
+        } else {
+            fin = new FileInputStream(this.rootFolderPath + imagePath);
+        }
+        try {
+            bis = new BufferedInputStream(fin);
+            sos = response.getOutputStream();
+
+            byte[] buf = new byte[1024];
+            int readByte = 0;
+            while((readByte = bis.read(buf)) != -1) {
+                sos.write(buf, 0, readByte);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(bis != null) bis.close();
+            if(sos != null) sos.close();
+        }
     }
 
-    public byte[] getMatchImgSrc(String imagePath) throws IOException {
-        FileInputStream fin = new FileInputStream(this.matchPath + imagePath);
-        return IOUtils.toByteArray(fin);
+    public void getMatchImgSrc(String imagePath, HttpServletResponse response) throws IOException {
+        BufferedInputStream bis = null;
+        ServletOutputStream sos = null;
+        response.setContentType("image/jpeg");
+        try {
+            bis = new BufferedInputStream(new FileInputStream(this.matchPath + imagePath));
+            sos = response.getOutputStream();
+
+            byte[] buf = new byte[1024];
+            int readByte = 0;
+            while((readByte = bis.read(buf)) != -1) {
+                sos.write(buf, 0, readByte);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(bis != null) bis.close();
+            if(sos != null) sos.close();
+        }
     }
 }

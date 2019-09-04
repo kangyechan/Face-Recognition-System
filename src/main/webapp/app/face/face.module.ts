@@ -14,6 +14,7 @@ import { MemberCaptureComponent } from './member/member-capture/member-capture.c
 import { TreeModule } from 'angular-tree-component';
 import { DragToSelectModule } from 'ngx-drag-to-select';
 import { ModalModule } from 'angular-custom-modal';
+import { NguiInViewComponent } from './ngui-in-view.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { ModalModule } from 'angular-custom-modal';
     DetectComponent,
     DetectCaptureComponent,
     MemberLiveComponent,
-    MemberCaptureComponent
+    MemberCaptureComponent,
+    NguiInViewComponent
   ],
   entryComponents: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

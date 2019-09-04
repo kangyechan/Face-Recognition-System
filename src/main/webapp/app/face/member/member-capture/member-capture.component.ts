@@ -9,18 +9,14 @@ import { startWith, switchMap } from 'rxjs/operators';
   styleUrls: ['./member-capture.scss']
 })
 export class MemberCaptureComponent implements OnInit {
-  matchList: Array<any> = [];
-  matchSourceList: Array<any> = [];
-  initSecond: number;
-  sameTime: number;
+  matchList = [];
+  matchSourceList = [];
+  initSecond = 1000;
+  sameTime = 0;
 
   constructor(private memberCaptureService: MemberCaptureService) {}
 
   ngOnInit() {
-    this.initSecond = 1000;
-    this.sameTime = 0;
-    this.matchList = [];
-    this.matchSourceList = [];
     interval(this.initSecond)
       .pipe(
         startWith(0),
