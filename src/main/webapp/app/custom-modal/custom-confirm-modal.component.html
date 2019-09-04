@@ -1,0 +1,12 @@
+<div>
+    <h1>{{data.title}}</h1>
+
+    <mat-dialog-content>
+        <p>{{data.contents}}</p>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button class="modal-button" mat-button [mat-dialog-close]="true">OK</button>
+        <button class="modal-button" mat-button [mat-dialog-close]="false">CANCEL</button>
+    </mat-dialog-actions>
+</div>
