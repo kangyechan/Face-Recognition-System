@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DetectCaptureComponent } from './detect-capture/detect-capture.component';
 
 @Component({
@@ -6,7 +6,7 @@ import { DetectCaptureComponent } from './detect-capture/detect-capture.componen
   templateUrl: './detect.component.html',
   styleUrls: ['./detect.scss']
 })
-export class DetectComponent implements OnInit {
+export class DetectComponent {
   @ViewChild(DetectCaptureComponent, { static: false }) private detectCapture: DetectCaptureComponent;
 
   allCheckbox = true;
@@ -30,14 +30,6 @@ export class DetectComponent implements OnInit {
     this.whiteList = 'whitelist';
     this.blackList = 'blacklist';
     this.unKnown = 'unknown';
-  }
-
-  ngOnInit() {
-    this.member1Checkbox = true;
-    this.member2Checkbox = true;
-    this.whiteCheckbox = true;
-    this.blackCheckbox = true;
-    this.unknownCheckbox = true;
   }
 
   checkAll() {
